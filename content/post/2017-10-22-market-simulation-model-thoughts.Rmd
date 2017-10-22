@@ -1,0 +1,146 @@
+---
+title: Market Simulation Model thoughts
+author: Bruce Meng
+date: '2017-10-22'
+slug: market-simulation-model-thoughts
+categories: []
+tags:
+  - R
+  - modelling
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(forecast)
+library(magrittr)
+library(readxl)
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggthemes)
+library(plotly)
+library(scales)
+set.seed(1)
+source("../../data/simul.model/Simul.model.R")
+```
+
+I created the market simulation model because I needed a fast and __painless__ way to obtain reasonable market values as an input into my big financial model.
+
+The big financial model attempts to predict actual BMO P&L (e.g. revenues) and takes as an input various drivers, including the equity markets. The more accurate the input variables, the more meaningful the model predictions are.
+
+## How it works
+
+The idea behind the model is that while equity market prices do not appear to have any appreciable boundaries, market returns do. The likelihood of the TSX dropping to 0 by the next day is extremely unlikely, and similarly the likelihood of the TSX increasing 5,000% is also extremely unlikely.
+
+Now, if those two values are extremely unlikely, then what are some more likely values?
+
+### TSX behaviour
+
+Let's first visualize the historical TSX prices and returns:
+
+```{r tsx.price, echo = F, fig.width = 7, fig.height = 5, message = F, warning = F}
+# Visualizing results
+TSX.g <- ggplot(data.TSX, aes(x = Date, y = GSPTSE.Close)) 
+TSX.g <- TSX.g +geom_line()
+TSX.g <- TSX.g +ggtitle("TSX historical levels") +
+                ylab("TSX Index") +
+                scale_y_continuous(labels = comma)
+
+TSX.g <- TSX.g +theme_minimal()
+ggplotly(TSX.g)
+```
+
+```{r tsx.return, echo = F, fig.width = 7, fig.height = 4, warning=F, message=F}
+# Visualizing results
+TSX.g <- ggplot(data.TSX.2010.change, aes(x = change))
+TSX.g <- TSX.g +geom_histogram(binwidth = 0.01, alpha = 0.3) +
+            geom_density(aes(linetype = "Actual")) #+ 
+            #stat_function(fun = dnorm, args = c(mean = TSX.simul.params$mean, sd = TSX.simul.params$sd),
+                          #aes(linetype = "Normal"))
+
+TSX.g <- TSX.g +ggtitle("TSX returns from 2010 onwards", subtitle = "(Model vs. Actual)") +ylab("Frequency") +xlab("TSX returns")
+TSX.g <- TSX.g +theme_minimal()
+ggplotly(TSX.g)
+```
+
+#### Using the normal probability distribution as a model
+
+My first attempt to model the returns is the use the popular normal distribution. To use the normal distribution, we only need two parameters:
+
+1. Location
+2. Scale
+
+We can obtain those parameters from the historical behaviour of the TSX itself. The location is the mean (or average) return of the TSX, and the scale is the variance of those returns.
+
+Let's see how the normal distribution compares to the actual returns:
+
+```{r tsx.return.N, echo = F, fig.width = 7, fig.height = 4, warning=F, message=F}
+# Visualizing results
+TSX.g <- ggplot(data.TSX.2010.change, aes(x = change))
+TSX.g <- TSX.g +geom_histogram(binwidth = 0.01, alpha = 0.3) +
+            geom_density(aes(linetype = "Actual")) + 
+            stat_function(fun = dnorm, args = c(mean = TSX.simul.params$mean, sd = TSX.simul.params$sd),
+                          aes(linetype = "Normal"))
+
+TSX.g <- TSX.g +ggtitle("TSX returns from 2010 onwards", subtitle = "(Model vs. Actual)") +ylab("Frequency") +xlab("TSX returns")
+TSX.g <- TSX.g +theme_minimal()
+ggplotly(TSX.g)
+
+mc.TSX.N <- mc.TSX
+```
+
+I'd say the normal distribution does an adequate job, but there are clearly sections where there are differences between the normal model and the actual return.
+
+#### Using the generalized lambda probability distribution as a model
+
+Recent literature has suggested that the generalized lambda distribution (GLD) may be a better model to model equity market returns. The GLD has four parameters in total and is therefore able to vary its shape to a greater degree than the normal distribution.
+
+The GLD's four parameters are:
+
+1. Location
+2. Scale
+3. Skewness
+4. Kurtosis
+
+Similar to the normal distribution, the values of the two additional parameters can be obtained from the actual returns.
+
+Let's see how the GLD compares to the normal model and to actual returns:
+
+```{r tsx.return.GLD, echo = F, fig.width = 7, fig.height = 4, warning=F, message=F}
+source("../../data/simul.model/Simul.model.v2.GLD.R")
+
+# Visualizing results
+TSX.g <- ggplot(data.TSX.2010.change, aes(x = change))
+TSX.g <- TSX.g +geom_histogram(binwidth = 0.01, alpha = 0.3) +
+                geom_density(aes(linetype = "Actual")) + 
+                stat_function(fun = dnorm, args = c(mean = TSX.simul.params$mean, sd = TSX.simul.params$sd),
+                          aes(linetype = "Normal")) +
+                stat_function(fun = dgl, args = list(lambda1 = gld.params.tsx$estA, 
+                                                 param = "gpd"), aes(linetype = "GLD"))
+
+TSX.g <- TSX.g +ggtitle("TSX returns from 2010 onwards", subtitle = "(Model vs. Actual)") +ylab("Frequency") +xlab("TSX returns")
+TSX.g <- TSX.g +theme_minimal()
+ggplotly(TSX.g) 
+```
+
+The GLD was able to capture the slight skew to the right as well as the slightly fatter tails, which the normal distribution missed.
+
+The market simulation model uses the GLD as the underlying model to simulate new market values from.
+
+### S&P 500 behaviour
+
+The same process can be repeated for the S&P 500. The actual returns, normal model, and the GLD model is presented below:
+
+```{r sp500.GLD, echo = F, fig.width = 7, fig.height = 4, warning=F, message=F}
+# Visualizing results
+SP500.g <- ggplot(data.SP500.change, aes(x = change))
+SP500.g <- SP500.g +geom_histogram(binwidth = 0.01, alpha = 0.3) +
+            geom_density(aes(linetype = "Actual")) +
+            stat_function(fun = dnorm, args = c(mean = SP500.simul.params$mean, sd = SP500.simul.params$sd),
+                          aes(linetype = "Normal")) +
+            stat_function(fun = dgl, args = gld.params.SP500$lambda, aes(linetype = "GLD"))
+
+SP500.g <- SP500.g +ggtitle("S&P500 returns from 2010 onwards", subtitle = "(With density curves superimposed)") +ylab("Frequency") +xlab("S&P500 returns")
+SP500.g <- SP500.g +theme_minimal()
+ggplotly(SP500.g)
+```

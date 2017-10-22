@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on Bruce Meng</title>
+    <link>/about/</link>
+    <description>Recent content in Abouts on Bruce Meng</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 22 Oct 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/about/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About Me</title>
+      <link>/about/bruce.meng/</link>
+      <pubDate>Sun, 22 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/about/bruce.meng/</guid>
+      <description>Hi!
+My name is Bruce.
+I have concentrated my studies around economics, accounting, and finance while at the University of Toronto and have managed to also obtain an accounting designation. My current focus is on integrating various data science concepts into classical financial analysis and modelling.
+I am an avid R user, and also like to cycle when the sun is out :).</description>
+    </item>
+    
+  </channel>
+</rss>
