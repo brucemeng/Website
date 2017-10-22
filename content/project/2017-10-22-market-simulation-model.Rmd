@@ -6,7 +6,7 @@ date: '2017-10-22'
 showdate: false
 slug: market-simulation-model
 categories: []
-tags: ["R", "modelling"]
+tags: ["modelling"]
 ---
 
 ```{r setup, include=FALSE}

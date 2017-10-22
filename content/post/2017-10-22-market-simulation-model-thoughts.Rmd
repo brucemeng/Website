@@ -5,7 +5,6 @@ date: '2017-10-22'
 slug: market-simulation-model-thoughts
 categories: []
 tags:
-  - R
   - modelling
 ---
 
