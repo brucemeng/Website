@@ -20,3 +20,5 @@ I intend to use this website as a medium to collect, write, and share my adventu
 I am an avid R user, and also like to cycle when the sun is out :).
 
 Update 1 test.
+
+Update 2 test.
