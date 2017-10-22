@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://bmeng.netlify.com/"
 languageCode = "en-us"
 title = "Bruce Meng"
 theme = "minimal"
