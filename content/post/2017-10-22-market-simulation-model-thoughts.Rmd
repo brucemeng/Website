@@ -64,7 +64,7 @@ ggplotly(TSX.g)
 
 #### Using the normal probability distribution as a model
 
-My first attempt to model the returns is the use the popular normal distribution. To use the normal distribution, we only need two parameters:
+My first attempt to model the returns is to use the popular normal distribution. To use the normal distribution, we only need two parameters:
 
 1. Location
 2. Scale

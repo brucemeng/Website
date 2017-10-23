@@ -1,0 +1,11 @@
+---
+title: Volatility of Profit and Loss thoughts
+author: Bruce Meng
+date: '2017-10-23'
+slug: volatility-of-profit-and-loss-thoughts
+categories: []
+tags:
+  - R
+  - statistics
+---
+

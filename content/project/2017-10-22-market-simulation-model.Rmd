@@ -29,7 +29,9 @@ source("../../data/simul.model/Simul.model.v2.GLD.R")
 
 This model will generate reasonable prices for the market and will use the latest real-time price as the starting point.
 
-Date updated: `r Sys.time()`
+*Price updated as of*: 
+
+> **`r Sys.time()`**
 
 ## TSX
 
