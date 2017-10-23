@@ -1,11 +1,63 @@
 ---
 title: Volatility of Profit and Loss thoughts
 author: Bruce Meng
-date: '2017-10-23'
+date: '2017-10-28'
 slug: volatility-of-profit-and-loss-thoughts
 categories: []
 tags:
   - R
   - statistics
 ---
+
+```{r setup, include = FALSE}
+library(ggplot2)
+library(forecast)
+library(magrittr)
+set.seed = 1
+```
+
+I did this bit of analysis for BMO Investor Relations a few years back while I was with BMO Capital Markets but I think it is still an interesting topic.
+
+The quick summary is that BMO Investor Relations received a published report, as well as the data and analysis underpinning the report from one of the credit rating agencies. The rating agency analyst made some certain assertions about BMO's revenue volatility, but it turns out that the statistical analysis used by the analyst was... questionable.
+
+Before we get into that however, let's first define some terms and some concepts so that we are all on the same page. Let's start with... what is volatility?
+
+## Volatility definition
+
+To me, volatility is best defined as:
+
+> Volatility is something unexpected happening...
+
+So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn't be a cause for volatility. Indeed, if the opposite were to happen, then a unfathomable catastrophe would have instead occurred.
+
+Now, let's introduce some data to move this discussion from a purely theoretical one. We shall use three companies to illustrate this:  
+
+* Company A (A) - a linear trending series
+* Company B (B) - a non-trending series
+* Company C (C) - a random series, with no trend
+
+```{r data.gen}
+A <- c(100,110,120,130,140,150) %>% data.frame(Date = zoo::index(.), 
+                                               Revenue = ., 
+                                               Company = "A")
+
+B <- c(100,100,100,100,100,100) %>% data.frame(Date = zoo::index(.), 
+                                               Revenue = ., 
+                                               Company = "B")
+
+C <- runif(6, min = 50, max = 150) %>% data.frame(Date = zoo::index(.), 
+                                                  Revenue = ., 
+                                                  Company = "C")
+
+company <- rbind(A, B, C)
+```
+
+Visualizing the above data points shows this:
+
+```{r data.gen.visual, echo=FALSE}
+ggplot(company, aes(x = Date, y = Revenue)) +
+        geom_line() +
+        facet_grid(. ~ Company) +
+        theme_minimal()
+```
 

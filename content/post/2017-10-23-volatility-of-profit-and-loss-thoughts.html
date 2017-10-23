@@ -1,7 +1,7 @@
 ---
 title: Volatility of Profit and Loss thoughts
 author: Bruce Meng
-date: '2017-10-23'
+date: '2017-10-28'
 slug: volatility-of-profit-and-loss-thoughts
 categories: []
 tags:
@@ -11,4 +11,35 @@ tags:
 
 
 
+<p>I did this bit of analysis for BMO Investor Relations a few years back while I was with BMO Capital Markets but I think it is still an interesting topic.</p>
+<p>The quick summary is that BMO Investor Relations received a published report, as well as the data and analysis underpinning the report from one of the credit rating agencies. The rating agency analyst made some certain assertions about BMO’s revenue volatility, but it turns out that the statistical analysis used by the analyst was… questionable.</p>
+<p>Before we get into that however, let’s first define some terms and some concepts so that we are all on the same page. Let’s start with… what is volatility?</p>
+<div id="volatility-definition" class="section level2">
+<h2>Volatility definition</h2>
+<p>To me, volatility is best defined as:</p>
+<blockquote>
+<p>Volatility is something unexpected happening…</p>
+</blockquote>
+<p>So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn’t be a cause for volatility. Indeed, if the opposite were to happen, then a unfathomable catastrophe would have instead occurred.</p>
+<p>Now, let’s introduce some data to move this discussion from a purely theoretical one. We shall use three companies to illustrate this:</p>
+<ul>
+<li>Company A (A) - a linear trending series</li>
+<li>Company B (B) - a non-trending series</li>
+<li>Company C (C) - a random series, with no trend</li>
+</ul>
+<pre class="r"><code>A &lt;- c(100,110,120,130,140,150) %&gt;% data.frame(Date = zoo::index(.), 
+                                               Revenue = ., 
+                                               Company = &quot;A&quot;)
 
+B &lt;- c(100,100,100,100,100,100) %&gt;% data.frame(Date = zoo::index(.), 
+                                               Revenue = ., 
+                                               Company = &quot;B&quot;)
+
+C &lt;- runif(6, min = 50, max = 150) %&gt;% data.frame(Date = zoo::index(.), 
+                                                  Revenue = ., 
+                                                  Company = &quot;C&quot;)
+
+company &lt;- rbind(A, B, C)</code></pre>
+<p>Visualizing the above data points shows this:</p>
+<p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/data.gen.visual-1.png" width="672" /></p>
+</div>
