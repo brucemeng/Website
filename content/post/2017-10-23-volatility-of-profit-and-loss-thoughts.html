@@ -51,8 +51,8 @@ company &lt;- rbind(A, B, C)</code></pre>
 <pre class="r"><code>data.frame(A = round(sd(A$Revenue),0), 
            B = sd(B$Revenue), 
            C = round(sd(C$Revenue),0))</code></pre>
-<pre><code>##    A B  C
-## 1 19 0 10</code></pre>
+<pre><code>##    A B C
+## 1 19 0 8</code></pre>
 <p>The above result violates our intuitive understanding that Vol(A) = Vol(B), since the standard deviation of A is not the same as the standard deviation of B. This is because A is a trending series.</p>
 <p>We need to transform our series of numbers to remove the trend. We can do this by taking the first difference of all three companies (i.e. we look at the change in the original numbers for A, B, C).</p>
 <pre class="r"><code># Transform data
@@ -74,6 +74,76 @@ ggplot(company.transform, aes(x = Date, y = Rev.transform)) +
 <pre class="r"><code>data.frame(A = round(sd(A$Rev.transform, na.rm = T),0), 
            B = sd(B$Rev.transform, na.rm = T), 
            C = round(sd(C$Rev.transform, na.rm = T),0))</code></pre>
-<pre><code>##   A B  C
-## 1 0 0 13</code></pre>
+<pre><code>##   A B C
+## 1 0 0 9</code></pre>
+</div>
+<div id="example-of-inappropriate-volatility-measurement" class="section level2">
+<h2>Example of inappropriate volatility measurement</h2>
+<p>Now we can finally address the report.</p>
+<p>Moody’s published a report in 2014 concluding that BMO has the most volatile revenue between RBC and National Bank:</p>
+<div class="figure">
+<img src="E:/Projects/Website/data/volatility/Moody.png" />
+
+</div>
+<p>Let’s take a look at the data that Moody’s used to arrive at their conclusion:</p>
+<pre class="r"><code># Load data
+BMO &lt;- read_excel(&quot;../../data/volatility/moody.data.xlsx&quot;, sheet = &quot;BMO&quot;)
+RBC &lt;- read_excel(&quot;../../data/volatility/moody.data.xlsx&quot;, sheet = &quot;RBC&quot;)
+NBC &lt;- read_excel(&quot;../../data/volatility/moody.data.xlsx&quot;, sheet = &quot;NBC&quot;)
+
+BMO &lt;- ts(BMO[2], freq = 4, start = 2004.75) %&gt;% data.frame(Revenue = ., Date = index(.))
+RBC &lt;- ts(RBC[2], freq = 4, start = 2004.75) %&gt;% data.frame(Revenue =., Date = index(.))
+NBC &lt;- ts(NBC[2], freq = 4, start = 2004.75) %&gt;% data.frame(Revenue =., Date = index(.))
+
+BMO$Bank &lt;- &quot;BMO&quot;
+RBC$Bank &lt;- &quot;RBC&quot;
+NBC$Bank &lt;- &quot;NBC&quot;
+
+Banks.data &lt;- rbind(BMO, RBC, NBC)
+
+# Plot data
+ggplot(Banks.data, aes(x = Date, y = Revenue)) +
+        geom_line() +
+        facet_grid(. ~ Bank) +
+        scale_y_continuous(labels = dollar_format()) +
+        theme_minimal()</code></pre>
+<p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/moody.data-1.png" width="672" /></p>
+<p>Visually, it doesn’t appear that BMO revenues exhibit the highest volatility, but I concede that it’s hard to definitely say based on visual inspection.</p>
+<p>Let’s proceed with our prior established method of transforming our data to remove the trend and calculate the volatility of our revenues. (Moody’s compared volatility on the coefficient of variation instead of the standard deviation, we shall do the same to be consistent. The CV is simply sd / mean).</p>
+<pre class="r"><code># Data transform
+BMO$Rev.transform &lt;- c(NA, log(BMO$Revenue) %&gt;% diff())
+RBC$Rev.transform &lt;- c(NA, log(RBC$Revenue) %&gt;% diff())
+NBC$Rev.transform &lt;- c(NA, log(NBC$Revenue) %&gt;% diff())
+
+Banks.data &lt;- rbind(BMO, RBC, NBC)
+
+# Visualize data transform
+ggplot(Banks.data, aes(x = Date, y = Rev.transform)) +
+        geom_line() +
+        facet_grid(. ~ Bank) +
+        scale_y_continuous(labels = comma) +
+        ylab(&quot;Logarithmic Change in Revenue&quot;) +
+        theme_minimal()</code></pre>
+<p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/rev.vol-1.png" width="672" /></p>
+<p>No trend is visible now. We can proceed with our volatility calculation:</p>
+<pre class="r"><code>data.frame(BMO = sd(BMO$Rev.transform, na.rm = T) / mean(BMO$Rev.transform, na.rm = T) %&gt;% round(4),
+           RBC = sd(RBC$Rev.transform, na.rm = T) / mean(RBC$Rev.transform, na.rm = T) %&gt;% round(4),
+           NBC = sd(NBC$Rev.transform, na.rm = T) / mean(NBC$Rev.transform, na.rm = T) %&gt;% round(4)
+)</code></pre>
+<pre><code>##       BMO      RBC      NBC
+## 1 4.35317 5.039788 19.66576</code></pre>
+<p>Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and NBC.</p>
+<p>Let’s now return to Moody’s analysis methods. Moody’s proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks.</p>
+<div class="figure">
+<img src="E:/Projects/Website/data/volatility/MoodyData.png" />
+
+</div>
+<p>We can recalculate those numbers just to be sure:</p>
+<pre class="r"><code>data.frame(Moody.BMO = sd(BMO$Revenue) / mean(BMO$Revenue) %&gt;% round(4),
+           Moody.RBC = sd(RBC$Revenue) / mean(RBC$Revenue) %&gt;% round(4),
+           Moody.NBC = sd(NBC$Revenue) / mean(NBC$Revenue) %&gt;% round(4)
+)</code></pre>
+<pre><code>##   Moody.BMO Moody.RBC Moody.NBC
+## 1 0.2614868 0.2007567 0.2021072</code></pre>
+<p>This is an example of what happens when you fail to adjust for trending series.</p>
 </div>
