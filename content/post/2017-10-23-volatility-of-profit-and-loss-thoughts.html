@@ -82,8 +82,8 @@ ggplot(company.transform, aes(x = Date, y = Rev.transform)) +
 <p>Now we can finally address the report.</p>
 <p>Moody’s published a report in 2014 concluding that BMO has the most volatile revenue between RBC and National Bank:</p>
 <div class="figure">
-<img src="E:/Projects/Website/data/volatility/Moody.png" />
-
+<img src="E:/Projects/Website/data/volatility/Moody.png" alt="Moody’s Report" />
+<p class="caption">Moody’s Report</p>
 </div>
 <p>Let’s take a look at the data that Moody’s used to arrive at their conclusion:</p>
 <pre class="r"><code># Load data
@@ -138,8 +138,8 @@ ggplot(Banks.data, aes(x = Date, y = Rev.transform)) +
 <p>Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and NBC.</p>
 <p>Let’s now return to Moody’s analysis methods. Moody’s proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks.</p>
 <div class="figure">
-<img src="E:/Projects/Website/data/volatility/MoodyData.png" />
-
+<img src="E:/Projects/Website/data/volatility/MoodyData.png" alt="Moody’s Analysis" />
+<p class="caption">Moody’s Analysis</p>
 </div>
 <p>We can recalculate those numbers just to be sure:</p>
 <pre class="r"><code>data.frame(Moody.BMO = sd(BMO$Revenue) / mean(BMO$Revenue) %&gt;% round(4),
