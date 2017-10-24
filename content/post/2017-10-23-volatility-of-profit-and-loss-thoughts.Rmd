@@ -178,7 +178,7 @@ data.frame(BMO = sd(BMO$Rev.transform, na.rm = T) /
 
 Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and NBC.
 
-Let's now return to Moody's analysis methods. Moody's proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks.
+Let's now return to Moody's analysis methods. Moody's proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks without regard to whether the number series is trending or not.
 
 ![Moody's Analysis](/img/MoodyData.png)
 
