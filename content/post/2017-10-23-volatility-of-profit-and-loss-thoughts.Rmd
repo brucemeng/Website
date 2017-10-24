@@ -28,13 +28,13 @@ To me, volatility is best defined as:
 
 > Volatility is something unexpected happening...
 
-So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn't be a cause for volatility. Indeed, if the opposite were to happen, then a unfathomable catastrophe would have instead occurred.
+So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn't be a cause for volatility. If you were to ask me to predict whether the sun would rise tomorrow, I would with 100% certainty say "YES!". Indeed, if the opposite were to happen, then an unfathomable catastrophe would have instead occurred.
 
 Now, let's introduce some data to move this discussion from a purely theoretical one. We shall use three companies to illustrate this:  
 
-* Company A (A) - a linear trending series
-* Company B (B) - a non-trending series
-* Company C (C) - a random series, with no trend
+* Company A (A) - a consistent growth company
+* Company B (B) - a consistent no growth company
+* Company C (C) - an inconsistent no growth company
 
 ```{r data.gen}
 A <- c(100,110,120,130,140,150) %>% data.frame(Date = zoo::index(.), 
@@ -68,13 +68,12 @@ Using standard deviation as our quantitative measure of volatility, let's see wh
 ```{r sd}
 data.frame(A = round(sd(A$Revenue),0), 
            B = sd(B$Revenue), 
-           C = round(sd(C$Revenue),0)) %>%
-                knitr::kable()
+           C = round(sd(C$Revenue),0))
 ```
 
 The above result violates our intuitive understanding that Vol(A) = Vol(B), since the standard deviation of A is not the same as the standard deviation of B. This is because A is a trending series.
 
-We need to transform our series of numbers to remove the trend. We can do this by first differencing all three companies (i.e. we look at the change in the original numbers for A, B, C).
+We need to transform our series of numbers to remove the trend. We can do this by taking the first difference of all three companies (i.e. we look at the change in the original numbers for A, B, C).
 
 ```{r transform, warning=F}
 # Transform data
@@ -100,6 +99,5 @@ Now, if we repeat our standard deviation calculation on the first differenced re
 ```{r sd.transform}
 data.frame(A = round(sd(A$Rev.transform, na.rm = T),0), 
            B = sd(B$Rev.transform, na.rm = T), 
-           C = round(sd(C$Rev.transform, na.rm = T),0)) %>%
-                knitr::kable()
+           C = round(sd(C$Rev.transform, na.rm = T),0))
 ```

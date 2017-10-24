@@ -20,12 +20,12 @@ tags:
 <blockquote>
 <p>Volatility is something unexpected happening…</p>
 </blockquote>
-<p>So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn’t be a cause for volatility. Indeed, if the opposite were to happen, then a unfathomable catastrophe would have instead occurred.</p>
+<p>So, for instance, the sun rises and sets every day. You can therefore say that the value changes from day to night constantly, but because the sun rising and setting is expected, this wouldn’t be a cause for volatility. If you were to ask me to predict whether the sun would rise tomorrow, I would with 100% certainty say “YES!”. Indeed, if the opposite were to happen, then an unfathomable catastrophe would have instead occurred.</p>
 <p>Now, let’s introduce some data to move this discussion from a purely theoretical one. We shall use three companies to illustrate this:</p>
 <ul>
-<li>Company A (A) - a linear trending series</li>
-<li>Company B (B) - a non-trending series</li>
-<li>Company C (C) - a random series, with no trend</li>
+<li>Company A (A) - a consistent growth company</li>
+<li>Company B (B) - a consistent no growth company</li>
+<li>Company C (C) - an inconsistent no growth company</li>
 </ul>
 <pre class="r"><code>A &lt;- c(100,110,120,130,140,150) %&gt;% data.frame(Date = zoo::index(.), 
                                                Revenue = ., 
@@ -50,26 +50,11 @@ company &lt;- rbind(A, B, C)</code></pre>
 <p>Using standard deviation as our quantitative measure of volatility, let’s see what happens if we calculate the standard deviation of A, B, C directly:</p>
 <pre class="r"><code>data.frame(A = round(sd(A$Revenue),0), 
            B = sd(B$Revenue), 
-           C = round(sd(C$Revenue),0)) %&gt;%
-                knitr::kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">A</th>
-<th align="right">B</th>
-<th align="right">C</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">19</td>
-<td align="right">0</td>
-<td align="right">18</td>
-</tr>
-</tbody>
-</table>
+           C = round(sd(C$Revenue),0))</code></pre>
+<pre><code>##    A B  C
+## 1 19 0 10</code></pre>
 <p>The above result violates our intuitive understanding that Vol(A) = Vol(B), since the standard deviation of A is not the same as the standard deviation of B. This is because A is a trending series.</p>
-<p>We need to transform our series of numbers to remove the trend. We can do this by first differencing all three companies (i.e. we look at the change in the original numbers for A, B, C).</p>
+<p>We need to transform our series of numbers to remove the trend. We can do this by taking the first difference of all three companies (i.e. we look at the change in the original numbers for A, B, C).</p>
 <pre class="r"><code># Transform data
 A$Rev.transform &lt;- c(NA, diff(A$Revenue))
 B$Rev.transform &lt;- c(NA, diff(B$Revenue))
@@ -88,22 +73,7 @@ ggplot(company.transform, aes(x = Date, y = Rev.transform)) +
 <p>Now, if we repeat our standard deviation calculation on the first differenced results, we will get a quantitative measure of volatility that doesn’t violate our intuition.</p>
 <pre class="r"><code>data.frame(A = round(sd(A$Rev.transform, na.rm = T),0), 
            B = sd(B$Rev.transform, na.rm = T), 
-           C = round(sd(C$Rev.transform, na.rm = T),0)) %&gt;%
-                knitr::kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="right">A</th>
-<th align="right">B</th>
-<th align="right">C</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">34</td>
-</tr>
-</tbody>
-</table>
+           C = round(sd(C$Rev.transform, na.rm = T),0))</code></pre>
+<pre><code>##   A B  C
+## 1 0 0 13</code></pre>
 </div>
