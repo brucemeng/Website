@@ -113,7 +113,7 @@ Now we can finally address the report.
 Moody's published a report in 2014 concluding that BMO has the most volatile revenue between RBC and National Bank:
 
 
-![Moody's Report](../../data/volatility/Moody.png)
+![Moody's Report](/img/Moody.png)
 
 
 Let's take a look at the data that Moody's used to arrive at their conclusion:
@@ -180,7 +180,7 @@ Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and
 
 Let's now return to Moody's analysis methods. Moody's proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks.
 
-![Moody's Analysis](../../data/volatility/MoodyData.png)
+![Moody's Analysis](/img/MoodyData.png)
 
 We can recalculate those numbers just to be sure:
 
