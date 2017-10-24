@@ -1,5 +1,5 @@
 ---
-title: Volatility of Profit and Loss thoughts
+title: Volatility of Revenue thoughts
 author: Bruce Meng
 date: '2017-10-28'
 slug: volatility-of-profit-and-loss-thoughts
@@ -31,15 +31,79 @@ tags:
                                                Revenue = ., 
                                                Company = &quot;A&quot;)
 
-B &lt;- c(100,100,100,100,100,100) %&gt;% data.frame(Date = zoo::index(.), 
+B &lt;- c(125,125,125,125,125,125) %&gt;% data.frame(Date = zoo::index(.), 
                                                Revenue = ., 
                                                Company = &quot;B&quot;)
 
-C &lt;- runif(6, min = 50, max = 150) %&gt;% data.frame(Date = zoo::index(.), 
+C &lt;- runif(6, min = 100, max = 150) %&gt;% data.frame(Date = zoo::index(.), 
                                                   Revenue = ., 
                                                   Company = &quot;C&quot;)
 
 company &lt;- rbind(A, B, C)</code></pre>
 <p>Visualizing the above data points shows this:</p>
+<pre class="r"><code>ggplot(company, aes(x = Date, y = Revenue)) +
+        geom_line() +
+        facet_grid(. ~ Company) +
+        theme_minimal()</code></pre>
 <p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/data.gen.visual-1.png" width="672" /></p>
+<p>Intuitively, based on the above definition, we would conclude that Vol(A) = Vol(B) = 0, and Vol(C) &gt; Vol(A) &amp; Vol(B).</p>
+<p>Using standard deviation as our quantitative measure of volatility, let’s see what happens if we calculate the standard deviation of A, B, C directly:</p>
+<pre class="r"><code>data.frame(A = round(sd(A$Revenue),0), 
+           B = sd(B$Revenue), 
+           C = round(sd(C$Revenue),0)) %&gt;%
+                knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">A</th>
+<th align="right">B</th>
+<th align="right">C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">19</td>
+<td align="right">0</td>
+<td align="right">18</td>
+</tr>
+</tbody>
+</table>
+<p>The above result violates our intuitive understanding that Vol(A) = Vol(B), since the standard deviation of A is not the same as the standard deviation of B. This is because A is a trending series.</p>
+<p>We need to transform our series of numbers to remove the trend. We can do this by first differencing all three companies (i.e. we look at the change in the original numbers for A, B, C).</p>
+<pre class="r"><code># Transform data
+A$Rev.transform &lt;- c(NA, diff(A$Revenue))
+B$Rev.transform &lt;- c(NA, diff(B$Revenue))
+C$Rev.transform &lt;- c(NA, diff(C$Revenue))
+
+company.transform &lt;- rbind(A, B, C)
+
+# Plot data
+ggplot(company.transform, aes(x = Date, y = Rev.transform)) +
+        geom_line() +
+        facet_grid(. ~ Company) +
+        ylab(&quot;Revenue Change&quot;) +
+        theme_minimal()</code></pre>
+<p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/transform-1.png" width="672" /></p>
+<p>The above graphs show that A has been increasing their results by 10 every year, B has no change to their results every year, and C has a variable change to their results every year.</p>
+<p>Now, if we repeat our standard deviation calculation on the first differenced results, we will get a quantitative measure of volatility that doesn’t violate our intuition.</p>
+<pre class="r"><code>data.frame(A = round(sd(A$Rev.transform, na.rm = T),0), 
+           B = sd(B$Rev.transform, na.rm = T), 
+           C = round(sd(C$Rev.transform, na.rm = T),0)) %&gt;%
+                knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">A</th>
+<th align="right">B</th>
+<th align="right">C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">34</td>
+</tr>
+</tbody>
+</table>
 </div>
