@@ -82,7 +82,7 @@ ggplot(company.transform, aes(x = Date, y = Rev.transform)) +
 <p>Now we can finally address the report.</p>
 <p>Moody’s published a report in 2014 concluding that BMO has the most volatile revenue between RBC and National Bank:</p>
 <div class="figure">
-<img src="E:/Projects/Website/data/volatility/Moody.png" />
+<img src="../data/volatility/Moody.png" />
 
 </div>
 <p>Let’s take a look at the data that Moody’s used to arrive at their conclusion:</p>
@@ -108,7 +108,7 @@ ggplot(Banks.data, aes(x = Date, y = Revenue)) +
         scale_y_continuous(labels = dollar_format()) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/moody.data-1.png" width="672" /></p>
-<p>Visually, it doesn’t appear that BMO revenues exhibit the highest volatility, but I concede that it’s hard to definitely say based on visual inspection.</p>
+<p>Visually, it doesn’t appear that BMO revenues exhibit the highest volatility, but I concede that it’s hard to definitively say based on visual inspection.</p>
 <p>Let’s proceed with our prior established method of transforming our data to remove the trend and calculate the volatility of our revenues. (Moody’s compared volatility on the coefficient of variation instead of the standard deviation, we shall do the same to be consistent. The CV is simply sd / mean).</p>
 <pre class="r"><code># Data transform
 BMO$Rev.transform &lt;- c(NA, log(BMO$Revenue) %&gt;% diff())
@@ -135,7 +135,7 @@ ggplot(Banks.data, aes(x = Date, y = Rev.transform)) +
 <p>Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and NBC.</p>
 <p>Let’s now return to Moody’s analysis methods. Moody’s proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks.</p>
 <div class="figure">
-<img src="E:/Projects/Website/data/volatility/MoodyData.png" />
+<img src="../data/volatility/MoodyData.png" />
 
 </div>
 <p>We can recalculate those numbers just to be sure:</p>
