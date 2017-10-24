@@ -27,17 +27,20 @@ tags:
 <li>Company B (B) - a consistent no growth company</li>
 <li>Company C (C) - an inconsistent no growth company</li>
 </ul>
-<pre class="r"><code>A &lt;- c(100,110,120,130,140,150) %&gt;% data.frame(Date = zoo::index(.), 
-                                               Revenue = ., 
-                                               Company = &quot;A&quot;)
+<pre class="r"><code>A &lt;- c(100,110,120,130,140,150) %&gt;% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = .,
+                   Company = &quot;A&quot;)
 
-B &lt;- c(125,125,125,125,125,125) %&gt;% data.frame(Date = zoo::index(.), 
-                                               Revenue = ., 
-                                               Company = &quot;B&quot;)
+B &lt;- c(125,125,125,125,125,125) %&gt;% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = ., 
+                   Company = &quot;B&quot;)
 
-C &lt;- runif(6, min = 100, max = 150) %&gt;% data.frame(Date = zoo::index(.), 
-                                                  Revenue = ., 
-                                                  Company = &quot;C&quot;)
+C &lt;- runif(6, min = 100, max = 150) %&gt;% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = ., 
+                   Company = &quot;C&quot;)
 
 company &lt;- rbind(A, B, C)</code></pre>
 <p>Visualizing the above data points shows this:</p>
