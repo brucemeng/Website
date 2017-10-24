@@ -168,11 +168,17 @@ No trend is visible now. We can proceed with our volatility calculation:
 
 ```{r rev.vol.calc, warning = F}
 data.frame(BMO = sd(BMO$Rev.transform, na.rm = T) / 
-                   mean(BMO$Rev.transform, na.rm = T) %>% round(4),
+                   mean(BMO$Rev.transform, na.rm = T) %>% 
+                   exp() %>%
+                   round(4),
            RBC = sd(RBC$Rev.transform, na.rm = T) / 
-                   mean(RBC$Rev.transform, na.rm = T) %>% round(4),
+                   mean(RBC$Rev.transform, na.rm = T) %>% 
+                   exp() %>%
+                   round(4),
            NBC = sd(NBC$Rev.transform, na.rm = T) / 
-                   mean(NBC$Rev.transform, na.rm = T) %>% round(4)
+                   mean(NBC$Rev.transform, na.rm = T) %>% 
+                   exp() %>%
+                   round(4)
 )
 ```
 

@@ -127,14 +127,20 @@ ggplot(Banks.data, aes(x = Date, y = Rev.transform)) +
 <p><img src="/post/2017-10-23-volatility-of-profit-and-loss-thoughts_files/figure-html/rev.vol-1.png" width="672" /></p>
 <p>No trend is visible now. We can proceed with our volatility calculation:</p>
 <pre class="r"><code>data.frame(BMO = sd(BMO$Rev.transform, na.rm = T) / 
-                   mean(BMO$Rev.transform, na.rm = T) %&gt;% round(4),
+                   mean(BMO$Rev.transform, na.rm = T) %&gt;% 
+                   exp() %&gt;%
+                   round(4),
            RBC = sd(RBC$Rev.transform, na.rm = T) / 
-                   mean(RBC$Rev.transform, na.rm = T) %&gt;% round(4),
+                   mean(RBC$Rev.transform, na.rm = T) %&gt;% 
+                   exp() %&gt;%
+                   round(4),
            NBC = sd(NBC$Rev.transform, na.rm = T) / 
-                   mean(NBC$Rev.transform, na.rm = T) %&gt;% round(4)
+                   mean(NBC$Rev.transform, na.rm = T) %&gt;% 
+                   exp() %&gt;%
+                   round(4)
 )</code></pre>
-<pre><code>##       BMO      RBC      NBC
-## 1 4.35317 5.039788 19.66576</code></pre>
+<pre><code>##          BMO        RBC       NBC
+## 1 0.08282807 0.09006692 0.2177954</code></pre>
 <p>Voila. BMO revenue did in fact exhibit the lowest volatility compared to RBC and NBC.</p>
 <p>Let’s now return to Moody’s analysis methods. Moody’s proceeds to calculate the mean, standard deviation, and the coefficient of variation (sd / mean) of the three banks without regard to whether the number series is trending or not.</p>
 <div class="figure">
