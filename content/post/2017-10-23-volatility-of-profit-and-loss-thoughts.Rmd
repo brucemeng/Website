@@ -41,17 +41,20 @@ Now, let's introduce some data to move this discussion from a purely theoretical
 * Company C (C) - an inconsistent no growth company
 
 ```{r data.gen}
-A <- c(100,110,120,130,140,150) %>% data.frame(Date = zoo::index(.), 
-                                               Revenue = ., 
-                                               Company = "A")
+A <- c(100,110,120,130,140,150) %>% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = .,
+                   Company = "A")
 
-B <- c(125,125,125,125,125,125) %>% data.frame(Date = zoo::index(.), 
-                                               Revenue = ., 
-                                               Company = "B")
+B <- c(125,125,125,125,125,125) %>% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = ., 
+                   Company = "B")
 
-C <- runif(6, min = 100, max = 150) %>% data.frame(Date = zoo::index(.), 
-                                                  Revenue = ., 
-                                                  Company = "C")
+C <- runif(6, min = 100, max = 150) %>% 
+        data.frame(Date = zoo::index(.), 
+                   Revenue = ., 
+                   Company = "C")
 
 company <- rbind(A, B, C)
 ```
