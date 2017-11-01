@@ -43,7 +43,7 @@ The Toronto Stock Exchange (TSX) historical and simulated values are modelled be
 data.TSX.plot <- filter(data.TSX, Date > 2007)
 
 # Simulation date
-date.simul <- as.Date(mc.TSX$Date[1]) %>%
+date.simul <- as.Date(mc.TSX$Date[2]) %>%
                 as.numeric()
 
 # Plot simulation
@@ -82,7 +82,7 @@ The Standard & Poor's 500 (S&P 500) index historical and simulated values are mo
 data.SP500.plot <- filter(data.SP500, Date > 2007)
 
 # Simulation date
-date.simul <- as.Date(mc.SP500$Date[1]) %>%
+date.simul <- as.Date(mc.SP500$Date[2]) %>%
                 as.numeric()
 
 # Plot simulation
