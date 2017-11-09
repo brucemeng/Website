@@ -80,6 +80,6 @@ bil.plot <- ggplot(data = bil.act.pred, aes(x = Date)) +
 bil.plot
 ```
 
-The InvestorLine AUM model was a function of just the TSX.
+The InvestorLine AUM model was a function of the TSX only.
 
 I will add a couple more businesses at a later date.
