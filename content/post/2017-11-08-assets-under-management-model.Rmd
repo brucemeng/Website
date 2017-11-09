@@ -27,7 +27,7 @@ In all cases below, I have trained the model with data from 2010 to about 2013, 
 
 ### Online Brokerage - BMO InvestorLine
 
-Here's a look at BMO InvestorLine AUM with a straightforward linear regression model:
+Here's a comparison of the InvestorLine AUM model with actual AUM (model: dashed blue line, actual: solid black line):
 
 ```{r bil.data, message = F, echo = F, warning = F}
 # Read BIL data
