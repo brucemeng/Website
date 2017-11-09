@@ -10,18 +10,25 @@ tags:
 
 
 
-<p>If you ever find yourself creating a financial model (of any kind) on a business even remotely connected to the wealth management space, chances are your model will feature <strong>assets under management</strong>, or AUM in short, somewhere in the model.</p>
+<p>If you ever find yourself creating a financial model (of any kind) on a business even remotely connected to the wealth management space, chances are your model will feature <strong>assets under management</strong>, or AUM in short, somewhere.</p>
 <p>AUM often represents the economic base that a wealth management firm can draw its revenue from, just like how an employed populace is the economic base a government can draw its tax revenue from. As an example, I am currently invested in the BMO ETF <code>ZCN</code>, which has a management expense ratio of about 0.06%. <code>ZCN</code> thus would charge me 0.06% on the total amount I have invested in the fund every year.</p>
 <p>Now, on to the actual model…</p>
 <div id="aum-model" class="section level2">
 <h2>AUM Model</h2>
 <p>I have found that the linear regression model worked well for the BMO businesses that I have modelled, albeit, some (like the online brokerage business) were much easier to fit than others.</p>
 <p>In all cases below, I have trained the model with data from 2010 to about 2013, and then I ask the model to make predictions on AUM based on actual equity market movements. We can then compare the predictions with the actual AUM for that period. Since BMO doesn’t release this data publically, I won’t be sharing the actual values or the model parameters (sorry!).</p>
-<div id="online-brokerage---bmo-investorline" class="section level3">
-<h3>Online Brokerage - BMO InvestorLine</h3>
+<div id="online-investing---bmo-investorline" class="section level3">
+<h3>Online Investing - BMO InvestorLine</h3>
+<p>BMO’s online investing option, BMO InvestorLine, allows you to take control of your investment portfolio.</p>
 <p>Here’s a comparison of the InvestorLine AUM model with actual AUM (model: dashed blue line, actual: solid black line):</p>
 <p><img src="/post/2017-11-08-assets-under-management-model_files/figure-html/bil.data-1.png" width="672" /></p>
 <p>The InvestorLine AUM model was a function of the TSX only.</p>
-<p>I will add a couple more businesses at a later date.</p>
+</div>
+<div id="investment-management---bmo-full-service-investing" class="section level3">
+<h3>Investment Management - BMO Full Service Investing</h3>
+<p>BMO’s investment management business provides investment planning, advisory, and discretionary investing services.</p>
+<p>Here’s a comparison of the Full Service Investing AUM model with actual AUM (model: dashed blue line, actual: solid black line):</p>
+<p><img src="/post/2017-11-08-assets-under-management-model_files/figure-html/fsi.data-1.png" width="672" /></p>
+<p>The Full Service model is a bit trickier to fit. The final model was a function of the TSX, the S&amp;P500, and the number of investment advisors.</p>
 </div>
 </div>

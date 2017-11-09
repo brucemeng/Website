@@ -13,7 +13,7 @@ library(readxl)
 library(quantmod)
 library(scales)
 ```
-If you ever find yourself creating a financial model (of any kind) on a business even remotely connected to the wealth management space, chances are your model will feature **assets under management**, or AUM in short, somewhere in the model.
+If you ever find yourself creating a financial model (of any kind) on a business even remotely connected to the wealth management space, chances are your model will feature **assets under management**, or AUM in short, somewhere.
 
 AUM often represents the economic base that a wealth management firm can draw its revenue from, just like how an employed populace is the economic base a government can draw its tax revenue from. As an example, I am currently invested in the BMO ETF `ZCN`, which has a management expense ratio of about 0.06%. `ZCN` thus would charge me 0.06% on the total amount I have invested in the fund every year.
 
@@ -25,7 +25,9 @@ I have found that the linear regression model worked well for the BMO businesses
 
 In all cases below, I have trained the model with data from 2010 to about 2013, and then I ask the model to make predictions on AUM based on actual equity market movements. We can then compare the predictions with the actual AUM for that period. Since BMO doesn't release this data publically, I won't be sharing the actual values or the model parameters (sorry!).
 
-### Online Brokerage - BMO InvestorLine
+### Online Investing - BMO InvestorLine
+
+BMO's online investing option, BMO InvestorLine, allows you to take control of your investment portfolio.
 
 Here's a comparison of the InvestorLine AUM model with actual AUM (model: dashed blue line, actual: solid black line):
 
@@ -82,4 +84,75 @@ bil.plot
 
 The InvestorLine AUM model was a function of the TSX only.
 
-I will add a couple more businesses at a later date.
+### Investment Management - BMO Full Service Investing
+
+BMO's investment management business provides investment planning, advisory, and discretionary investing services.
+
+Here's a comparison of the Full Service Investing AUM model with actual AUM (model: dashed blue line, actual: solid black line):
+
+```{r fsi.data, message = F, echo = F, warning = F}
+# Read BIL data
+fsi <- read_excel("../../data/aum/Data.fsi.xlsx")
+fsi$aum.per.ia <- with(fsi, AUM.TOTAL / IA)
+
+fsi.change <- select(fsi, c("Date", "AUM.TOTAL", "IA", "aum.per.ia")) %>%
+                .[-1,] %>%
+                data.frame()
+fsi.change$Date <- as.yearmon(fsi.change$Date)
+fsi.change$aum.change <- log(fsi$aum.per.ia) %>% diff()
+
+
+# Get TSX data
+tsx <- getSymbols("^GSPTSE", from = fsi$Date[1], periodicity = "monthly", auto.assign = F)
+tsx.change <- tsx
+tsx.change$tsx.change <- log(tsx$GSPTSE.Adjusted) %>% diff()
+tsx.change <- tsx.change[-1,]
+tsx.change$Date <- 1
+tsx.change$Date <- index(tsx.change) %>% as.yearmon()
+tsx.change <- data.frame(tsx.change) %>%
+                select(c("Date", "tsx.change"))
+
+# Get SP500 data
+sp500 <- getSymbols("^GSPC", from = fsi$Date[1], periodicity = "monthly", auto.assign = F)
+sp500.change <- sp500
+sp500.change$sp500.change <- log(sp500$GSPC.Adjusted) %>% diff()
+sp500.change <- sp500.change[-1,]
+sp500.change$Date <- 1
+sp500.change$Date <- index(sp500.change) %>% as.yearmon()
+sp500.change <- data.frame(sp500.change) %>%
+                select(c("Date", "sp500.change"))
+
+# Combine and split data
+train.date <- "Aug 2013"
+
+fsi.tsx.sp500 <- left_join(fsi.change, tsx.change) %>%
+                        left_join(sp500.change)
+
+train.fsi <- filter(fsi.tsx.sp500, Date <= train.date)
+test.fsi <- filter(fsi.tsx.sp500, Date > train.date)
+
+# Train LM model
+fsi.model <- lm(data = fsi.tsx.sp500, aum.change ~ tsx.change + sp500.change)
+
+# Predict AUM
+fsi.predict <- predict(fsi.model, newdata = test.fsi)
+fsi.predict.base <- cumprod(c(train.fsi$aum.per.ia[nrow(train.fsi)], exp(fsi.predict))) %>%
+                        data.frame(AUM.Predict = .)
+fsi.predict.base$Date <- c(train.fsi$Date[nrow(train.fsi)], test.fsi$Date)
+fsi.act.pred <- left_join(fsi.predict.base, fsi.tsx.sp500)
+fsi.act.pred$AUM.Predict.Total <- with(fsi.act.pred, AUM.Predict * IA)
+
+# Plot
+fsi.plot <- ggplot(data = fsi.act.pred, aes(x = Date)) +
+                geom_line(data = fsi.tsx.sp500, aes(x = Date, y = AUM.TOTAL)) +
+                geom_line(aes(y = AUM.TOTAL)) +
+                geom_line(aes(y = AUM.Predict.Total), linetype = "dashed", colour = "blue") +
+                geom_vline(xintercept = test.fsi$Date[1], linetype = "dashed") +
+                ylab("AUM") +
+                theme_minimal() +
+                theme(axis.text.y = element_blank())
+
+fsi.plot
+```
+
+The Full Service model is a bit trickier to fit. The final model was a function of the TSX, the S&P500, and the number of investment advisors.
