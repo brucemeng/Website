@@ -23,9 +23,9 @@ set.seed(1)
 source("../../data/simul.model/Simul.model.R")
 ```
 
-I created the market simulation model because I needed a fast and __painless__ way to obtain reasonable market values as an input into my big financial model.
+I created the market simulation model because I needed a fast and __painless__ way to obtain reasonable market values as an input into my larger hybrid financial model.
 
-The big financial model attempts to predict actual BMO P&L (e.g. revenues) and takes as an input various drivers, including the equity markets. The more accurate the input variables, the more meaningful the model predictions are.
+The hybrid financial model attempts to predict actual BMO P&L (e.g. revenues) using modern data science techniques including machine learning and artificial intelligence and takes as an input various drivers, including the equity markets. The more accurate the input variables, the more meaningful the model predictions are.
 
 ## How it works
 

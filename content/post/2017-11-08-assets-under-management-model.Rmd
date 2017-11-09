@@ -1,0 +1,85 @@
+---
+title: Assets under Management Model thoughts
+author: Bruce Meng
+date: '2017-11-08'
+slug: assets-under-management-model
+categories: []
+tags:
+  - modelling
+---
+```{r setup, include = F}
+library(tidyverse)
+library(readxl)
+library(quantmod)
+library(scales)
+```
+If you ever find yourself creating a financial model (of any kind) on a business even remotely connected to the wealth management space, chances are your model will feature **assets under management**, or AUM in short, somewhere in the model.
+
+AUM often represents the economic base that a wealth management firm can draw its revenue from, just like how an employed populace is the economic base a government can draw its tax revenue from. As an example, I am currently invested in the BMO ETF `ZCN`, which has a management expense ratio of about 0.06%. `ZCN` thus would charge me 0.06% on the total amount I have invested in the fund every year.
+
+Now, on to the actual model...
+
+## AUM Model
+
+I have found that the linear regression model worked well for the BMO businesses that I have modelled, albeit, some (like the online brokerage business) were much easier to fit than others.
+
+In all cases below, I have trained the model with data from 2010 to about 2013, and then I ask the model to make predictions on AUM based on actual equity market movements. We can then compare the predictions with the actual AUM for that period. Since BMO doesn't release this data publically, I won't be sharing the actual values or the model parameters (sorry!).
+
+### Online Brokerage - BMO InvestorLine
+
+Here's a look at BMO InvestorLine AUM with a straightforward linear regression model:
+
+```{r bil.data, message = F, echo = F, warning = F}
+# Read BIL data
+bil <- read_excel("../../data/aum/Data.BIL.xlsx")
+
+bil.change <- select(bil, c("Date", "AUM.TOTAL")) %>%
+                .[-1,] %>%
+                data.frame()
+bil.change$Date <- as.yearmon(bil.change$Date)
+bil.change$aum.change <- log(bil$AUM.TOTAL) %>% diff()
+
+
+# Get TSX data
+tsx <- getSymbols("^GSPTSE", from = bil$Date[1], periodicity = "monthly", auto.assign = F)
+tsx.change <- tsx
+tsx.change$tsx.change <- log(tsx$GSPTSE.Adjusted) %>% diff()
+tsx.change <- tsx.change[-1,]
+tsx.change$Date <- 1
+tsx.change$Date <- index(tsx.change) %>% as.yearmon()
+tsx.change <- data.frame(tsx.change) %>%
+                select(c("Date", "tsx.change"))
+
+# Combine and split data
+train.date <- "Aug 2013"
+
+bil.tsx <- left_join(bil.change, tsx.change)
+train.bil <- filter(bil.tsx, Date <= train.date)
+test.bil <- filter(bil.tsx, Date > train.date)
+
+# Train LM model
+bil.model <- lm(data = bil.tsx, aum.change ~ tsx.change)
+
+# Predict AUM
+bil.predict <- predict(bil.model, newdata = test.bil)
+bil.predict.base <- cumprod(c(train.bil$AUM.TOTAL[nrow(train.bil)], exp(bil.predict))) %>%
+                        data.frame(AUM.Predict = .)
+bil.predict.base$Date <- c(train.bil$Date[nrow(train.bil)], test.bil$Date)
+bil.act.pred <- left_join(bil.predict.base, bil.tsx)
+
+# Plot
+bil.plot <- ggplot(data = bil.act.pred, aes(x = Date)) +
+                geom_line(data = bil.tsx, aes(x = Date, y = AUM.TOTAL)) +
+                geom_line(aes(y = AUM.TOTAL)) +
+                geom_line(aes(y = AUM.Predict), linetype = "dashed", colour = "blue") +
+                geom_vline(xintercept = test.bil$Date[1], linetype = "dashed") +
+                ylab("AUM") +
+                theme_minimal() +
+                theme(axis.text.y = element_blank())
+
+bil.plot
+```
+
+The InvestorLine AUM model was a function of just the TSX.
+
+I will add a couple more businesses at a later date.
