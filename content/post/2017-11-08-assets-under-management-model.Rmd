@@ -29,7 +29,7 @@ In all cases below, I have trained the model with data from 2010 to about 2013, 
 
 BMO's online investing option, BMO InvestorLine, allows you to take control of your investment portfolio.
 
-Here's a comparison of the InvestorLine AUM model with actual AUM (model: dashed blue line, actual: solid black line):
+Here's a comparison of the InvestorLine AUM model with actual AUM:
 
 ```{r bil.data, message = F, echo = F, warning = F}
 # Read BIL data
@@ -72,8 +72,8 @@ bil.act.pred <- left_join(bil.predict.base, bil.tsx)
 # Plot
 bil.plot <- ggplot(data = bil.act.pred, aes(x = Date)) +
                 geom_line(data = bil.tsx, aes(x = Date, y = AUM.TOTAL)) +
-                geom_line(aes(y = AUM.TOTAL)) +
-                geom_line(aes(y = AUM.Predict), linetype = "dashed", colour = "blue") +
+                geom_line(aes(y = AUM.TOTAL, linetype = "Actual")) +
+                geom_line(aes(y = AUM.Predict, linetype = "Prediction"), colour = "blue") +
                 geom_vline(xintercept = test.bil$Date[1], linetype = "dashed") +
                 ylab("AUM") +
                 theme_minimal() +
@@ -88,7 +88,7 @@ The InvestorLine AUM model was a function of the TSX only.
 
 BMO's investment management business provides investment planning, advisory, and discretionary investing services.
 
-Here's a comparison of the Full Service Investing AUM model with actual AUM (model: dashed blue line, actual: solid black line):
+Here's a comparison of the Full Service Investing AUM model with actual AUM:
 
 ```{r fsi.data, message = F, echo = F, warning = F}
 # Read BIL data
@@ -145,8 +145,8 @@ fsi.act.pred$AUM.Predict.Total <- with(fsi.act.pred, AUM.Predict * IA)
 # Plot
 fsi.plot <- ggplot(data = fsi.act.pred, aes(x = Date)) +
                 geom_line(data = fsi.tsx.sp500, aes(x = Date, y = AUM.TOTAL)) +
-                geom_line(aes(y = AUM.TOTAL)) +
-                geom_line(aes(y = AUM.Predict.Total), linetype = "dashed", colour = "blue") +
+                geom_line(aes(y = AUM.TOTAL, linetype = "Actual")) +
+                geom_line(aes(y = AUM.Predict.Total, linetype = "Prediction"), colour = "blue") +
                 geom_vline(xintercept = test.fsi$Date[1], linetype = "dashed") +
                 ylab("AUM") +
                 theme_minimal() +
