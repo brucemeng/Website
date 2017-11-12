@@ -12,14 +12,15 @@
     {{ with .OutputFormats.Get "RSS" }}
         {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
     {{ end }}
-    {{ range first 10 .Site.Taxonomies.categories.r }}
+    {{ range .Data.Pages }}
     <item>
-      <title>{{ .Page.Title }}</title>
-      <link>{{ .Page.Permalink }}</link>
-      <pubDate>{{ .Page.Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
       {{ with .Site.Author.email }}<author>{{.}}{{ with $.Site.Author.name }} ({{.}}){{end}}</author>{{end}}
-      <guid>{{ .Page.Permalink }}</guid>
-      <description>{{ .Page.Content | html }}</description>
+      <guid>{{ .Permalink }}</guid>
+      <description>{{ .Summary | html }}</description>
+      <content:encoded>{{ .Content | safeHTML }}</content:encoded>
     </item>
     {{ end }}
   </channel>

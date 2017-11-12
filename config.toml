@@ -52,7 +52,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "linkedin"
     weight = 2
 
-[outputFormats.RFEED]
+[outputFormats]
+[outputFormats.RSS]
 mediatype = "application/rss"
-baseName = "feed_r"
-noUgly = true
+baseName = "feed"
