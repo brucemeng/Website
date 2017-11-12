@@ -51,3 +51,8 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "https://www.linkedin.com/in/bruce-meng/"
     name = "linkedin"
     weight = 2
+
+[outputFormats.RFEED]
+mediatype = "application/rss"
+baseName = "feed_r"
+noUgly = true
