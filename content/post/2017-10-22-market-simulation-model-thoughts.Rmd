@@ -1,5 +1,5 @@
 ---
-title: Market Simulation Model thoughts
+title: Market simulation model thoughts
 author: Bruce Meng
 date: '2017-10-22'
 slug: market-simulation-model-thoughts

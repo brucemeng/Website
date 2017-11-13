@@ -6,7 +6,7 @@ slug: mapping-branches-thoughts
 categories: []
 tags:
   - R
-  - data cleansing
+  - data
 ---
 ```{r setup, include = F}
 library(tidyverse)
@@ -72,3 +72,4 @@ bank.branches <- cbind(bank.branches, branches.postal)
 head(bank.branches, 20) %>% knitr::kable()
 ```
 
+That's pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this data set. Check out the corresponding map I made in the [Projects](https://www.brucemeng.ca/project/map-branch/) section.

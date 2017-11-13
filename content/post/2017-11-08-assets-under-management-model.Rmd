@@ -1,5 +1,5 @@
 ---
-title: Assets under Management Model thoughts
+title: Assets under management model thoughts
 author: Bruce Meng
 date: '2017-11-08'
 slug: assets-under-management-model

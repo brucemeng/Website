@@ -1,5 +1,5 @@
 ---
-title: Volatility of Revenue thoughts
+title: Volatility of revenue thoughts
 author: Bruce Meng
 date: '2017-10-28'
 slug: volatility-of-profit-and-loss-thoughts
