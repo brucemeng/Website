@@ -64,8 +64,9 @@ bank.branches[3161:3165,] %>% knitr::kable()
 And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:
 
 ```{r data.postal, warning = F, message = F}
-branches.postal <- str_extract(bank.branches$text, "[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]") %>%
-                        data.frame(Postal = .)
+branches.postal <- str_extract(bank.branches$text, 
+                               "[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]") %>%
+                                        data.frame(Postal = .)
 bank.branches <- cbind(bank.branches, branches.postal)
 
 head(bank.branches, 20) %>% knitr::kable()
