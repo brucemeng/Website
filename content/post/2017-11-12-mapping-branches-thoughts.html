@@ -1,0 +1,703 @@
+---
+title: Mapping branches how to
+author: Bruce Meng
+date: '2017-11-18'
+slug: mapping-branches-thoughts
+categories: []
+tags:
+  - R
+  - data viz
+  - data cleansing
+---
+
+
+
+<p>I received some interesting data on branch locations from my counterpart on the Personal &amp; Commercial Banking Strategic Business Analysis team. Now, the actual data I received is confidential data that the BMO Market Analytics team put together so I won’t be showing that here, but I found an open source intel option from <a href="https://www.payments.ca/our-directories/financial-institutions-branch-directory">Payments Canada</a> that I can use instead.</p>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>The data set itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada… so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.</p>
+<p>Here’s a snapshot of the data from the PDF:</p>
+<div class="figure">
+<img src="/img/fib.sample.data.png" alt="Payments Canada - Financial Institutions Branch Directory Sample Data" />
+<p class="caption">Payments Canada - Financial Institutions Branch Directory Sample Data</p>
+</div>
+<p>Notwithstanding that the data file is a PDF, it is also not exactly the most machine readable data. The bulk of this post will be on getting this data into a clean, machine readable format.</p>
+<p>First step is loading this PDF into R:</p>
+<pre class="r"><code>library(textreadr)
+
+branch.pdf &lt;- read_pdf(&quot;../../data/branches/mbrbnksn_2.pdf&quot;)
+head(branch.pdf, 20) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">page_id</th>
+<th align="right">element_id</th>
+<th align="left">text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ADS CANADIAN BANK 343</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">Routing Numbers /</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="left">Numéros d’acheminement</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="left">Electronic Paper(MICR)</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="left">AMEX BANK OF CANADA 303</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="left">Routing Numbers /</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="left">Numéros d’acheminement</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="left">Electronic Paper(MICR)</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">15</td>
+<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">18</td>
+<td align="left">Routing Numbers /</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">19</td>
+<td align="left">Numéros d’acheminement</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">20</td>
+<td align="left">Electronic Paper(MICR)</td>
+</tr>
+</tbody>
+</table>
+<p>I like the <code>read_pdf</code> function from the package <code>textreadr</code> rather than the main <code>pdftools</code> package because it places the text in a data frame. The next step would be to isolate the routing numbers:</p>
+<pre class="r"><code>branches.route &lt;- str_extract(branch.pdf$text, &quot;[0-9]{9}&quot;) %&gt;%
+                        data.frame(Routing = .)
+branches.clean &lt;- cbind(branch.pdf, branches.route)
+
+head(branches.clean, 20) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">page_id</th>
+<th align="right">element_id</th>
+<th align="left">text</th>
+<th align="left">Routing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ADS CANADIAN BANK 343</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300012</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300092</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="left">AMEX BANK OF CANADA 303</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300012</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">15</td>
+<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300022</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300032</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">18</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">19</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">20</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p>From the routing numbers, we can extract the bank identification numbers:</p>
+<pre class="r"><code>branches.clean$Bank.nbr &lt;- substr(branches.clean$Routing, 1, 4)
+head(branches.clean, 20) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">page_id</th>
+<th align="right">element_id</th>
+<th align="left">text</th>
+<th align="left">Routing</th>
+<th align="left">Bank.nbr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ADS CANADIAN BANK 343</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300012</td>
+<td align="left">0343</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300092</td>
+<td align="left">0343</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="left">AMEX BANK OF CANADA 303</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300012</td>
+<td align="left">0303</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">15</td>
+<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300022</td>
+<td align="left">0303</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300032</td>
+<td align="left">0303</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">18</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">19</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">20</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<p>And we can now identify the banks that each branch belongs to. To make it easier to recognize the banks, I created a manual mapping of bank numbers to bank names:</p>
+<pre class="r"><code>bank.names &lt;- data.frame(Bank.nbr = c(&quot;0001&quot;, &quot;0010&quot;, &quot;0003&quot;, &quot;0002&quot;, &quot;0004&quot;),
+                         Bank.name = c(&quot;BMO&quot;, &quot;CIBC&quot;, &quot;RBC&quot;, &quot;BNS&quot;, &quot;TD&quot;))
+
+bank.branches &lt;- left_join(branches.clean, bank.names)
+
+bank.branches[3161:3165,] %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">page_id</th>
+<th align="right">element_id</th>
+<th align="left">text</th>
+<th align="left">Routing</th>
+<th align="left">Bank.nbr</th>
+<th align="left">Bank.name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3161</td>
+<td align="right">42</td>
+<td align="right">33</td>
+<td align="left">000251193 51193-002 Halifax Centralized Accounting Unit, 1465 Brenton St., 4th Floor, Halifax, NS B3J 3T2</td>
+<td align="left">000251193</td>
+<td align="left">0002</td>
+<td align="left">BNS</td>
+</tr>
+<tr class="even">
+<td>3162</td>
+<td align="right">42</td>
+<td align="right">34</td>
+<td align="left">000251219 51219-002 Rundlehorn Plaza, 3735 Rundlehorn Drive N. E., Calgary, AB T1Y 2K1 (Sub to 30049)</td>
+<td align="left">000251219</td>
+<td align="left">0002</td>
+<td align="left">BNS</td>
+</tr>
+<tr class="odd">
+<td>3163</td>
+<td align="right">42</td>
+<td align="right">35</td>
+<td align="left">000251268 51268-002 ISS Operations Control, Scotia Plaza, 40 King St. W. 25th Fl, Toronto, ON M5H 1H1</td>
+<td align="left">000251268</td>
+<td align="left">0002</td>
+<td align="left">BNS</td>
+</tr>
+<tr class="even">
+<td>3164</td>
+<td align="right">42</td>
+<td align="right">36</td>
+<td align="left">000251292 51292-002 Eglinton &amp; Castle Knock, 438 Eglinton Avenue West, Toronto, ON M5N 1A2</td>
+<td align="left">000251292</td>
+<td align="left">0002</td>
+<td align="left">BNS</td>
+</tr>
+<tr class="odd">
+<td>3165</td>
+<td align="right">42</td>
+<td align="right">37</td>
+<td align="left">000251326 51326-002 Barrhaven Centre, 3701 Strandherd Drive, Nepean, ON K2J 4G8 (Sub to 00166)</td>
+<td align="left">000251326</td>
+<td align="left">0002</td>
+<td align="left">BNS</td>
+</tr>
+</tbody>
+</table>
+<p>And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:</p>
+<pre class="r"><code>branches.postal &lt;- str_extract(bank.branches$text, &quot;[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]&quot;) %&gt;%
+                        data.frame(Postal = .)
+bank.branches &lt;- cbind(bank.branches, branches.postal)
+
+head(bank.branches, 20) %&gt;% knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">page_id</th>
+<th align="right">element_id</th>
+<th align="left">text</th>
+<th align="left">Routing</th>
+<th align="left">Bank.nbr</th>
+<th align="left">Bank.name</th>
+<th align="left">Postal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">ADS CANADIAN BANK 343</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">5</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">6</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300012</td>
+<td align="left">0343</td>
+<td align="left">NA</td>
+<td align="left">M5H 3R3</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<td align="left">034300092</td>
+<td align="left">0343</td>
+<td align="left">NA</td>
+<td align="left">M5H 3R3</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="left">AMEX BANK OF CANADA 303</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">11</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">13</td>
+<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">14</td>
+<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300012</td>
+<td align="left">0303</td>
+<td align="left">NA</td>
+<td align="left">L3R 4H8</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">15</td>
+<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300022</td>
+<td align="left">0303</td>
+<td align="left">NA</td>
+<td align="left">L3R 4H8</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">16</td>
+<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
+<td align="left">030300032</td>
+<td align="left">0303</td>
+<td align="left">NA</td>
+<td align="left">L3R 4H8</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">17</td>
+<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">18</td>
+<td align="left">Routing Numbers /</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">19</td>
+<td align="left">Numéros d’acheminement</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">20</td>
+<td align="left">Electronic Paper(MICR)</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</div>

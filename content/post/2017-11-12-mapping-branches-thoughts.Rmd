@@ -1,0 +1,73 @@
+---
+title: Mapping branches - cleaning data
+author: Bruce Meng
+date: '2017-11-18'
+slug: mapping-branches-thoughts
+categories: []
+tags:
+  - R
+  - data cleansing
+---
+```{r setup, include = F}
+library(tidyverse)
+```
+
+I received some interesting data on branch locations from my counterpart on the Personal & Commercial Banking Strategic Business Analysis team. Now, the actual data I received is confidential data that the BMO Market Analytics team put together so I won't be showing that here, but I found an open source intel option from [Payments Canada](https://www.payments.ca/our-directories/financial-institutions-branch-directory) that I can use instead.
+
+# Data
+
+The data set itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada... so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.
+
+Here's a snapshot of the data from the PDF:
+
+![Payments Canada - Financial Institutions Branch Directory Sample Data](/img/fib.sample.data.png)
+
+Notwithstanding that the data file is a PDF, it is also not exactly the most machine readable data. The bulk of this post will be on getting this data into a clean, machine readable format.
+
+First step is loading this PDF into R:
+
+```{r data.pdf}
+library(textreadr)
+
+branch.pdf <- read_pdf("../../data/branches/mbrbnksn_2.pdf")
+head(branch.pdf, 20) %>% knitr::kable()
+```
+
+I like the `read_pdf` function from the package `textreadr` rather than the main `pdftools` package because it places the text in a data frame. The next step would be to isolate the routing numbers:
+
+```{r data.iso}
+branches.route <- str_extract(branch.pdf$text, "[0-9]{9}") %>%
+                        data.frame(Routing = .)
+branches.clean <- cbind(branch.pdf, branches.route)
+
+head(branches.clean, 20) %>% knitr::kable()
+```
+
+From the routing numbers, we can extract the bank identification numbers:
+
+```{r data.bank}
+branches.clean$Bank.nbr <- substr(branches.clean$Routing, 1, 4)
+head(branches.clean, 20) %>% knitr::kable()
+```
+
+And we can now identify the banks that each branch belongs to. To make it easier to recognize the banks, I created a manual mapping of bank numbers to bank names:
+
+```{r data.banknames, warning = F, message = F}
+bank.names <- data.frame(Bank.nbr = c("0001", "0010", "0003", "0002", "0004"),
+                         Bank.name = c("BMO", "CIBC", "RBC", "BNS", "TD"))
+
+bank.branches <- left_join(branches.clean, bank.names)
+
+bank.branches[3161:3165,] %>% knitr::kable()
+```
+
+And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:
+
+```{r data.postal, warning = F, message = F}
+branches.postal <- str_extract(bank.branches$text, "[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]") %>%
+                        data.frame(Postal = .)
+bank.branches <- cbind(bank.branches, branches.postal)
+
+head(bank.branches, 20) %>% knitr::kable()
+```
+
