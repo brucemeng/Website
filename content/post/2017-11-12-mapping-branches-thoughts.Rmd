@@ -7,7 +7,6 @@ categories: []
 tags:
   - R
   - data
-draft: true
 ---
 ```{r setup, include = F}
 library(tidyverse)
