@@ -1,0 +1,65 @@
+---
+title: Branch Locations
+description: A map of all branches from major Canadian banks
+author: Bruce Meng
+date: '2017-11-13'
+slug: map-branch
+categories: []
+tags:
+  - data
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(leaflet.extras)
+library(tidyverse)
+
+branch <- read_csv("../../data/branches/branches.map.data.csv")
+```
+
+```{r data.process, include = F}
+branch.clean <- branch[complete.cases(branch),]
+
+
+```
+
+# Description
+
+This is a map of branch locations from the major Canadian banks.
+
+Features:
+* Heatmap
+* Individual Banks
+
+Date of data:
+> Sep. 2017
+
+Source of data:
+> [Payments Canada](https://www.payments.ca/our-directories/financial-institutions-branch-directory). 
+Geocoded by Google Maps.
+
+# Map
+
+```{r map, message = F, echo = F, warning = F}
+bank.colr <- colorFactor(c("#0000FF", "#FF0000", "#8B6508", "#00CD00"), c("BMO", "CIBC", "TD", "RBC"))
+
+leaflet(branch.clean) %>%
+        addProviderTiles(provider = "CartoDB.DarkMatter") %>%
+        addCircleMarkers(lng = branch.clean$lon,
+                   lat = branch.clean$lat,
+                   weight = 1, 
+                   color = ~bank.colr(branch.clean$Bank),
+                   group = branch.clean$Bank,
+                   label = paste(branch.clean$Bank, branch.clean$Address, sep = ": ")
+                   ) %>%
+        addHeatmap(layerId = "Heat On", group = "Heat On",
+                   radius = 5) %>%
+        addLayersControl(overlayGroups = branch.clean$Bank,
+                         baseGroups = c("Heat On", "Heat Off")) %>%
+        addFullscreenControl() %>%
+        addLegend(pal = bank.colr,
+                  values = ~branch.clean$Bank,
+                  position = "bottomright",
+                  title = "")
+
+```

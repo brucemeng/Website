@@ -33,6 +33,7 @@ branch.pdf <- read_pdf("../../data/branches/mbrbnksn_2.pdf")
 head(branch.pdf, 20) %>% knitr::kable()
 ```
 
+\newline
 I like the `read_pdf` function from the package `textreadr` rather than the main `pdftools` package because it places the text in a data frame. The next step would be to isolate the routing numbers:
 
 ```{r data.iso}
@@ -43,6 +44,7 @@ branches.clean <- cbind(branch.pdf, branches.route)
 head(branches.clean, 20) %>% knitr::kable()
 ```
 
+\newline
 From the routing numbers, we can extract the bank identification numbers:
 
 ```{r data.bank}
@@ -50,6 +52,7 @@ branches.clean$Bank.nbr <- substr(branches.clean$Routing, 1, 4)
 head(branches.clean, 20) %>% knitr::kable()
 ```
 
+\newline
 And we can now identify the banks that each branch belongs to. To make it easier to recognize the banks, I created a manual mapping of bank numbers to bank names:
 
 ```{r data.banknames, warning = F, message = F}
@@ -61,15 +64,15 @@ bank.branches <- left_join(branches.clean, bank.names)
 bank.branches[3161:3165,] %>% knitr::kable()
 ```
 
+\newline
 And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:
 
 ```{r data.postal, warning = F, message = F}
-branches.postal <- str_extract(bank.branches$text, 
-                               "[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]") %>%
-                                        data.frame(Postal = .)
-bank.branches <- cbind(bank.branches, branches.postal)
+bank.branches$Postal <- str_extract(bank.branches$text, 
+                               "[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]")
 
 head(bank.branches, 20) %>% knitr::kable()
 ```
 
+\newline
 That's pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this data set. Check out the corresponding map I made in the [Projects](https://www.brucemeng.ca/project/map-branch/) section.

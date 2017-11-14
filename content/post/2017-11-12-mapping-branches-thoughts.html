@@ -499,10 +499,8 @@ bank.branches[3161:3165,] %&gt;% knitr::kable()</code></pre>
 </tbody>
 </table>
 <p>And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:</p>
-<pre class="r"><code>branches.postal &lt;- str_extract(bank.branches$text, 
-                               &quot;[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]&quot;) %&gt;%
-                                        data.frame(Postal = .)
-bank.branches &lt;- cbind(bank.branches, branches.postal)
+<pre class="r"><code>bank.branches$Postal &lt;- str_extract(bank.branches$text, 
+                               &quot;[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]&quot;)
 
 head(bank.branches, 20) %&gt;% knitr::kable()</code></pre>
 <table>
