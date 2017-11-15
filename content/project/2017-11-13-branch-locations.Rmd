@@ -75,7 +75,7 @@ leaflet(branch.clean) %>%
 
 ## Observations
 
-Most of the economic activity is located near the border to the U.S. (not surprising). It did surprise me on how sparse Saskatchewan was however.
+Most of the economic activity is located near the border to the U.S. (not surprising). It did surprise me on how sparse Saskatchewan was however, as well as the vast swaths of land in Northern Ontario and Northern Quebec.
 
 ## Other
 
