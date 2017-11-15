@@ -14,7 +14,7 @@ tags:
 <p>I received some interesting data on branch locations from my counterpart on the Personal &amp; Commercial Banking Strategic Business Analysis team. Now, the actual data I received is confidential data that the BMO Market Analytics team put together so I won’t be showing that here, but I found an open source intel option from <a href="https://www.payments.ca/our-directories/financial-institutions-branch-directory">Payments Canada</a> that I can use instead.</p>
 <div id="data" class="section level1">
 <h1>Data</h1>
-<p>The data set itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada… so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.</p>
+<p>The dataset itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada… so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.</p>
 <p>Here’s a snapshot of the data from the PDF:</p>
 <div class="figure">
 <img src="/img/fib.sample.data.png" alt="Payments Canada - Financial Institutions Branch Directory Sample Data" />
@@ -698,5 +698,5 @@ head(bank.branches, 20) %&gt;% knitr::kable()</code></pre>
 </tr>
 </tbody>
 </table>
-<p>That’s pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this data set. Check out the corresponding map I made in the <a href="https://www.brucemeng.ca/project/map-branch/">Projects</a> section.</p>
+<p>That’s pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this dataset. Check out the corresponding map I made in the <a href="https://www.brucemeng.ca/project/map-branch/">Projects</a> section.</p>
 </div>

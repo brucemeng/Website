@@ -16,7 +16,7 @@ I received some interesting data on branch locations from my counterpart on the 
 
 # Data
 
-The data set itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada... so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.
+The dataset itself looks to be a very comprehensive list of all bank branches from what looks like every bank that operates in Canada... so lots of bonus points there as a data source. Unfortunately, the data is only available as a PDF so getting it into a usable format will either be very manual (e.g. cutting/pasting in Excel), or quite a bit of code will be dedicated to processing the data.
 
 Here's a snapshot of the data from the PDF:
 
@@ -75,4 +75,4 @@ head(bank.branches, 20) %>% knitr::kable()
 ```
 
 \newline
-That's pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this data set. Check out the corresponding map I made in the [Projects](https://www.brucemeng.ca/project/map-branch/) section.
+That's pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this dataset. Check out the corresponding map I made in the [Projects](https://www.brucemeng.ca/project/map-branch/) section.

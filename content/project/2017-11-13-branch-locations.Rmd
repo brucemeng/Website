@@ -1,13 +1,12 @@
 ---
-title: Branch Locations
-description: A map of all branches from major Canadian banks
+title: Economic Activity in Canada
+description: A map of economic activity in Canada as represented by the location and number of bank branches
 author: Bruce Meng
 date: '2017-11-13'
 slug: map-branch
 categories: []
 tags:
   - data
-draft: true
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -15,23 +14,30 @@ library(leaflet)
 library(leaflet.extras)
 library(tidyverse)
 
-branch <- read_csv("../../data/branches/branches.map.data.csv")
+branch <- read_csv("../../data/branches/fib.data.big6.csv")
 ```
 
 ```{r data.process, include = F}
-branch.clean <- branch[complete.cases(branch),]
+branch.clean <- select(branch, Bank.name, lon, lat) %>%
+                        .[complete.cases(.),]
 
 
 ```
 
 # Description
 
+Despite the advance of mobile and digital banking, the physical branch is still a preferred place to do banking business for many consumers and service businesses. By looking at where and how many bank branches are, we can get a glimpse of where economic activity is in Canada.
+
 This is a map of branch locations from the major Canadian banks.
 
-Features:
+Branch locations from:
 
-* Heatmap
-* Individual Banks
+* Bank of Montreal
+* Scotiabank
+* Canadian Imperial Bank of Commerce
+* National Bank
+* Royal Bank of Canada
+* Toronto-Dominion Bank
 
 Date of data:
 
@@ -39,8 +45,7 @@ Date of data:
 
 Source of data:
 
-> [Payments Canada](https://www.payments.ca/our-directories/financial-institutions-branch-directory). 
-Geocoded by Google Maps.
+> [Payments Canada](https://www.payments.ca/our-directories/financial-institutions-branch-directory). Geocoded by [Photon](http://photon.komoot.de/).
 
 # Map
 
@@ -49,21 +54,29 @@ bank.colr <- colorFactor(c("#0000FF", "#FF0000", "#8B6508", "#00CD00"), c("BMO",
 
 leaflet(branch.clean) %>%
         addProviderTiles(provider = "CartoDB.DarkMatter") %>%
-        addCircleMarkers(lng = branch.clean$lon,
-                   lat = branch.clean$lat,
-                   stroke = F, 
-                   color = ~bank.colr(branch.clean$Bank),
-                   group = branch.clean$Bank,
-                   label = paste(branch.clean$Bank, branch.clean$Address, sep = ": ")
-                   ) %>%
+        # addCircleMarkers(lng = branch.clean$lon,
+        #            lat = branch.clean$lat,
+        #            stroke = F, 
+        #            color = ~bank.colr(branch.clean$Bank),
+        #            group = branch.clean$Bank,
+        #            label = paste(branch.clean$Bank, branch.clean$Address, sep = ": ")
+        #            ) %>%
         addHeatmap(layerId = "Heat On", group = "Heat On",
                    radius = 5) %>%
-        addLayersControl(overlayGroups = branch.clean$Bank,
-                         baseGroups = c("Heat On", "Heat Off")) %>%
-        addFullscreenControl() %>%
-        addLegend(pal = bank.colr,
-                  values = ~branch.clean$Bank,
-                  position = "bottomright",
-                  title = "")
+        # addLayersControl(overlayGroups = branch.clean$Bank,
+        #                  baseGroups = c("Heat On", "Heat Off")) %>%
+        addFullscreenControl()
+        # addLegend(pal = bank.colr,
+        #           values = ~branch.clean$Bank,
+        #           position = "bottomright",
+        #           title = "")
 
 ```
+
+## Observations
+
+Most of the economic activity is located near the border to the U.S. (not surprising). It did surprise me on how sparse Saskatchewan was however.
+
+## Other
+
+I developed something similar at work, but instead of viewing it from a lens of where economic activity is, I viewed it from a lens of where the competition is. I didn't reproduce individual bank branch locations in hopes of keeping that slight edge in competitive intelligence ;).
