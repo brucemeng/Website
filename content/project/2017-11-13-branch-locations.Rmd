@@ -75,8 +75,8 @@ leaflet(branch.clean) %>%
 
 ## Observations
 
-Most of the economic activity is located near the border to the U.S. (not surprising). It did surprise me on how sparse Saskatchewan was however, as well as the vast swaths of land in Northern Ontario and Northern Quebec.
+Most of the economic activity is located near the border to the U.S. (not surprising). It did surprise me on how sparse the economic activity is from Northern Saskatchewan all the way to Northern Quebec. Conversely, I was also surprised that there is significant enough activity as far north as Cambridge Bay!
 
 ## Other
 
-I developed something similar at work, but instead of viewing it from a lens of where economic activity is, I viewed it from a lens of where the competition is. I didn't reproduce individual bank branch locations in hopes of keeping that slight edge in competitive intelligence ;).
+I developed something similar at work, but instead of viewing it from a lens of where economic activity is, I viewed it from a lens of where the competition is. I didn't reproduce individual bank branch locations here in hopes of keeping that slight edge in competitive intelligence ;).
