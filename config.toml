@@ -10,7 +10,11 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     author = "Bruce Meng"
     description = "...a collection of posts, projects, and other random thoughts..."
     githubUsername = "#"
+<<<<<<< HEAD
     accent = "darkorange"
+=======
+    accent = "firebrick"
+>>>>>>> parent of 4374920... darkred accent
     showBorder = true
     backgroundColor = "white"
     font = "Raleway" # should match the name on Google Fonts!
