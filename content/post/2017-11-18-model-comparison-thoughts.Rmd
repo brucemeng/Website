@@ -1,0 +1,84 @@
+---
+title: Model comparison thoughts
+author: Bruce Meng
+date: '2017-11-18'
+slug: model-comparison-thoughts
+categories: []
+tags:
+  - modelling
+  - R
+draft: true
+---
+
+While developing my hybrid financial model, I quickly realized that I needed a method to compare my new model performance with the traditional manual model currently in use by BMO.
+
+I decided to focus first and foremost on model prediction accuracy (partly because there really is no comparison on speed... the hybrid model is **fast!**). The most obvious measure here, and it was one that I ran with for a while, is the absolute percentage error between the model predictions and the actual value.
+
+As an example, suppose the actual value is 100, and Model A predicted 102, while Model B predicted 105. The absolute percentage error (APE) will simply be the distance between the prediction and the actual value, as a percentage of the actual value (in this case 100), without regard to whether the prediction was over or under.
+
+```{r}
+library(tidyverse)
+
+results <- data.frame(Actual = 100, Model.A = 102, Model.B = 105)
+
+results$APE.A <- with(results, (Model.A / Actual - 1) %>% abs())
+results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
+
+knitr::kable(results)
+```
+
+As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply divided the two APE values, so that if the APE ratio is less than 1.0 then Model B is better, and conversely if the APE ratio is greater than 1.0 then Model B is worse.
+
+```{r}
+results$APE.ratio <- with(results, APE.B / APE.A)
+
+knitr::kable(results)
+```
+
+As you can guess from this rather trivial example, Model B is worse since the APE ratio is > 1. Now, we can also see how much better or how much worse the predictions are to the actual values by the magnitude of the APE ratio.
+
+Let's see how this works with a variety of accuracies. First the data:
+
+```{r}
+results <- data.frame(Actual = rep(100, 20), 
+                      Model.A = rep(105, 20), 
+                      Model.B = c(seq(50, 150, length.out = 18), 100.001, 300),
+                      Date = 2017: (2017+19))
+
+results$APE.A <- with(results, (Model.A / Actual - 1) %>% abs())
+results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
+results$APE.ratio <- with(results, APE.B - APE.A)
+
+ggplot(results, aes(x = Date)) +
+        geom_line(aes(y = Actual, linetype = "Actual")) +
+        geom_line(aes(y = Model.A, linetype = "Model A")) +
+        geom_line(aes(y = Model.B, linetype = "Model B")) +
+        ylab("Values") +
+        theme_minimal()
+```
+
+To summarize, the Actual values are a constant 100, Model A has a constant prediction of 105, and Model B has an escalating prediction, starting at 100.
+
+and looking at our sole measure of which model is better, APE difference, shows us this:
+
+```{r}
+ggplot(results, aes(x = Date, y = APE.ratio)) +
+        geom_bar(stat = "identity") +
+        ylab("APE ratio (Model B - Model A)") +
+        theme_minimal()
+```
+
+The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first connundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE ratio system I devised is not symmetrical (it is bound between APE.A and \infty). What I need is a symmetrical system...
+
+...Enter the logarithm
+
+```{r}
+results$APE.log.ratio <- with(results, log(APE.B) - log(APE.A))
+
+ggplot(results, aes(x = Date, y = APE.log.ratio)) +
+        geom_bar(stat = "identity") +
+        ylab("APE log. ratio (Model B / Model A)") +
+        theme_minimal()
+```
+
+By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (-\infty, +\infty). Thus, a very very good prediction has an equal amount of visual space as a very very bad prediction.
