@@ -28,7 +28,9 @@ If you enjoyed my site, check out David Robinson's excellent posts at [Variance 
 This site is RSS enabled.
 
 For all posts:
-[](https://www.brucemeng.ca/feed.xml)
+
+[https://www.brucemeng.ca/feed.xml](https://www.brucemeng.ca/feed.xml)
 
 For only R posts:
-[](https://www.brucemeng.ca/tags/r/feed.xml)
+
+[https://www.brucemeng.ca/tags/r/feed.xml](https://www.brucemeng.ca/tags/r/feed.xml)
