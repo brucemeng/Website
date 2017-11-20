@@ -22,3 +22,13 @@ I intend to use this website as a medium to collect, write, and share my adventu
 I am an avid R user, and also like to cycle when the sun is out :).
 
 If you enjoyed my site, check out David Robinson's excellent posts at [Variance Explained](http://varianceexplained.org/), and also the broader R community as well at [R-bloggers](https://www.r-bloggers.com/).
+
+**RSS**
+
+This site is RSS enabled.
+
+For all posts:
+[](https://www.brucemeng.ca/feed.xml)
+
+For only R posts:
+[](https://www.brucemeng.ca/tags/r/feed.xml)
