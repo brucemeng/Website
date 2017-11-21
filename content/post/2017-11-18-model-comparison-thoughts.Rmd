@@ -16,7 +16,7 @@ I decided to focus first and foremost on model prediction accuracy (partly becau
 
 As an example, suppose the actual value is 100, and Model A predicted 102, while Model B predicted 105. The absolute percentage error (APE) will simply be the distance between the prediction and the actual value, as a percentage of the actual value (in this case 100), without regard to whether the prediction was over or under.
 
-```{r message = F, warning = F, results='asis'}
+```{r message = F, warning = F, results='asis', fig.align='center'}
 library(tidyverse)
 # Generate results
 results <- data.frame(Actual = 100, Model.A = 102, Model.B = 105)
@@ -31,7 +31,7 @@ knitr::kable(results)
 
 As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply subtracted the two APE values, so that if the APE difference is negative then Model B is better, and conversely if the APE difference is positive then Model B is worse.
 
-```{r results='asis'}
+```{r results='asis', fig.align='center'}
 results$APE.diff <- with(results, APE.B - APE.A)
 
 knitr::kable(results)
@@ -75,7 +75,7 @@ ggplot(results, aes(x = Date, y = APE.diff)) +
 
 The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and $\infty$). What I need is a symmetrical system...
 
-...Enter the log!
+#### ...Enter the log!
 
 ```{r message = F, warning = F}
 # Calculate log-diff
