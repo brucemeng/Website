@@ -51,6 +51,11 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "https://www.linkedin.com/in/bruce-meng/"
     name = "linkedin"
     weight = 2
+    
+[[menu.icon]]
+    url = "https://www.brucemeng.ca/feed.xml"
+    name = "rss"
+    weight = 3
 
 [outputFormats]
 [outputFormats.RSS]
