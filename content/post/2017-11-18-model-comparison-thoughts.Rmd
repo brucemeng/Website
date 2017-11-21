@@ -75,7 +75,7 @@ ggplot(results, aes(x = Date, y = APE.diff)) +
 
 The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and $\infty$). What I need is a symmetrical system...
 
-#### ...Enter the log!
+# ...Enter the log!
 
 ```{r message = F, warning = F}
 # Calculate log-diff
@@ -88,8 +88,7 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
         theme_minimal()
 ```
 
-By transforming the scores to the logarithmic scale, it is now symmetrical and bound between ($-\infty$, $+\infty$). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.
+By transforming the scores to the logarithmic scale, it is now symmetrical and bound between ($-\infty$, $+\infty$). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction. (Or as xkcd would put it... I just took the easy way out... =D).
 
 <center>![](/img/log_scale.png)</center>
 
-(Or did I just take the easy way out... courtesy of xkcd...)
