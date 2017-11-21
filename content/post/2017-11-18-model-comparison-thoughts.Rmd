@@ -1,7 +1,7 @@
 ---
 title: Logs to the rescue! - model comparisons
 author: Bruce Meng
-date: '2017-11-18'
+date: '2017-11-22'
 slug: model-comparison-log
 categories: []
 tags:
@@ -75,9 +75,9 @@ ggplot(results, aes(x = Date, y = APE.diff)) +
 
 The above graph shows the performance of Model B, compared with Model A at various predictions. The bigger the upward bar, the worse off Model B is, and the bigger the downward bar, the better off Model B is. Here is where I had my first conundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly taking up all of the visual space. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and $\infty$). What I need is a symmetrical system...
 
-# ...Enter the log!
+# ![Enter the Log (from Clash Royale)](/img/TheLogCard.png)
 
-![The Log - from Clash Royale](/img/TheLogCard.png)
+We can use the logarithm to transform the APE difference score.
 
 ```{r message = F, warning = F}
 # Calculate log-diff
