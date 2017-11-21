@@ -26,7 +26,7 @@ results$APE.A <- with(results, (Model.A / Actual - 1) %>% abs())
 results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
 
 # Show results
-knitr::kable(results)
+results
 ```
 
 As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply subtracted the two APE values, so that if the APE difference is negative then Model B is better, and conversely if the APE difference is positive then Model B is worse.
@@ -34,7 +34,7 @@ As shown above, the further the prediction is from actual, the greater the APE v
 ```{r results='asis', fig.align='center'}
 results$APE.diff <- with(results, APE.B - APE.A)
 
-knitr::kable(results)
+results
 ```
 
 As you can guess from this rather trivial example, Model B is worse since the APE difference is positive. In addition to seeing whether Model B is better or worse, we can also see how much better or how much worse Model B is by the magnitude of the APE difference.
