@@ -7,7 +7,7 @@ categories: []
 tags:
   - modelling
   - R
-draft: true
+draft: false
 ---
 
 While developing my hybrid financial model, I quickly realized that I needed a quick visual method to compare my new model performance with the traditional manual model currently in use by BMO.
