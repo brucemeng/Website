@@ -16,20 +16,22 @@ I decided to focus first and foremost on model prediction accuracy (partly becau
 
 As an example, suppose the actual value is 100, and Model A predicted 102, while Model B predicted 105. The absolute percentage error (APE) will simply be the distance between the prediction and the actual value, as a percentage of the actual value (in this case 100), without regard to whether the prediction was over or under.
 
-```{r}
+```{r message = F, warning = F, results='asis'}
 library(tidyverse)
-
+# Generate results
 results <- data.frame(Actual = 100, Model.A = 102, Model.B = 105)
 
+# Calculate APE
 results$APE.A <- with(results, (Model.A / Actual - 1) %>% abs())
 results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
 
+# Show results
 knitr::kable(results)
 ```
 
 As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply subtracted the two APE values, so that if the APE difference is negative then Model B is better, and conversely if the APE difference is positive then Model B is worse.
 
-```{r}
+```{r results='asis'}
 results$APE.diff <- with(results, APE.B - APE.A)
 
 knitr::kable(results)
@@ -39,7 +41,7 @@ As you can guess from this rather trivial example, Model B is worse since the AP
 
 Let's see how this works with a variety of accuracies. First the data:
 
-```{r}
+```{r message = F, warning = F}
 # Generate data
 results <- data.frame(Actual = rep(100, 20), 
                       Model.A = rep(105, 20), 
@@ -64,7 +66,7 @@ To summarize, the Actual values are a constant 100, Model A has a constant predi
 
 Looking at our sole measure of which model is better, APE difference, shows us this:
 
-```{r}
+```{r message = F, warning = F}
 ggplot(results, aes(x = Date, y = APE.diff)) +
         geom_bar(stat = "identity") +
         ylab("APE difference (Model B - Model A)") +
@@ -75,7 +77,7 @@ The above graph shows the performance of Model B, compared with Model A at vario
 
 ...Enter the log(arithm)
 
-```{r}
+```{r message = F, warning = F}
 # Calculate log-diff
 results$APE.log.diff <- with(results, log(APE.B) - log(APE.A))
 
@@ -88,4 +90,4 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
 
 By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (-\infty, +\infty). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.
 
-![Or did I just take the easy way out... courtesy of xkcd](/img/log_scale.png)
+![(Or did I just take the easy way out... courtesy of xkcd...)](/img/log_scale.png)
