@@ -90,7 +90,7 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
         theme_minimal()
 ```
 
-By transforming the scores to the logarithmic scale, it is now symmetrical and bound between ($-\infty$, $+\infty$). Thus, a very very bad prediction will not hog all of the visual space, while a very very good prediction will have a proportionate share of the visual space. (Or as xkcd would put it... I just took the easy way out... =D).
+By transforming the scores to the logarithmic scale, it is now symmetrical and bound between ($-\infty$, $+\infty$). Thus, a very very bad prediction will not hog all of the visual space, but will instead occupy its proportionate share of the visual space along with a very very good prediction. (Or as xkcd would put it... I just took the easy way out... =D).
 
 <center>![](/img/log_scale.png)</center>
 
