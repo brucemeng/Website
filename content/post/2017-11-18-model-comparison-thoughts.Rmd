@@ -1,5 +1,5 @@
 ---
-title: Model comparison thoughts
+title: Logs to the rescue! - model comparisons
 author: Bruce Meng
 date: '2017-11-18'
 slug: model-comparison-thoughts
@@ -10,7 +10,7 @@ tags:
 draft: true
 ---
 
-While developing my hybrid financial model, I quickly realized that I needed a method to compare my new model performance with the traditional manual model currently in use by BMO.
+While developing my hybrid financial model, I quickly realized that I needed a quick visual method to compare my new model performance with the traditional manual model currently in use by BMO.
 
 I decided to focus first and foremost on model prediction accuracy (partly because there really is no comparison on speed... the hybrid model is **fast!**). The most obvious measure here, and it was one that I ran with for a while, is the absolute percentage error between the model predictions and the actual value.
 
@@ -27,28 +27,31 @@ results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
 knitr::kable(results)
 ```
 
-As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply divided the two APE values, so that if the APE ratio is less than 1.0 then Model B is better, and conversely if the APE ratio is greater than 1.0 then Model B is worse.
+As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply subtracted the two APE values, so that if the APE difference is negative then Model B is better, and conversely if the APE difference is positive then Model B is worse.
 
 ```{r}
-results$APE.ratio <- with(results, APE.B / APE.A)
+results$APE.diff <- with(results, APE.B - APE.A)
 
 knitr::kable(results)
 ```
 
-As you can guess from this rather trivial example, Model B is worse since the APE ratio is > 1. Now, we can also see how much better or how much worse the predictions are to the actual values by the magnitude of the APE ratio.
+As you can guess from this rather trivial example, Model B is worse since the APE difference is positive. In addition to seeing whether Model B is better or worse, we can also see how much better or how much worse Model B is by the magnitude of the APE difference.
 
 Let's see how this works with a variety of accuracies. First the data:
 
 ```{r}
+# Generate data
 results <- data.frame(Actual = rep(100, 20), 
                       Model.A = rep(105, 20), 
                       Model.B = c(seq(50, 150, length.out = 18), 100.001, 300),
                       Date = 2017: (2017+19))
 
+# Calculate APE
 results$APE.A <- with(results, (Model.A / Actual - 1) %>% abs())
 results$APE.B <- with(results, (Model.B / Actual - 1) %>% abs())
-results$APE.ratio <- with(results, APE.B - APE.A)
+results$APE.diff <- with(results, APE.B - APE.A)
 
+# Plot values
 ggplot(results, aes(x = Date)) +
         geom_line(aes(y = Actual, linetype = "Actual")) +
         geom_line(aes(y = Model.A, linetype = "Model A")) +
@@ -57,28 +60,32 @@ ggplot(results, aes(x = Date)) +
         theme_minimal()
 ```
 
-To summarize, the Actual values are a constant 100, Model A has a constant prediction of 105, and Model B has an escalating prediction, starting at 100.
+To summarize, the Actual values are a constant 100, Model A has a constant prediction of 105, and Model B has an escalating prediction, starting at `r results$Model.B[1]`.
 
-and looking at our sole measure of which model is better, APE difference, shows us this:
+Looking at our sole measure of which model is better, APE difference, shows us this:
 
 ```{r}
-ggplot(results, aes(x = Date, y = APE.ratio)) +
+ggplot(results, aes(x = Date, y = APE.diff)) +
         geom_bar(stat = "identity") +
-        ylab("APE ratio (Model B - Model A)") +
+        ylab("APE difference (Model B - Model A)") +
         theme_minimal()
 ```
 
-The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first connundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE ratio system I devised is not symmetrical (it is bound between APE.A and \infty). What I need is a symmetrical system...
+The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum... a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and \infty). What I need is a symmetrical system...
 
-...Enter the logarithm
+...Enter the log(arithm)
 
 ```{r}
-results$APE.log.ratio <- with(results, log(APE.B) - log(APE.A))
+# Calculate log-diff
+results$APE.log.diff <- with(results, log(APE.B) - log(APE.A))
 
-ggplot(results, aes(x = Date, y = APE.log.ratio)) +
+# Plot results
+ggplot(results, aes(x = Date, y = APE.log.diff)) +
         geom_bar(stat = "identity") +
-        ylab("APE log. ratio (Model B / Model A)") +
+        ylab("APE log. difference (Model B - Model A)") +
         theme_minimal()
 ```
 
-By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (-\infty, +\infty). Thus, a very very good prediction has an equal amount of visual space as a very very bad prediction.
+By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (-\infty, +\infty). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.
+
+![Or did I just take the easy way out... courtesy of xkcd](/img/log_scale.png)
