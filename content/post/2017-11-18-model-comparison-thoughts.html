@@ -1,7 +1,7 @@
 ---
 title: Logs to the rescue! - model comparisons
 author: Bruce Meng
-date: '2017-11-18'
+date: '2017-11-22'
 slug: model-comparison-thoughts
 categories: []
 tags:
@@ -99,8 +99,8 @@ ggplot(results, aes(x = Date)) +
         ylab(&quot;APE difference (Model B - Model A)&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-18-model-comparison-thoughts_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum… a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and ). What I need is a symmetrical system…</p>
-<p>…Enter the log(arithm)</p>
+<p>The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum… a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and <span class="math inline">\(\infty\)</span>). What I need is a symmetrical system…</p>
+<p>…Enter the log!</p>
 <pre class="r"><code># Calculate log-diff
 results$APE.log.diff &lt;- with(results, log(APE.B) - log(APE.A))
 
@@ -110,8 +110,7 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
         ylab(&quot;APE log. difference (Model B - Model A)&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-18-model-comparison-thoughts_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (-, +). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.</p>
-<div class="figure">
-<img src="/img/log_scale.png" alt="Or did I just take the easy way out… courtesy of xkcd" />
-<p class="caption">Or did I just take the easy way out… courtesy of xkcd</p>
-</div>
+<p>By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (<span class="math inline">\(-\infty\)</span>, <span class="math inline">\(+\infty\)</span>). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.</p>
+<center>
+<img src="/img/log_scale.png" alt="(Or did I just take the easy way out… courtesy of xkcd…)" />
+</center>
