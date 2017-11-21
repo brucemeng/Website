@@ -2,7 +2,7 @@
 title: Logs to the rescue! - model comparisons
 author: Bruce Meng
 date: '2017-11-18'
-slug: model-comparison-thoughts
+slug: model-comparison-log
 categories: []
 tags:
   - modelling
@@ -99,9 +99,13 @@ ggplot(results, aes(x = Date)) +
         ylab(&quot;APE difference (Model B - Model A)&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-18-model-comparison-thoughts_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>The above graph shows the performance of Model B, compared with Model A at various predictions. Here is where I had my first conundrum… a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly visible. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and <span class="math inline">\(\infty\)</span>). What I need is a symmetrical system…</p>
+<p>The above graph shows the performance of Model B, compared with Model A at various predictions. The bigger the upward bar, the worse off Model B is, and the bigger the downward bar, the better off Model B is. Here is where I had my first conundrum… a very very good prediction (second last prediction, where Model B had almost perfect accuracy) was basically not visible at all, while a very very bad prediction (last prediction) is clearly taking up all of the visual space. This is because this APE difference system I devised is not symmetrical (it is bound between APE.A and <span class="math inline">\(\infty\)</span>). What I need is a symmetrical system…</p>
 <div id="enter-the-log" class="section level1">
 <h1>…Enter the log!</h1>
+<div class="figure">
+<img src="/img/TheLogCard.png" alt="The Log - from Clash Royale" />
+<p class="caption">The Log - from Clash Royale</p>
+</div>
 <pre class="r"><code># Calculate log-diff
 results$APE.log.diff &lt;- with(results, log(APE.B) - log(APE.A))
 
@@ -111,7 +115,7 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
         ylab(&quot;APE log. difference (Model B - Model A)&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-18-model-comparison-thoughts_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (<span class="math inline">\(-\infty\)</span>, <span class="math inline">\(+\infty\)</span>). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction. (Or as xkcd would put it… I just took the easy way out… =D).</p>
+<p>By transforming the scores to the logarithmic scale, it is now symmetrical and bound between (<span class="math inline">\(-\infty\)</span>, <span class="math inline">\(+\infty\)</span>). Thus, a very very bad prediction will not hog all of the visual space, while a very very good prediction will have a proportionate share of the visual space. (Or as xkcd would put it… I just took the easy way out… =D).</p>
 <center>
 <img src="/img/log_scale.png" />
 </center>
