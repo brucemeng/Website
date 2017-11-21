@@ -16,7 +16,7 @@ I decided to focus first and foremost on model prediction accuracy (partly becau
 
 As an example, suppose the actual value is 100, and Model A predicted 102, while Model B predicted 105. The absolute percentage error (APE) will simply be the distance between the prediction and the actual value, as a percentage of the actual value (in this case 100), without regard to whether the prediction was over or under.
 
-```{r message = F, warning = F, results='asis', fig.align='center'}
+```{r message = F, warning = F, fig.align='center'}
 library(tidyverse)
 # Generate results
 results <- data.frame(Actual = 100, Model.A = 102, Model.B = 105)
@@ -31,7 +31,7 @@ results
 
 As shown above, the further the prediction is from actual, the greater the APE value is. Now, instead of looking at two numbers, I made it so that I simply subtracted the two APE values, so that if the APE difference is negative then Model B is better, and conversely if the APE difference is positive then Model B is worse.
 
-```{r results='asis', fig.align='center'}
+```{r, fig.align='center'}
 results$APE.diff <- with(results, APE.B - APE.A)
 
 results
