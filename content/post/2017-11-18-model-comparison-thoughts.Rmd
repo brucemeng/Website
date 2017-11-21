@@ -90,4 +90,6 @@ ggplot(results, aes(x = Date, y = APE.log.diff)) +
 
 By transforming the scores to the logarithmic scale, it is now symmetrical and bound between ($-\infty$, $+\infty$). Thus, a very very good prediction has a proportionate amount of visual space as a very very bad prediction.
 
-<center>![(Or did I just take the easy way out... courtesy of xkcd...)](/img/log_scale.png)</center>
+<center>![](/img/log_scale.png)</center>
+
+(Or did I just take the easy way out... courtesy of xkcd...)
