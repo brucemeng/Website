@@ -1,0 +1,99 @@
+---
+title: Neural network time series models
+author: 'Bruce Meng'
+date: '2017-11-23'
+slug: neural-network-time-series-models
+categories: []
+tags:
+  - R
+  - modelling
+---
+
+
+
+<p>I recently became aware of a new neural network time series model in the package <code>nnfor</code> developed by <a href="http://kourentzes.com/forecasting/2017/02/10/forecasting-time-series-with-neural-networks-in-r/">Nikos Kourentzes</a> that really piqued my interest. Let’s put it through some of the test data available in R and compare the two models contained in the <code>nnfor</code> package against the <code>nnetar</code> model contained in Rob Hyndman’s <code>forecast</code> package.</p>
+<div id="dataset-airpassengers" class="section level1">
+<h1>Dataset: AirPassengers</h1>
+<p>I’ll use the <code>AirPassengers</code> dataset since that’s the dataset that was tested in the <code>nnfor</code> demo, but with some slight modifications. I will establish a training set and a testing set and compare model performance on the testing set only.</p>
+<p>Training data:</p>
+<pre class="r"><code>air.train &lt;- window(AirPassengers, end = 1958)
+
+autoplot(air.train) +
+        ylab(&quot;Number of Passengers&quot;) +
+        ggtitle(&quot;Training dataset&quot;) +
+        theme_minimal()</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/data.train-1.png" width="672" /></p>
+<p>Testing data:</p>
+<pre class="r"><code>air.test &lt;- window(AirPassengers, start = 1958.001)
+
+autoplot(air.test) +
+        ylab(&quot;Number of Passengers&quot;) +
+        ggtitle(&quot;Testing dataset&quot;) +
+        theme_minimal()</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/data.test-1.png" width="672" /></p>
+<div id="forecast---neural-network-autoregressive-nnetar" class="section level2">
+<h2><code>forecast</code> - Neural Network Autoregressive (nnetar)</h2>
+<p>This neural network model is part of the <code>forecast</code> package. Let’s see how the model performs with default/auto parameters:</p>
+<pre class="r"><code># Fitting nnetar model
+air.fit.nnetar &lt;- nnetar(air.train)
+air.fcst.nnetar &lt;- forecast(air.fit.nnetar, h = 35)</code></pre>
+<pre class="r"><code># Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.nnetar, series = &quot;nnetar Forecast&quot;, linetype = &quot;dashed&quot;) +
+        theme_minimal() +
+        ylab(&quot;Number of Passengers&quot;)</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/nnetar.plot-1.png" width="672" /></p>
+</div>
+<div id="nnfor---multilayer-perceptrons-mlp" class="section level2">
+<h2><code>nnfor</code> - Multilayer Perceptrons (MLP)</h2>
+<p>Let’s see how the model performs with default/auto parameters:</p>
+<pre class="r"><code># Fitting MLP model
+air.fit.mlp &lt;- mlp(air.train)
+air.fcst.mlp &lt;- forecast(air.fit.mlp, h = 35)</code></pre>
+<pre class="r"><code># Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.mlp, series = &quot;MLP Forecast&quot;, linetype = &quot;dashed&quot;) +
+        theme_minimal() +
+        ylab(&quot;Number of Passengers&quot;)</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/mlp.plot-1.png" width="672" /></p>
+</div>
+<div id="nnfor---extreme-learning-machine-elm" class="section level2">
+<h2><code>nnfor</code> - Extreme Learning Machine (ELM)</h2>
+<p>This is the other neural network model available in the <code>nnfor</code> package. Let’s see how the model performs with default/auto parameters:</p>
+<pre class="r"><code># Fitting MLP model
+air.fit.elm &lt;- elm(air.train)
+air.fcst.elm &lt;- forecast(air.fit.elm, h = 35)</code></pre>
+<pre class="r"><code># Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.elm, series = &quot;ELM Forecast&quot;, linetype = &quot;dashed&quot;) +
+        theme_minimal() +
+        ylab(&quot;Number of Passengers&quot;)</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/elm.plot-1.png" width="672" /></p>
+</div>
+<div id="observations" class="section level2">
+<h2>Observations</h2>
+<p>Visually… I may have to give it to the MLP model here.</p>
+<div id="mean-absolute-error" class="section level3">
+<h3>Mean absolute error</h3>
+<p>I’ll use the mean absolute error (MAE) as a more precise measure of model performance. The MAE is the mean difference between each model prediction and the test value, regardless of whether it is over or under the test value.</p>
+<pre class="r"><code># Establish tibble to contain predictions
+mae &lt;- tibble(Test = air.test, 
+               nnetar = air.fcst.nnetar$mean,
+               MLP = air.fcst.mlp$mean,
+               ELM = air.fcst.elm$mean)
+
+# Calculate abs. error
+mae$ae.nnetar &lt;- with(mae, abs(nnetar - Test))
+mae$ae.MLP &lt;- with(mae, abs(MLP - Test))
+mae$ae.ELM &lt;- with(mae, abs(ELM - Test))
+
+# Calculate MAE
+mae.score &lt;- apply(mae, 2, mean)[5:7] 
+names(mae.score) &lt;- c(&quot;MAE.nnetar&quot;, &quot;MAE.MLP&quot;, &quot;MAE.ELM&quot;)
+mae.score</code></pre>
+<pre><code>##  MAE.nnetar     MAE.MLP     MAE.ELM 
+## 42.68403696 23.22061148 23.47489601</code></pre>
+<p>And the MLP model wins on default parameters!</p>
+</div>
+</div>
+</div>

@@ -1,0 +1,128 @@
+---
+title: Neural network time series models
+author: 'Bruce Meng'
+date: '2017-11-23'
+slug: neural-network-time-series-models
+categories: []
+tags:
+  - R
+  - modelling
+---
+```{r setup, include = F}
+library(tidyverse)
+library(forecast)
+library(nnfor)
+library(zoo)
+```
+I recently became aware of a new neural network time series model in the package `nnfor` developed by [Nikos Kourentzes](http://kourentzes.com/forecasting/2017/02/10/forecasting-time-series-with-neural-networks-in-r/) that really piqued my interest. Let's put it through some of the test data available in R and compare the two models contained in the `nnfor` package against the `nnetar` model contained in Rob Hyndman's `forecast` package.
+
+# Dataset: AirPassengers
+
+I'll use the `AirPassengers` dataset since that's the dataset that was tested in the `nnfor` demo, but with some slight modifications. I will establish a training set and a testing set and compare model performance on the testing set only.
+
+Training data:
+
+```{r data.train}
+air.train <- window(AirPassengers, end = 1958)
+
+autoplot(air.train) +
+        ylab("Number of Passengers") +
+        ggtitle("Training dataset") +
+        theme_minimal()
+```
+
+Testing data:
+
+```{r data.test}
+air.test <- window(AirPassengers, start = 1958.001)
+
+autoplot(air.test) +
+        ylab("Number of Passengers") +
+        ggtitle("Testing dataset") +
+        theme_minimal()
+```
+
+## `forecast` - Neural Network Autoregressive (nnetar)
+
+This neural network model is part of the `forecast` package. Let's see how the model performs with default/auto parameters: 
+
+```{r nnetar}
+# Fitting nnetar model
+air.fit.nnetar <- nnetar(air.train)
+air.fcst.nnetar <- forecast(air.fit.nnetar, h = 35)
+```
+
+```{r nnetar.plot}
+# Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.nnetar, series = "nnetar Forecast", linetype = "dashed") +
+        theme_minimal() +
+        ylab("Number of Passengers")
+
+```
+
+## `nnfor` - Multilayer Perceptrons (MLP)
+
+Let's see how the model performs with default/auto parameters: 
+
+```{r nnfor.mlp}
+# Fitting MLP model
+air.fit.mlp <- mlp(air.train)
+air.fcst.mlp <- forecast(air.fit.mlp, h = 35)
+```
+
+```{r mlp.plot}
+# Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.mlp, series = "MLP Forecast", linetype = "dashed") +
+        theme_minimal() +
+        ylab("Number of Passengers")
+
+```
+
+## `nnfor` - Extreme Learning Machine (ELM)
+
+This is the other neural network model available in the `nnfor` package. Let's see how the model performs with default/auto parameters: 
+
+```{r nnfor.elm}
+# Fitting MLP model
+air.fit.elm <- elm(air.train)
+air.fcst.elm <- forecast(air.fit.elm, h = 35)
+```
+
+```{r elm.plot}
+# Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.elm, series = "ELM Forecast", linetype = "dashed") +
+        theme_minimal() +
+        ylab("Number of Passengers")
+
+```
+
+## Observations
+
+Visually... I may have to give it to the MLP model here.
+
+### Mean absolute error
+
+I'll use the mean absolute error (MAE) as a more precise measure of model performance. The MAE is the mean difference between each model prediction and the test value, regardless of whether it is over or under the test value.
+
+```{r mae}
+# Establish tibble to contain predictions
+mae <- tibble(Test = air.test, 
+               nnetar = air.fcst.nnetar$mean,
+               MLP = air.fcst.mlp$mean,
+               ELM = air.fcst.elm$mean)
+
+# Calculate abs. error
+mae$ae.nnetar <- with(mae, abs(nnetar - Test))
+mae$ae.MLP <- with(mae, abs(MLP - Test))
+mae$ae.ELM <- with(mae, abs(ELM - Test))
+
+# Calculate MAE
+mae.score <- apply(mae, 2, mean)[5:7] 
+names(mae.score) <- c("MAE.nnetar", "MAE.MLP", "MAE.ELM")
+mae.score
+```
+
+And the MLP model wins on default parameters!
