@@ -20,7 +20,7 @@ I recently became aware of a new neural network time series model in the package
 
 I'll use the `AirPassengers` dataset since that's the dataset that was tested in the `nnfor` demo, but with some slight modifications. I will establish a training set and a testing set and compare model performance on the testing set only.
 
-Training data:
+## Training data:
 
 ```{r data.train}
 air.train <- window(AirPassengers, end = 1958)
@@ -31,7 +31,7 @@ autoplot(air.train) +
         theme_minimal()
 ```
 
-Testing data:
+## Testing data:
 
 ```{r data.test}
 air.test <- window(AirPassengers, start = 1958.001)
@@ -42,7 +42,11 @@ autoplot(air.test) +
         theme_minimal()
 ```
 
-## `forecast` - Neural Network Autoregressive (nnetar)
+# Model prediction comparisons - Defaults
+
+We will run the models with the default/auto parameters first and compare the results.
+
+## `forecast` - Neural Network Autoregression (nnetar)
 
 This neural network model is part of the `forecast` package. Let's see how the model performs with default/auto parameters: 
 
@@ -63,7 +67,7 @@ autoplot(air.test) +
 
 ## `nnfor` - Multilayer Perceptrons (MLP)
 
-Let's see how the model performs with default/auto parameters: 
+Moving on to the `nnfor` package, let's see how the MLP model performs with default/auto parameters: 
 
 ```{r nnfor.mlp}
 # Fitting MLP model
@@ -126,3 +130,78 @@ mae.score
 ```
 
 And the MLP model wins on default parameters!
+
+# Model comparisons - with some tweaks
+
+Let's play with some of the options in the model functions to see if the results improve. (I'm going to restrict myself to the options in the functions only, without doing any outside transformations, to keep this post relatively light).
+
+I'll attempt some pre-processing of the data prior to submitting it to the neural network model and I'll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let's see if this changes anything.
+
+## nnetar
+
+Starting with `forecast::nnetar`, we'll try a BoxCox transformation on the training data first.
+
+```{r nnetar.2}
+# Fitting nnetar model
+air.fit.nnetar <- nnetar(air.train, lambda = BoxCox.lambda(air.train))
+air.fcst.nnetar <- forecast(air.fit.nnetar, h = 35)
+```
+
+```{r nnetar.plot.2}
+# Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.nnetar, series = "nnetar w/ BoxCox", linetype = "dashed") +
+        theme_minimal() +
+        ylab("Number of Passengers")
+
+```
+
+## MLP
+
+We'll let MLP compute an optimal number of hidden layers now:
+
+```{r nnfor.mlp.2}
+# Fitting MLP model
+air.fit.mlp <- mlp(air.train, hd.auto.type = "valid")
+air.fcst.mlp <- forecast(air.fit.mlp, h = 35)
+```
+
+```{r mlp.plot.2}
+# Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.mlp, series = "MLP w/ opt. hidden nodes", linetype = "dashed") +
+        theme_minimal() +
+        ylab("Number of Passengers")
+```
+
+## ELM
+
+I don't have any quick ideas for tweaking ELM...
+
+## Observations
+
+First observation is that the MLP model took a considerable amount of time to compute given that the training dataset had a little over 100 data points. I can see why the default option is 5 nodes rather than a computed number of nodes. 
+
+Second observation is that MLP looks really good here.
+
+### Mean absolute error
+
+```{r mae.2}
+# Establish tibble to contain predictions
+mae <- tibble(Test = air.test, 
+               nnetar = air.fcst.nnetar$mean,
+               MLP = air.fcst.mlp$mean,
+               ELM = air.fcst.elm$mean)
+
+# Calculate abs. error
+mae$ae.nnetar <- with(mae, abs(nnetar - Test))
+mae$ae.MLP <- with(mae, abs(MLP - Test))
+mae$ae.ELM <- with(mae, abs(ELM - Test))
+
+# Calculate MAE
+mae.score <- apply(mae, 2, mean)[5:7] 
+names(mae.score) <- c("MAE.nnetar", "MAE.MLP", "MAE.ELM")
+mae.score
+```
+
+Looks like `nnetar` has improved, but `MLP` has improved more. `MLP` appears to be pretty promising so far.

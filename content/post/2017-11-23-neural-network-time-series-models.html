@@ -15,7 +15,8 @@ tags:
 <div id="dataset-airpassengers" class="section level1">
 <h1>Dataset: AirPassengers</h1>
 <p>I’ll use the <code>AirPassengers</code> dataset since that’s the dataset that was tested in the <code>nnfor</code> demo, but with some slight modifications. I will establish a training set and a testing set and compare model performance on the testing set only.</p>
-<p>Training data:</p>
+<div id="training-data" class="section level2">
+<h2>Training data:</h2>
 <pre class="r"><code>air.train &lt;- window(AirPassengers, end = 1958)
 
 autoplot(air.train) +
@@ -23,7 +24,9 @@ autoplot(air.train) +
         ggtitle(&quot;Training dataset&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/data.train-1.png" width="672" /></p>
-<p>Testing data:</p>
+</div>
+<div id="testing-data" class="section level2">
+<h2>Testing data:</h2>
 <pre class="r"><code>air.test &lt;- window(AirPassengers, start = 1958.001)
 
 autoplot(air.test) +
@@ -31,8 +34,13 @@ autoplot(air.test) +
         ggtitle(&quot;Testing dataset&quot;) +
         theme_minimal()</code></pre>
 <p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/data.test-1.png" width="672" /></p>
-<div id="forecast---neural-network-autoregressive-nnetar" class="section level2">
-<h2><code>forecast</code> - Neural Network Autoregressive (nnetar)</h2>
+</div>
+</div>
+<div id="model-prediction-comparisons---defaults" class="section level1">
+<h1>Model prediction comparisons - Defaults</h1>
+<p>We will run the models with the default/auto parameters first and compare the results.</p>
+<div id="forecast---neural-network-autoregression-nnetar" class="section level2">
+<h2><code>forecast</code> - Neural Network Autoregression (nnetar)</h2>
 <p>This neural network model is part of the <code>forecast</code> package. Let’s see how the model performs with default/auto parameters:</p>
 <pre class="r"><code># Fitting nnetar model
 air.fit.nnetar &lt;- nnetar(air.train)
@@ -46,7 +54,7 @@ autoplot(air.test) +
 </div>
 <div id="nnfor---multilayer-perceptrons-mlp" class="section level2">
 <h2><code>nnfor</code> - Multilayer Perceptrons (MLP)</h2>
-<p>Let’s see how the model performs with default/auto parameters:</p>
+<p>Moving on to the <code>nnfor</code> package, let’s see how the MLP model performs with default/auto parameters:</p>
 <pre class="r"><code># Fitting MLP model
 air.fit.mlp &lt;- mlp(air.train)
 air.fcst.mlp &lt;- forecast(air.fit.mlp, h = 35)</code></pre>
@@ -92,8 +100,69 @@ mae.score &lt;- apply(mae, 2, mean)[5:7]
 names(mae.score) &lt;- c(&quot;MAE.nnetar&quot;, &quot;MAE.MLP&quot;, &quot;MAE.ELM&quot;)
 mae.score</code></pre>
 <pre><code>##  MAE.nnetar     MAE.MLP     MAE.ELM 
-## 42.68403696 23.22061148 23.47489601</code></pre>
+## 41.59502116 24.90170727 23.42058407</code></pre>
 <p>And the MLP model wins on default parameters!</p>
+</div>
+</div>
+</div>
+<div id="model-comparisons---with-some-tweaks" class="section level1">
+<h1>Model comparisons - with some tweaks</h1>
+<p>Let’s play with some of the options in the model functions to see if the results improve. (I’m going to restrict myself to the options in the functions only, without doing any outside transformations, to keep this post relatively light).</p>
+<p>I’ll attempt some pre-processing of the data prior to submitting it to the neural network model and I’ll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let’s see if this changes anything.</p>
+<div id="nnetar" class="section level2">
+<h2>nnetar</h2>
+<p>Starting with <code>forecast::nnetar</code>, we’ll try a BoxCox transformation on the training data first.</p>
+<pre class="r"><code># Fitting nnetar model
+air.fit.nnetar &lt;- nnetar(air.train, lambda = BoxCox.lambda(air.train))
+air.fcst.nnetar &lt;- forecast(air.fit.nnetar, h = 35)</code></pre>
+<pre class="r"><code># Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.nnetar, series = &quot;nnetar w/ BoxCox&quot;, linetype = &quot;dashed&quot;) +
+        theme_minimal() +
+        ylab(&quot;Number of Passengers&quot;)</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/nnetar.plot.2-1.png" width="672" /></p>
+</div>
+<div id="mlp" class="section level2">
+<h2>MLP</h2>
+<p>We’ll let MLP compute an optimal number of hidden layers now:</p>
+<pre class="r"><code># Fitting MLP model
+air.fit.mlp &lt;- mlp(air.train, hd.auto.type = &quot;valid&quot;)
+air.fcst.mlp &lt;- forecast(air.fit.mlp, h = 35)</code></pre>
+<pre class="r"><code># Visualize model predictions
+autoplot(air.test) +
+        autolayer(air.fcst.mlp, series = &quot;MLP w/ opt. hidden nodes&quot;, linetype = &quot;dashed&quot;) +
+        theme_minimal() +
+        ylab(&quot;Number of Passengers&quot;)</code></pre>
+<p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/mlp.plot.2-1.png" width="672" /></p>
+</div>
+<div id="elm" class="section level2">
+<h2>ELM</h2>
+<p>I don’t have any quick ideas for tweaking ELM…</p>
+</div>
+<div id="observations-1" class="section level2">
+<h2>Observations</h2>
+<p>First observation is that the MLP model took a considerable amount of time to compute given that the training dataset had a little over 100 data points. I can see why the default option is 5 nodes rather than a computed number of nodes.</p>
+<p>Second observation is that MLP looks really good here.</p>
+<div id="mean-absolute-error-1" class="section level3">
+<h3>Mean absolute error</h3>
+<pre class="r"><code># Establish tibble to contain predictions
+mae &lt;- tibble(Test = air.test, 
+               nnetar = air.fcst.nnetar$mean,
+               MLP = air.fcst.mlp$mean,
+               ELM = air.fcst.elm$mean)
+
+# Calculate abs. error
+mae$ae.nnetar &lt;- with(mae, abs(nnetar - Test))
+mae$ae.MLP &lt;- with(mae, abs(MLP - Test))
+mae$ae.ELM &lt;- with(mae, abs(ELM - Test))
+
+# Calculate MAE
+mae.score &lt;- apply(mae, 2, mean)[5:7] 
+names(mae.score) &lt;- c(&quot;MAE.nnetar&quot;, &quot;MAE.MLP&quot;, &quot;MAE.ELM&quot;)
+mae.score</code></pre>
+<pre><code>##  MAE.nnetar     MAE.MLP     MAE.ELM 
+## 39.99798768 22.56422247 23.42058407</code></pre>
+<p>Looks like <code>nnetar</code> has improved, but <code>MLP</code> has improved considerably more. <code>MLP</code> appears to be pretty promising so far.</p>
 </div>
 </div>
 </div>
