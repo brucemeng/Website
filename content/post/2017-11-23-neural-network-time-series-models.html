@@ -100,17 +100,17 @@ mae.score &lt;- apply(mae, 2, mean)[5:7]
 names(mae.score) &lt;- c(&quot;MAE.nnetar&quot;, &quot;MAE.MLP&quot;, &quot;MAE.ELM&quot;)
 mae.score</code></pre>
 <pre><code>##  MAE.nnetar     MAE.MLP     MAE.ELM 
-## 41.59502116 24.90170727 23.42058407</code></pre>
-<p>And the MLP model wins on default parameters!</p>
+## 41.47303600 26.76718692 22.26210218</code></pre>
+<p>And the ELM model wins on default parameters!</p>
 </div>
 </div>
 </div>
 <div id="model-comparisons---with-some-tweaks" class="section level1">
 <h1>Model comparisons - with some tweaks</h1>
 <p>Let’s play with some of the options in the model functions to see if the results improve. (I’m going to restrict myself to the options in the functions only, without doing any outside transformations, to keep this post relatively light).</p>
-<p>I’ll attempt some pre-processing of the data prior to submitting it to the neural network model and I’ll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let’s see if this changes anything.</p>
-<div id="nnetar" class="section level2">
-<h2>nnetar</h2>
+<p>I’ll attempt some pre-processing of the data prior to submitting it to the nnetar model and I’ll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let’s see if this changes anything.</p>
+<div id="forecastnnetar" class="section level2">
+<h2>forecast::nnetar</h2>
 <p>Starting with <code>forecast::nnetar</code>, we’ll try a BoxCox transformation on the training data first.</p>
 <pre class="r"><code># Fitting nnetar model
 air.fit.nnetar &lt;- nnetar(air.train, lambda = BoxCox.lambda(air.train))
@@ -122,8 +122,8 @@ autoplot(air.test) +
         ylab(&quot;Number of Passengers&quot;)</code></pre>
 <p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/nnetar.plot.2-1.png" width="672" /></p>
 </div>
-<div id="mlp" class="section level2">
-<h2>MLP</h2>
+<div id="nnformlp" class="section level2">
+<h2>nnfor::mlp</h2>
 <p>We’ll let MLP compute an optimal number of hidden layers now:</p>
 <pre class="r"><code># Fitting MLP model
 air.fit.mlp &lt;- mlp(air.train, hd.auto.type = &quot;valid&quot;)
@@ -135,8 +135,8 @@ autoplot(air.test) +
         ylab(&quot;Number of Passengers&quot;)</code></pre>
 <p><img src="/post/2017-11-23-neural-network-time-series-models_files/figure-html/mlp.plot.2-1.png" width="672" /></p>
 </div>
-<div id="elm" class="section level2">
-<h2>ELM</h2>
+<div id="nnforelm" class="section level2">
+<h2>nnfor::elm</h2>
 <p>I don’t have any quick ideas for tweaking ELM…</p>
 </div>
 <div id="observations-1" class="section level2">
@@ -161,8 +161,8 @@ mae.score &lt;- apply(mae, 2, mean)[5:7]
 names(mae.score) &lt;- c(&quot;MAE.nnetar&quot;, &quot;MAE.MLP&quot;, &quot;MAE.ELM&quot;)
 mae.score</code></pre>
 <pre><code>##  MAE.nnetar     MAE.MLP     MAE.ELM 
-## 39.99798768 22.56422247 23.42058407</code></pre>
-<p>Looks like <code>nnetar</code> has improved, but <code>MLP</code> has improved considerably more. <code>MLP</code> appears to be pretty promising so far.</p>
+## 40.21540123 19.75997107 22.26210218</code></pre>
+<p>Looks like <code>nnetar</code> has improved, but <code>MLP</code> has improved more. <code>MLP</code> appears to be pretty promising so far.</p>
 </div>
 </div>
 </div>

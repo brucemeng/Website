@@ -13,6 +13,7 @@ library(tidyverse)
 library(forecast)
 library(nnfor)
 library(zoo)
+set.seed(1)
 ```
 I recently became aware of a new neural network time series model in the package `nnfor` developed by [Nikos Kourentzes](http://kourentzes.com/forecasting/2017/02/10/forecasting-time-series-with-neural-networks-in-r/) that really piqued my interest. Let's put it through some of the test data available in R and compare the two models contained in the `nnfor` package against the `nnetar` model contained in Rob Hyndman's `forecast` package.
 
@@ -129,15 +130,15 @@ names(mae.score) <- c("MAE.nnetar", "MAE.MLP", "MAE.ELM")
 mae.score
 ```
 
-And the MLP model wins on default parameters!
+And the ELM model wins on default parameters!
 
 # Model comparisons - with some tweaks
 
 Let's play with some of the options in the model functions to see if the results improve. (I'm going to restrict myself to the options in the functions only, without doing any outside transformations, to keep this post relatively light).
 
-I'll attempt some pre-processing of the data prior to submitting it to the neural network model and I'll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let's see if this changes anything.
+I'll attempt some pre-processing of the data prior to submitting it to the nnetar model and I'll let the MLP model compute an optimal number of hidden nodes, rather than the default 5. Let's see if this changes anything.
 
-## nnetar
+## forecast::nnetar
 
 Starting with `forecast::nnetar`, we'll try a BoxCox transformation on the training data first.
 
@@ -156,7 +157,7 @@ autoplot(air.test) +
 
 ```
 
-## MLP
+## nnfor::mlp
 
 We'll let MLP compute an optimal number of hidden layers now:
 
@@ -174,7 +175,7 @@ autoplot(air.test) +
         ylab("Number of Passengers")
 ```
 
-## ELM
+## nnfor::elm
 
 I don't have any quick ideas for tweaking ELM...
 
