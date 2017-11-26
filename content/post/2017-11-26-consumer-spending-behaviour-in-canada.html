@@ -1,0 +1,34 @@
+---
+title: Consumer spending behaviour in Canada
+author: Bruce Meng
+date: '2017-11-26'
+slug: consumer-spending-behaviour-in-canada
+categories: []
+tags:
+  - data
+---
+
+
+
+<p>With the holidays being so near, I got curious as to whether there were any differences in spending patterns throughout the year for Canadians.</p>
+<p>I pulled together some data that I had on hand, combined with some additional data from Statistics Canada. Here is what it looks like:</p>
+<pre class="r"><code>ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
+        geom_density_ridges_gradient(scale = 2, rel_min_height = 0.026, gradient_lwd = 1.,
+                                     color = &quot;black&quot;) +
+        scale_fill_viridis(name = &quot;Daily Spend&quot;, option = &quot;magma&quot;) +
+        xlab(&quot;Average Daily Spending&quot;) +
+        scale_x_continuous(labels = dollar_format(), expand = c(0.01,0)) +
+        theme_ridges() +
+        ggtitle(&quot;Daily spending, per-person, by consumers in Canada&quot;) +
+        ylab(NULL) +
+        guides(fill = F)</code></pre>
+<pre><code>## Picking joint bandwidth of 3.47</code></pre>
+<p><img src="/post/2017-11-26-consumer-spending-behaviour-in-canada_files/figure-html/season.plot-1.png" width="672" /></p>
+<p>So it definitely looks like December has the highest daily spend amount. It also looks like most Canadians pull back on spending in the three months after Christmas, until about May, when spending increases once again. My guess is that this is probably to prepare for the coming spring/summer with vacations and new wardrobes, but to be honest your guess is as good as mine.</p>
+<div id="when-do-canadians-shop-for-christmas" class="section level1">
+<h1>When do Canadians shop for Christmas?</h1>
+<p>Since the average daily spend amount doesn’t increase until December, I’m going to assume that the increase is mostly due to Christmas shopping, but how close do most Canadians cut it when it comes Christmas shopping?</p>
+<pre><code>## Picking joint bandwidth of 3.98</code></pre>
+<p><img src="/post/2017-11-26-consumer-spending-behaviour-in-canada_files/figure-html/xmas.plot-1.png" width="672" /></p>
+<p>Looks like there are quite a few early shoppers doing their shopping and the 1st and 2nd of December, but the that there’s also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month 🤣.</p>
+</div>
