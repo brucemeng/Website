@@ -18,9 +18,9 @@ library(lubridate)
 
 With the holidays being so near, I got curious as to whether there were any differences in spending patterns throughout the year for Canadians.
 
-I pulled together some data that I had on hand, combined with some additional data from Statistics Canada. Here is what it looks like:
+I pulled together some data that I had on hand, combined with some additional data from Statistics Canada. Let's see what it looks like:
 
-```{r data, echo = F}
+```{r data, echo = F, message=F}
 spend <- read_excel("../../data/spending/spending.xlsx")
 spend$Total <- with(spend, MC + Visa)
 spend$Month <- months(spend$Date) %>%
@@ -36,7 +36,7 @@ spend$lf <- 19440.5 * 1e3
 spend$avg.s <- with(spend, Total*1e3 / ms / lf)
 
 ```
-```{r season.plot}
+```{r season.plot, echo = F, message=F}
 ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
         geom_density_ridges_gradient(scale = 2, rel_min_height = 0.026, gradient_lwd = 1.,
                                      color = "black") +
@@ -49,14 +49,21 @@ ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
         guides(fill = F)
 ```
 
-So it definitely looks like December has the highest daily spend amount. It also looks like most Canadians pull back on spending in the three months after Christmas, until about May, when spending increases once again. My guess is that this is probably to prepare for the coming spring/summer with vacations and new wardrobes, but to be honest your guess is as good as mine.
+So it definitely looks like December has the highest daily spend amount. It also looks like most Canadians pull back on spending in the three months after Christmas, until about April, when spending increases once again. My guess is that this is probably to prepare for the coming spring/summer with vacations and new wardrobes, but to be honest your guess is as good as mine.
 
 # When do Canadians shop for Christmas?
 
-Since the average daily spend amount doesn't increase until December, I'm going to assume that the increase is mostly due to Christmas shopping, but how close do most Canadians cut it when it comes Christmas shopping?
+Since the average daily spend amount doesn't increase until December, I'm going to assume that the increase is mostly due to Christmas shopping. This then begs the question... how close do most Canadians cut it when it comes Christmas shopping?
 
-```{r xmas.plot, echo = F, fig.height=10}
+```{r xmas.plot, echo = F, fig.height=10, message=F}
 spend.xmas <- filter(spend, Month == "December")
+spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "25", replacement = "Christmas Day 25")
+spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "24", replacement = "Christmas Eve 24")
+spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "26", replacement = "Boxing Day 26")
+
+spend.xmas$daynumb <- spend.xmas$daynumb %>% 
+                        factor(levels = c(1:23, "Christmas Eve 24", "Christmas Day 25", "Boxing Day 26",
+                                        c(27:31)) %>% rev())
 
 ggplot(spend.xmas, aes(x = avg.s, y = daynumb, fill = ..x..)) +
         geom_density_ridges_gradient(scale = 1, rel_min_height = 0.3, gradient_lwd = 1.,
@@ -71,4 +78,6 @@ ggplot(spend.xmas, aes(x = avg.s, y = daynumb, fill = ..x..)) +
 
 ```
 
-Looks like there are quite a few early shoppers doing their shopping and the 1st and 2nd of December, but the that there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`.
+Looks like there are quite a few early shoppers doing their shopping on the 1st and 2nd of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
+
+In Canada, we have a discount shopping period immediately after Christmas Day called Boxing Day, although recently this has been extended to Boxing Week (and now Canadian stores are also doing Black Friday sales too). This discount period is likely what's driving the increased spending in the days after Christmas. Another interesting observation seems to be that despite the discounts, the average spend amount is lower than earlier in the month.
