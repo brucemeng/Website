@@ -44,7 +44,8 @@ ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
         xlab("Average Daily Spending") +
         scale_x_continuous(labels = dollar_format(), expand = c(0.01,0)) +
         theme_ridges() +
-        ggtitle("Daily spending, per-person, by consumers in Canada") +
+        ggtitle("Daily Spending") +
+        labs(subtitle = "Per-person spending amount, by consumers in Canada") +
         ylab(NULL) +
         guides(fill = F)
 ```
@@ -72,7 +73,8 @@ ggplot(spend.xmas, aes(x = avg.s, y = daynumb, fill = ..x..)) +
         xlab("Average Daily Spending") +
         scale_x_continuous(labels = dollar_format(), expand = c(0.01,0)) +
         theme_ridges(grid = T) +
-        ggtitle("Spending in December, per-person, by consumers in Canada") +
+        ggtitle("December Spending") +
+        labs(subtitle = "Per-person spending by consumers in Canada") +
         ylab("December") +
         guides(fill = F)
 
