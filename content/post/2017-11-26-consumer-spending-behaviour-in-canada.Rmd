@@ -16,7 +16,7 @@ library(scales)
 library(lubridate)
 ```
 
-With the holidays being so near, I got curious as to whether there were any differences in spending patterns throughout the year for Canadians.
+With the holidays being so near, I was asked during a casual conversation whether there were any differences in spending patterns throughout the year for Canadians.
 
 I pulled together some data that I had on hand, combined with some additional data from Statistics Canada. Let's see what it looks like:
 
@@ -31,7 +31,7 @@ spend$weekday <- weekdays(spend$Date)
 spend$daynumb <- day(spend$Date) %>% factor(levels = 1:31 %>% rev())
 spend$yearnum <- year(spend$Date) %>% factor(levels = 2008:2013 %>% rev())
 
-spend$ms <- 0.4
+spend$ms <- 0.35
 spend$lf <- 19440.5 * 1e3
 spend$avg.s <- with(spend, Total*1e3 / ms / lf)
 
@@ -67,7 +67,7 @@ spend.xmas$daynumb <- spend.xmas$daynumb %>%
                                         c(27:31)) %>% rev())
 
 ggplot(spend.xmas, aes(x = avg.s, y = daynumb, fill = ..x..)) +
-        geom_density_ridges_gradient(scale = 1, rel_min_height = 0.3, gradient_lwd = 1.,
+        geom_density_ridges_gradient(scale = 1.5, rel_min_height = 0.3, gradient_lwd = 1.,
                                      color = "black") +
         scale_fill_viridis(name = "Daily Spend", option = "magma") +
         xlab("Average Daily Spending") +
