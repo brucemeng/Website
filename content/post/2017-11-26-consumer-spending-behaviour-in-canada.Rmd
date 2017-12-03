@@ -52,7 +52,7 @@ ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
 
 So it definitely looks like December has the highest daily spend amount. It also looks like most Canadians pull back on spending in the three months after Christmas, until about April, when spending increases once again. My guess is that this is probably to prepare for the coming spring/summer with vacations and new wardrobes, but to be honest your guess is as good as mine.
 
-# When do Canadians shop for Christmas?
+# Spending pattern in December - Christmas Shopping?
 
 Since the average daily spend amount doesn't increase until December, I'm going to assume that the increase is mostly due to Christmas shopping. This then begs the question... how close do most Canadians cut it when it comes Christmas shopping?
 
@@ -67,7 +67,7 @@ spend.xmas$daynumb <- spend.xmas$daynumb %>%
                                         c(27:31)) %>% rev())
 
 ggplot(spend.xmas, aes(x = avg.s, y = daynumb)) +
-        geom_density_ridges(scale = 5, rel_min_height = 0.275,
+        geom_density_ridges(scale = 5, rel_min_height = 0.1,
                                      color = "black", alpha = 0.5, fill = "sky blue") +
         scale_fill_viridis(name = "Daily Spend", option = "magma") +
         xlab("Average Daily Spending") +
@@ -78,11 +78,6 @@ ggplot(spend.xmas, aes(x = avg.s, y = daynumb)) +
         ylab("December") +
         guides(fill = F) +
         xlim(0, 80)
-
-ggplot(spend.xmas, aes(y = avg.s, x = daynumb)) +
-        geom_point() +
-        geom_smooth()
-
 ```
 
 Looks like there are quite a few early shoppers doing their shopping on the 1st and 2nd of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
