@@ -25,678 +25,1564 @@ tags:
 <pre class="r"><code>library(textreadr)
 
 branch.pdf &lt;- read_pdf(&quot;../../data/branches/mbrbnksn_2.pdf&quot;)
-head(branch.pdf, 20) %&gt;% knitr::kable()</code></pre>
-<table>
+head(branch.pdf, 20) %&gt;% knitr::kable() %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="right">page_id</th>
-<th align="right">element_id</th>
-<th align="left">text</th>
+<tr>
+<th style="text-align:right;">
+page_id
+</th>
+<th style="text-align:right;">
+element_id
+</th>
+<th style="text-align:left;">
+text
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">ADS CANADIAN BANK 343</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+ADS CANADIAN BANK 343
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">Routing Numbers /</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="left">Numéros d’acheminement</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="left">Electronic Paper(MICR)</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="left">AMEX BANK OF CANADA 303</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+AMEX BANK OF CANADA 303
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="left">Routing Numbers /</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="left">Numéros d’acheminement</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">12</td>
-<td align="left">Electronic Paper(MICR)</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">13</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">14</td>
-<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">16</td>
-<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+BANK OF AMERICA NATIONAL ASSOCIATION 241
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">18</td>
-<td align="left">Routing Numbers /</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">19</td>
-<td align="left">Numéros d’acheminement</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">20</td>
-<td align="left">Electronic Paper(MICR)</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
 </tr>
 </tbody>
 </table>
-<p>I like the <code>read_pdf</code> function from the package <code>textreadr</code> rather than the main <code>pdftools</code> package because it places the text in a data frame. The next step would be to isolate the routing numbers:</p>
+<p><br> I like the <code>read_pdf</code> function from the package <code>textreadr</code> rather than the main <code>pdftools</code> package because it places the text in a data frame. The next step would be to isolate the routing numbers:</p>
 <pre class="r"><code>branches.route &lt;- str_extract(branch.pdf$text, &quot;[0-9]{9}&quot;) %&gt;%
                         data.frame(Routing = .)
 branches.clean &lt;- cbind(branch.pdf, branches.route)
 
-head(branches.clean, 20) %&gt;% knitr::kable()</code></pre>
-<table>
+head(branches.clean, 20) %&gt;% knitr::kable() %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="right">page_id</th>
-<th align="right">element_id</th>
-<th align="left">text</th>
-<th align="left">Routing</th>
+<tr>
+<th style="text-align:right;">
+page_id
+</th>
+<th style="text-align:right;">
+element_id
+</th>
+<th style="text-align:left;">
+text
+</th>
+<th style="text-align:left;">
+Routing
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">ADS CANADIAN BANK 343</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+ADS CANADIAN BANK 343
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300012</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300012
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300092</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300092
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="left">AMEX BANK OF CANADA 303</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+AMEX BANK OF CANADA 303
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">12</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">13</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">14</td>
-<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300012</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300012
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300022</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300022
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">16</td>
-<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300032</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300032
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+BANK OF AMERICA NATIONAL ASSOCIATION 241
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">18</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">19</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">20</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
 </tbody>
 </table>
-<p>From the routing numbers, we can extract the bank identification numbers:</p>
+<p><br> From the routing numbers, we can extract the bank identification numbers:</p>
 <pre class="r"><code>branches.clean$Bank.nbr &lt;- substr(branches.clean$Routing, 1, 4)
-head(branches.clean, 20) %&gt;% knitr::kable()</code></pre>
-<table>
+head(branches.clean, 20) %&gt;% knitr::kable() %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="right">page_id</th>
-<th align="right">element_id</th>
-<th align="left">text</th>
-<th align="left">Routing</th>
-<th align="left">Bank.nbr</th>
+<tr>
+<th style="text-align:right;">
+page_id
+</th>
+<th style="text-align:right;">
+element_id
+</th>
+<th style="text-align:left;">
+text
+</th>
+<th style="text-align:left;">
+Routing
+</th>
+<th style="text-align:left;">
+Bank.nbr
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">ADS CANADIAN BANK 343</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+ADS CANADIAN BANK 343
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300012</td>
-<td align="left">0343</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300012
+</td>
+<td style="text-align:left;">
+0343
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300092</td>
-<td align="left">0343</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300092
+</td>
+<td style="text-align:left;">
+0343
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="left">AMEX BANK OF CANADA 303</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+AMEX BANK OF CANADA 303
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">12</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">13</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">14</td>
-<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300012</td>
-<td align="left">0303</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300012
+</td>
+<td style="text-align:left;">
+0303
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300022</td>
-<td align="left">0303</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300022
+</td>
+<td style="text-align:left;">
+0303
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">16</td>
-<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300032</td>
-<td align="left">0303</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300032
+</td>
+<td style="text-align:left;">
+0303
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+BANK OF AMERICA NATIONAL ASSOCIATION 241
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">18</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">19</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">20</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
 </tbody>
 </table>
-<p>And we can now identify the banks that each branch belongs to. To make it easier to recognize the banks, I created a manual mapping of bank numbers to bank names:</p>
+<p><br> And we can now identify the banks that each branch belongs to. To make it easier to recognize the banks, I created a manual mapping of bank numbers to bank names:</p>
 <pre class="r"><code>bank.names &lt;- data.frame(Bank.nbr = c(&quot;0001&quot;, &quot;0010&quot;, &quot;0003&quot;, &quot;0002&quot;, &quot;0004&quot;),
                          Bank.name = c(&quot;BMO&quot;, &quot;CIBC&quot;, &quot;RBC&quot;, &quot;BNS&quot;, &quot;TD&quot;))
 
 bank.branches &lt;- left_join(branches.clean, bank.names)
 
-bank.branches[3161:3165,] %&gt;% knitr::kable()</code></pre>
-<table>
+bank.branches[3161:3165,] %&gt;% knitr::kable() %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th></th>
-<th align="right">page_id</th>
-<th align="right">element_id</th>
-<th align="left">text</th>
-<th align="left">Routing</th>
-<th align="left">Bank.nbr</th>
-<th align="left">Bank.name</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+page_id
+</th>
+<th style="text-align:right;">
+element_id
+</th>
+<th style="text-align:left;">
+text
+</th>
+<th style="text-align:left;">
+Routing
+</th>
+<th style="text-align:left;">
+Bank.nbr
+</th>
+<th style="text-align:left;">
+Bank.name
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td>3161</td>
-<td align="right">42</td>
-<td align="right">33</td>
-<td align="left">000251193 51193-002 Halifax Centralized Accounting Unit, 1465 Brenton St., 4th Floor, Halifax, NS B3J 3T2</td>
-<td align="left">000251193</td>
-<td align="left">0002</td>
-<td align="left">BNS</td>
+<tr>
+<td style="text-align:left;">
+3161
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:left;">
+000251193 51193-002 Halifax Centralized Accounting Unit, 1465 Brenton St., 4th Floor, Halifax, NS B3J 3T2
+</td>
+<td style="text-align:left;">
+000251193
+</td>
+<td style="text-align:left;">
+0002
+</td>
+<td style="text-align:left;">
+BNS
+</td>
 </tr>
-<tr class="even">
-<td>3162</td>
-<td align="right">42</td>
-<td align="right">34</td>
-<td align="left">000251219 51219-002 Rundlehorn Plaza, 3735 Rundlehorn Drive N. E., Calgary, AB T1Y 2K1 (Sub to 30049)</td>
-<td align="left">000251219</td>
-<td align="left">0002</td>
-<td align="left">BNS</td>
+<tr>
+<td style="text-align:left;">
+3162
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:left;">
+000251219 51219-002 Rundlehorn Plaza, 3735 Rundlehorn Drive N. E., Calgary, AB T1Y 2K1 (Sub to 30049)
+</td>
+<td style="text-align:left;">
+000251219
+</td>
+<td style="text-align:left;">
+0002
+</td>
+<td style="text-align:left;">
+BNS
+</td>
 </tr>
-<tr class="odd">
-<td>3163</td>
-<td align="right">42</td>
-<td align="right">35</td>
-<td align="left">000251268 51268-002 ISS Operations Control, Scotia Plaza, 40 King St. W. 25th Fl, Toronto, ON M5H 1H1</td>
-<td align="left">000251268</td>
-<td align="left">0002</td>
-<td align="left">BNS</td>
+<tr>
+<td style="text-align:left;">
+3163
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:left;">
+000251268 51268-002 ISS Operations Control, Scotia Plaza, 40 King St. W. 25th Fl, Toronto, ON M5H 1H1
+</td>
+<td style="text-align:left;">
+000251268
+</td>
+<td style="text-align:left;">
+0002
+</td>
+<td style="text-align:left;">
+BNS
+</td>
 </tr>
-<tr class="even">
-<td>3164</td>
-<td align="right">42</td>
-<td align="right">36</td>
-<td align="left">000251292 51292-002 Eglinton &amp; Castle Knock, 438 Eglinton Avenue West, Toronto, ON M5N 1A2</td>
-<td align="left">000251292</td>
-<td align="left">0002</td>
-<td align="left">BNS</td>
+<tr>
+<td style="text-align:left;">
+3164
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:left;">
+000251292 51292-002 Eglinton &amp; Castle Knock, 438 Eglinton Avenue West, Toronto, ON M5N 1A2
+</td>
+<td style="text-align:left;">
+000251292
+</td>
+<td style="text-align:left;">
+0002
+</td>
+<td style="text-align:left;">
+BNS
+</td>
 </tr>
-<tr class="odd">
-<td>3165</td>
-<td align="right">42</td>
-<td align="right">37</td>
-<td align="left">000251326 51326-002 Barrhaven Centre, 3701 Strandherd Drive, Nepean, ON K2J 4G8 (Sub to 00166)</td>
-<td align="left">000251326</td>
-<td align="left">0002</td>
-<td align="left">BNS</td>
+<tr>
+<td style="text-align:left;">
+3165
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:left;">
+000251326 51326-002 Barrhaven Centre, 3701 Strandherd Drive, Nepean, ON K2J 4G8 (Sub to 00166)
+</td>
+<td style="text-align:left;">
+000251326
+</td>
+<td style="text-align:left;">
+0002
+</td>
+<td style="text-align:left;">
+BNS
+</td>
 </tr>
 </tbody>
 </table>
-<p>And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:</p>
+<p><br> And now, the final bit of text extraction, we can pull out the postal codes of the branches to get their locations:</p>
 <pre class="r"><code>bank.branches$Postal &lt;- str_extract(bank.branches$text, 
                                &quot;[A-Z][0-9][A-Z][:space:][0-9][A-z][0-9]&quot;)
 
-head(bank.branches, 20) %&gt;% knitr::kable()</code></pre>
-<table>
+head(bank.branches, 20) %&gt;% knitr::kable() %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="right">page_id</th>
-<th align="right">element_id</th>
-<th align="left">text</th>
-<th align="left">Routing</th>
-<th align="left">Bank.nbr</th>
-<th align="left">Bank.name</th>
-<th align="left">Postal</th>
+<tr>
+<th style="text-align:right;">
+page_id
+</th>
+<th style="text-align:right;">
+element_id
+</th>
+<th style="text-align:left;">
+text
+</th>
+<th style="text-align:left;">
+Routing
+</th>
+<th style="text-align:left;">
+Bank.nbr
+</th>
+<th style="text-align:left;">
+Bank.name
+</th>
+<th style="text-align:left;">
+Postal
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="left">SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+SECTION I NUMERIC LIST / LISTE NUMÉRIQUE 1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">2</td>
-<td align="left">ADS CANADIAN BANK 343</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+ADS CANADIAN BANK 343
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">5</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">6</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="left">034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300012</td>
-<td align="left">0343</td>
-<td align="left">NA</td>
-<td align="left">M5H 3R3</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:left;">
+034300012 00012-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300012
+</td>
+<td style="text-align:left;">
+0343
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+M5H 3R3
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="left">034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3</td>
-<td align="left">034300092</td>
-<td align="left">0343</td>
-<td align="left">NA</td>
-<td align="left">M5H 3R3</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+034300092 00092-343 20 Queen Street West - Suite 2600, Toronto, ON M5H 3R3
+</td>
+<td style="text-align:left;">
+034300092
+</td>
+<td style="text-align:left;">
+0343
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+M5H 3R3
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="left">AMEX BANK OF CANADA 303</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+AMEX BANK OF CANADA 303
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">12</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">13</td>
-<td align="left">Électronique Papier(MICR) Postal Address - Addresse postale</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+Électronique Papier(MICR) Postal Address - Addresse postale
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">14</td>
-<td align="left">030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300012</td>
-<td align="left">0303</td>
-<td align="left">NA</td>
-<td align="left">L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+030300012 00012-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300012
+</td>
+<td style="text-align:left;">
+0303
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+L3R 4H8
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">15</td>
-<td align="left">030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300022</td>
-<td align="left">0303</td>
-<td align="left">NA</td>
-<td align="left">L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+030300022 00022-303 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300022
+</td>
+<td style="text-align:left;">
+0303
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+L3R 4H8
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">16</td>
-<td align="left">030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8</td>
-<td align="left">030300032</td>
-<td align="left">0303</td>
-<td align="left">NA</td>
-<td align="left">L3R 4H8</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:left;">
+030300032 00032-303 101 McNabb Street, 101 McNabb Street, Markham, ON L3R 4H8
+</td>
+<td style="text-align:left;">
+030300032
+</td>
+<td style="text-align:left;">
+0303
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+L3R 4H8
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">17</td>
-<td align="left">BANK OF AMERICA NATIONAL ASSOCIATION 241</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+BANK OF AMERICA NATIONAL ASSOCIATION 241
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">18</td>
-<td align="left">Routing Numbers /</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:left;">
+Routing Numbers /
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">19</td>
-<td align="left">Numéros d’acheminement</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+Numéros d’acheminement
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">20</td>
-<td align="left">Electronic Paper(MICR)</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
-<td align="left">NA</td>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+Electronic Paper(MICR)
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
 </tbody>
 </table>
-<p>That’s pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this dataset. Check out the corresponding map I made in the <a href="https://www.brucemeng.ca/project/map-branch/">Projects</a> section.</p>
+<p><br> That’s pretty much it in terms of cleaning the data to a point where we can then get the longitude/latitudes out of this dataset. Check out the corresponding map I made in the <a href="https://www.brucemeng.ca/project/map-branch/">Projects</a> section.</p>
 </div>
