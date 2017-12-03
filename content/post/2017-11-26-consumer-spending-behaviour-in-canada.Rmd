@@ -1,7 +1,7 @@
 ---
 title: Consumer spending behaviour in Canada
 author: Bruce Meng
-date: '2017-11-26'
+date: '2017-12-3'
 slug: consumer-spending-behaviour-in-canada
 categories: []
 tags:
@@ -52,7 +52,7 @@ ggplot(spend, aes(x = avg.s, y = Month, fill = ..x..)) +
 
 So it definitely looks like December has the highest daily spend amount. It also looks like most Canadians pull back on spending in the three months after Christmas, until about April, when spending increases once again. My guess is that this is probably to prepare for the coming spring/summer with vacations and new wardrobes, but to be honest your guess is as good as mine.
 
-# Finding when Canadians shop for Christmas...
+# Christmas shopping time!
 
 Since the average daily spend amount doesn't increase until December, I'm going to assume that the increase is mostly due to Christmas shopping. This then begs the question... how close do most Canadians cut it when it comes Christmas shopping?
 
@@ -80,6 +80,6 @@ ggplot(spend.xmas, aes(x = avg.s, y = daynumb)) +
         xlim(0, 80)
 ```
 
-Looks like there are quite a few early shoppers doing their shopping on the 1st and 2nd of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
+Looks like there are some early shoppers doing their shopping on the 1st and 2nd of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
 
 In Canada, we have a discount shopping period immediately after Christmas Day called Boxing Day, although recently this has been extended to Boxing Week (and now Canadian stores are also doing Black Friday sales too). This discount period is likely what's driving the increased spending in the days after Christmas. Another interesting observation seems to be that despite the discounts, the average spend amount is lower than earlier in the month.
