@@ -58,28 +58,32 @@ Since the average daily spend amount doesn't increase until December, I'm going 
 
 ```{r xmas.plot, echo = F, fig.height=10, message=F}
 spend.xmas <- filter(spend, Month == "December")
-spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "25", replacement = "Christmas Day 25")
-spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "24", replacement = "Christmas Eve 24")
-spend.xmas$daynumb <- gsub(x = spend.xmas$daynumb, pattern = "26", replacement = "Boxing Day 26")
+spend.xmas$daynumb.plot <- spend.xmas$daynumb
 
-spend.xmas$daynumb <- spend.xmas$daynumb %>% 
-                        factor(levels = c(1:23, "Christmas Eve 24", "Christmas Day 25", "Boxing Day 26",
+spend.xmas$daynumb.plot <- gsub(x = spend.xmas$daynumb.plot, pattern = "25", replacement = "Christmas Day 25")
+spend.xmas$daynumb.plot <- gsub(x = spend.xmas$daynumb.plot, pattern = "24", replacement = "Christmas Eve 24")
+spend.xmas$daynumb.plot <- gsub(x = spend.xmas$daynumb.plot, pattern = "26", replacement = "Boxing Day 26")
+
+spend.xmas$daynumb.plot <- spend.xmas$daynumb.plot %>% 
+                        factor(levels = c(1,"2 to 19", 20:23, "Christmas Eve 24", "Christmas Day 25", "Boxing Day 26",
                                         c(27:31)) %>% rev())
+spend.xmas <- spend.xmas %>% replace_na(list(daynumb.plot = "2 to 19"))
 
-ggplot(spend.xmas, aes(x = avg.s, y = daynumb)) +
+
+ggplot(spend.xmas, aes(x = avg.s, y = daynumb.plot)) +
         geom_density_ridges(scale = 5, rel_min_height = 0.01,
                                      color = "black", alpha = 0.5, fill = "sky blue") +
         scale_fill_viridis(name = "Daily Spend", option = "magma") +
         xlab("Average Daily Spending") +
-        scale_x_continuous(labels = dollar_format(), expand = c(0.01,0)) +
         theme_ridges(grid = T) +
         ggtitle("December Spending") +
         labs(subtitle = "Per-person spending by consumers in Canada") +
         ylab("December") +
         guides(fill = F) +
-        xlim(0, 80)
+        xlim(0, 80) +
+        scale_x_continuous(labels = dollar_format(), expand = c(0.01,0))
 ```
 
-Looks like there are some early shoppers doing their shopping on the 1st and 2nd of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
+Looks like there are some early shoppers doing their shopping on the 1st of December, but there's also some who wait until the very last days. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
 
 In Canada, we have a discount shopping period immediately after Christmas Day called Boxing Day, although recently this has been extended to Boxing Week (and now Canadian stores are also doing Black Friday sales too). This discount period is likely what's driving the increased spending in the days after Christmas. Another interesting observation seems to be that despite the discounts, the average spend amount is lower than earlier in the month.
