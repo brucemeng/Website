@@ -67,7 +67,7 @@ spend.xmas$daynumb <- spend.xmas$daynumb %>%
                                         c(27:31)) %>% rev())
 
 ggplot(spend.xmas, aes(x = avg.s, y = daynumb)) +
-        geom_density_ridges(scale = 5, rel_min_height = 0.05,
+        geom_density_ridges(scale = 5, rel_min_height = 0.01,
                                      color = "black", alpha = 0.5, fill = "sky blue") +
         scale_fill_viridis(name = "Daily Spend", option = "magma") +
         xlab("Average Daily Spending") +
