@@ -1,7 +1,7 @@
 ---
 title: Consumer spending behaviour in Canada
 author: Bruce Meng
-date: '2017-12-3'
+date: '2017-12-03'
 slug: consumer-spending-behaviour-in-canada
 categories: []
 tags:
