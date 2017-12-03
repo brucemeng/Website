@@ -29,11 +29,11 @@ spend$Month <- months(spend$Date) %>%
                                   "November", "December") %>% rev())
 spend$weekday <- weekdays(spend$Date)
 spend$daynumb <- day(spend$Date) %>% factor(levels = 1:31 %>% rev())
-spend$yearnum <- year(spend$Date) %>% factor(levels = 2008:2013 %>% rev())
+spend$yearnum <- year(spend$Date) %>% factor(levels = 2007:2013 %>% rev())
 
 spend$ms <- 0.35
 spend$lf <- 19440.5 * 1e3
-spend$avg.s <- with(spend, Total*1e3 / ms / lf)
+spend$avg.s <- with(spend, Total / ms / lf)
 
 ```
 ```{r season.plot, echo = F, message=F}
