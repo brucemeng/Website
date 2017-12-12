@@ -83,7 +83,7 @@ ggplot(spend.xmas, aes(x = avg.s, y = daynumb.plot)) +
         scale_x_continuous(labels = dollar_format(), limits = c(0, NA))
 ```
 
-Looks like there are some early shoppers doing their shopping on the 1st of December, before returning to the same range of spending as seen in the prior months. Spending doesn't appear to pick up again until the few days before Christmas. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("laugh")`. 
+Looks like there are some early shoppers doing their shopping on the 1st of December, before returning to the same range of spending as seen in the prior months. Spending doesn't appear to pick up again until the few days before Christmas. Interestingly, those who wait until 3 - 4 days before Christmas tend to spend more than those who bought their presents earlier in the month `r emo::ji("sweat_smile")`. 
 
 In Canada, we have a discount shopping period immediately after Christmas Day called Boxing Day, although recently this has been extended to Boxing Week (and now Canadian stores are also doing Black Friday sales too). Due to this discount period, I thought spending in the week following Christmas would've been higher than normal, but it seems that's not the case.
 
@@ -93,6 +93,6 @@ _Dec. 12, 2017_
 
 Interac (the payments network for debit cards) has just put out a press release forecasting that Dec. 22, 2017 will be the busiest shopping day of this season. ([Press release](http://www.interac.ca/en/interac-predicts-december-22-2017-will-be-the-busiest-shopping-day-of-the-year.html)).
 
-> _Canadians made over 24 million transactions and spent over $1.2 billion on Friday, December 23, 2016. This made it the busiest shopping day of last year, beating out the busiest day of the year prior (December 23, 2015) by 19 percent in the total amount spent. Forecasting data released from Interac predicts that Friday, December 22 is on track to be the busiest shopping day of 2017, with 25 million debit transactions projected on that day._
+> _Canadians made over 24 million transactions and spent over $1.2 billion on Friday, December 23, 2016 ... Forecasting data released from Interac predicts that Friday, December 22 is on track to be the busiest shopping day of 2017, with 25 million debit transactions projected on that day._
 
-Using the same methodology I used to translate total shopping amount to individual shopping amount, Interac is predicting that the average-per-person spend amount on Dec. 22 is approx. $`r round(1200/24 * 25 / spend$lf[1]*1e6, 0)`. This compares fairly well with my quick analysis `r emo::ji("thumbs")`.
+Using the same methodology I used to translate total shopping amount to individual shopping amount, Interac is predicting that the average-per-person spend amount on Dec. 22 is approx. $`r round(1200/24 * 25 / spend$lf[1]*1e6, 0)`. This compares fairly well with my quick analysis `r emo::ji("thumbs_up")`.
