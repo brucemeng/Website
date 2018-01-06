@@ -53,9 +53,14 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     weight = 2
     
 [[menu.icon]]
+    url = "https://twitter.com/BManalyst"
+    name = "twitter"
+    weight = 3
+    
+[[menu.icon]]
     url = "https://www.brucemeng.ca/feed.xml"
     name = "rss"
-    weight = 3
+    weight = 4
 
 [outputFormats]
 [outputFormats.RSS]
