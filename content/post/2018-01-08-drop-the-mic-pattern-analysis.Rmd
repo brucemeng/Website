@@ -82,7 +82,7 @@ kable(data.clean, "html") %>%
 
 Perfect. Now we can add the two features of this algorithm and watch every episode on the list in order to record the winner!
 
-```{r features}
+```{r features, echo = F}
 # Add features
 features <- data.frame(Female = c(1,
                                   0,
@@ -154,6 +154,10 @@ features <- data.frame(Female = c(1,
 # Combine with data
 data.combine <- cbind(data.clean, features)
 
+
+# Display results
+kable(data.combine, "html") %>%
+        kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
 Looks like my algorithm scored `r sum(data.combine$Algo.predict.correct, na.rm = T) / (tally(data.combine) - 2) * 100`%!
@@ -163,4 +167,4 @@ And the prediction for the last two episodes are:
 1. Danielle Fishel will beat Jonathan Lipnicki (female)
 2. Whoever is standing on the left side of the screen (looks like Shania)
 
-Well, that was certainly an enjoyable afternoon!
+Well, that was certainly an enjoyable afternoon! `r emo::ji("smile")`
