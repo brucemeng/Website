@@ -18,14 +18,14 @@ If you haven't yet found the simple pleasure of watching Drop the Mic, here's a 
 
 And here's one of the episodes I particularly liked:
 
-<center>[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)</center>
+<center>[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)</center><br>
 
 Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.
 
 My simple-in-head-algorithm for determining the winner is:
 
 1. If one contestant is female and the other is male, the female wins!
-2. If both are male, or both are female, or if they are a group, the one standing to the left of the screen at end wins!
+2. If both are male, or both are female, or if they are a group, the one standing to the left of the screen at the end wins!
 
 `r emo::ji("smile")`
 
@@ -33,19 +33,22 @@ Now I want to actually see how good this algorithm is!
 
 First off, scraping the episode data from IMDb:
 
-```{r data}
+```{r data, message=F}
 library(rvest)
 library(tidyverse)
 library(knitr)
 library(kableExtra)
 
+# Scrape data from IMDb
 data.dropmic <- read_html("http://www.imdb.com/title/tt6396094/episodes?season=1&ref_=tt_eps_sn_1") %>%
         html_nodes("strong a") %>%
         html_text() %>%
         as.data.frame()
 
+# Title column
 names(data.dropmic) <- "Episode"
 
+# Display results
 kable(data.dropmic, "html") %>%
         kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -62,3 +65,13 @@ kable(data.clean, "html") %>%
         kable_styling(bootstrap_options = c("striped", "hover"))
 ```
 
+Excellent. Now just one more minor step to split each episode up into "battles", since each episode contains two battles:
+
+```{r data.split}
+data.clean <- str_split(data.clean$Episode, "&| and ") %>%
+        unlist() %>%
+        data.frame(Battle = .)
+
+kable(data.clean, "html") %>%
+        kable_styling(bootstrap_options = c("striped", "hover"))
+```
