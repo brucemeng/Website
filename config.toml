@@ -5,7 +5,6 @@ theme = "minimal"
 #disqusShortname = "username" # delete this to disable disqus comments
 googleAnalytics = "UA-108447989-1"
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
-enableEmoji = true
 
 [params]
     author = "Bruce Meng"

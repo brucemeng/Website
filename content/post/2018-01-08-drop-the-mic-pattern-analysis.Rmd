@@ -1,0 +1,21 @@
+---
+title: '"Drop the Mic" pattern analysis...'
+author: Bruce Meng
+date: '2018-01-08'
+slug: drop-the-mic-pattern-analysis
+categories: []
+tags:
+  - R
+  - data
+  - fun
+---
+
+I've been watching lots of episodes of "Drop the Mic" on Youtube lately with [`@klam227`](https://twitter.com/klam227) and I think I noticed a pattern on how the winners were selected. It got to a point where I will guess who the winner is and I have found that I was right 8/9 times.
+
+If you haven't yet found the simple pleasure of watching Drop the Mic, here's a summary from IMDb:
+
+> Hosted by Method Man and Hailey Baldwin, each week Drop the Mic pits four stars from the worlds of entertainment, music, sports and pop culture to face off against each other in a rap battle royale packed with lyrically creative genius and "Did they really just say that?" moments. At the end of each head-to-head battle, there can only be one winner.
+
+And here's one of the episodes I particularly liked:
+
+[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)
