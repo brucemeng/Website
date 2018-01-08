@@ -369,7 +369,57 @@ features &lt;- data.frame(Female = c(1,
                                   1,
                                   1,
                                   0),
-                       Left = NA)
+                       Left = c(0,
+                                1,
+                                1,
+                                0,
+                                1,
+                                1,
+                                0,
+                                0,
+                                0,
+                                1,
+                                0,
+                                0,
+                                0,
+                                1,
+                                1,
+                                1,
+                                1,
+                                1,
+                                0,
+                                1,
+                                NA,
+                                NA),
+                       Algo.predict.correct = c(1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                0,
+                                                0,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                1,
+                                                0,
+                                                1,
+                                                NA,
+                                                NA))
 
 # Combine with data
 data.combine &lt;- cbind(data.clean, features)</code></pre>
+<p>Looks like my algorithm scored 85%!</p>
+<p>And the prediction for the last two episodes are:</p>
+<ol style="list-style-type: decimal">
+<li>Danielle Fishel will beat Jonathan Lipnicki (female)</li>
+<li>Whoever is standing on the left side of the screen (looks like Shania)</li>
+</ol>
+<p>Well, that was certainly an enjoyable afternoon!</p>
