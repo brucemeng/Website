@@ -162,7 +162,7 @@ kable(data.combine, "html") %>%
 
 Looks like my algorithm scored `r sum(data.combine$Algo.predict.correct, na.rm = T) / (tally(data.combine) - 2) * 100`%!
 
-And the prediction for the last two episodes are:
+And the prediction for the last two episodes (which haven't yet been posted on Youtube as of Jan. 8 2018) are:
 
 1. Danielle Fishel will beat Jonathan Lipnicki (female)
 2. Whoever is standing on the left side of the screen (looks like Shania)
