@@ -22,6 +22,9 @@ tags:
 <a href="https://www.youtube.com/watch?v=d4LYh_ukbas"><img src="https://img.youtube.com/vi/d4LYh_ukbas/0.jpg" alt="Halle Berry vs. James Corden" /></a>
 </center>
 <p><br></p>
+<iframe width="560" height="315" src="http://www.youtube.com/embed/d4LYh_ukbasrel=0" frameborder="0" allowfullscreen>
+</iframe>
+<p><br></p>
 <p>Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.</p>
 <p>My simple-in-head-algorithm for determining the winner is:</p>
 <ol style="list-style-type: decimal">
@@ -141,9 +144,11 @@ TV Shows
 </table>
 <p>(The pretty table styles are courtesy of <a href="https://twitter.com/haozhu233"><code>@haozhu233</code></a> and his excellent <code>kableExtra</code> package!)</p>
 <p>In the above table, there are some non-episode data in the last few rows. Let’s filter that out with the following code:</p>
-<pre class="r"><code>data.clean &lt;- data.dropmic[grepl(&quot;vs&quot;, data.dropmic$Episode),] %&gt;%
+<pre class="r"><code># Filter
+data.clean &lt;- data.dropmic[grepl(&quot;vs&quot;, data.dropmic$Episode),] %&gt;%
         data.frame(Episode = .)
 
+# Display results
 kable(data.clean, &quot;html&quot;) %&gt;%
         kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
@@ -213,17 +218,19 @@ Danielle Fishel vs. Jonathan Lipnicki and Shania Twain vs. Meghan Trainor
 </tbody>
 </table>
 <p>Excellent. Now just one more minor step to split each episode up into “battles”, since each episode contains two battles:</p>
-<pre class="r"><code>data.clean &lt;- str_split(data.clean$Episode, &quot;&amp;| and &quot;) %&gt;%
+<pre class="r"><code># Split into battles
+data.clean &lt;- str_split(data.clean$Episode, &quot;&amp;| and &quot;) %&gt;%
         unlist() %&gt;%
-        data.frame(Battle = .)
+        data.frame(Battles = .)
 
+# Display results
 kable(data.clean, &quot;html&quot;) %&gt;%
         kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-Battle
+Battles
 </th>
 </tr>
 </thead>
@@ -340,3 +347,31 @@ Shania Twain vs. Meghan Trainor
 </tr>
 </tbody>
 </table>
+<p>Perfect. Now we can add the two features of this algorithm and watch every episode on the list in order to record the winner!</p>
+<pre class="r"><code># Add features
+features &lt;- data.frame(Female = c(1,
+                                  0,
+                                  0,
+                                  1,
+                                  1,
+                                  0,
+                                  0,
+                                  0,
+                                  1,
+                                  0,
+                                  1,
+                                  1,
+                                  1,
+                                  1,
+                                  0,
+                                  0,
+                                  0,
+                                  1,
+                                  0,
+                                  1,
+                                  1,
+                                  0),
+                       Left = NA)
+
+# Combine with data
+data.combine &lt;- cbind(data.clean, features)</code></pre>

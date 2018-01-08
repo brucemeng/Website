@@ -20,6 +20,8 @@ And here's one of the episodes I particularly liked:
 
 <center>[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)</center><br>
 
+<iframe width="560" height="315" src="http://www.youtube.com/embed/d4LYh_ukbasrel=0" frameborder="0" allowfullscreen></iframe><br>
+
 Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.
 
 My simple-in-head-algorithm for determining the winner is:
@@ -58,9 +60,11 @@ kable(data.dropmic, "html") %>%
 In the above table, there are some non-episode data in the last few rows. Let's filter that out with the following code:
 
 ```{r data.clean}
+# Filter
 data.clean <- data.dropmic[grepl("vs", data.dropmic$Episode),] %>%
         data.frame(Episode = .)
 
+# Display results
 kable(data.clean, "html") %>%
         kable_styling(bootstrap_options = c("striped", "hover"))
 ```
@@ -68,10 +72,45 @@ kable(data.clean, "html") %>%
 Excellent. Now just one more minor step to split each episode up into "battles", since each episode contains two battles:
 
 ```{r data.split}
+# Split into battles
 data.clean <- str_split(data.clean$Episode, "&| and ") %>%
         unlist() %>%
-        data.frame(Battle = .)
+        data.frame(Battles = .)
 
+# Display results
 kable(data.clean, "html") %>%
         kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+Perfect. Now we can add the two features of this algorithm and watch every episode on the list in order to record the winner!
+
+```{r features}
+# Add features
+features <- data.frame(Female = c(1,
+                                  0,
+                                  0,
+                                  1,
+                                  1,
+                                  0,
+                                  0,
+                                  0,
+                                  1,
+                                  0,
+                                  1,
+                                  1,
+                                  1,
+                                  1,
+                                  0,
+                                  0,
+                                  0,
+                                  1,
+                                  0,
+                                  1,
+                                  1,
+                                  0),
+                       Left = NA)
+
+# Combine with data
+data.combine <- cbind(data.clean, features)
+
 ```
