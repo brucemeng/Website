@@ -20,7 +20,7 @@ And here's one of the episodes I particularly liked:
 
 <center>[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)</center><br>
 
-<iframe width="560" height="315" src="http://www.youtube.com/embed/d4LYh_ukbasrel=0" frameborder="0" allowfullscreen></iframe><br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/d4LYh_ukbas" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe><br>
 
 Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.
 
