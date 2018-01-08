@@ -1,8 +1,8 @@
 ---
-title: '"Drop the Mic" pattern analysis...'
+title: '"Drop the Mic" winner algorithm!'
 author: Bruce Meng
 date: '2018-01-08'
-slug: drop-the-mic-pattern-analysis
+slug: drop-the-mic
 categories: []
 tags:
   - R
@@ -12,10 +12,210 @@ tags:
 
 
 
-<p>I’ve been watching lots of episodes of “Drop the Mic” on Youtube lately with <a href="https://twitter.com/klam227"><code>@klam227</code></a> and I think I noticed a pattern on how the winners were selected. It got to a point where I will guess who the winner is and I have found that I was right 8/9 times.</p>
+<p>I’ve been watching lots of episodes of “Drop the Mic” on Youtube lately with <a href="https://twitter.com/klam227"><code>@klam227</code></a> and I think I noticed a pattern on how the winners are selected. It got to a point where I will guess who the winner is before the episode really gets underway and I would be right 8/9 times.</p>
 <p>If you haven’t yet found the simple pleasure of watching Drop the Mic, here’s a summary from IMDb:</p>
 <blockquote>
 <p>Hosted by Method Man and Hailey Baldwin, each week Drop the Mic pits four stars from the worlds of entertainment, music, sports and pop culture to face off against each other in a rap battle royale packed with lyrically creative genius and “Did they really just say that?” moments. At the end of each head-to-head battle, there can only be one winner.</p>
 </blockquote>
 <p>And here’s one of the episodes I particularly liked:</p>
-<p><a href="https://www.youtube.com/watch?v=d4LYh_ukbas"><img src="https://img.youtube.com/vi/d4LYh_ukbas/0.jpg" alt="Halle Berry vs. James Corden" /></a></p>
+<center>
+<a href="https://www.youtube.com/watch?v=d4LYh_ukbas"><img src="https://img.youtube.com/vi/d4LYh_ukbas/0.jpg" alt="Halle Berry vs. James Corden" /></a>
+</center>
+<p>Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.</p>
+<p>My simple-in-head-algorithm for determining the winner is:</p>
+<ol style="list-style-type: decimal">
+<li>If one contestant is female and the other is male, the female wins!</li>
+<li>If both are male, or both are female, or if they are a group, the one standing to the left of the screen at end wins!</li>
+</ol>
+<p>😄</p>
+<p>Now I want to actually see how good this algorithm is!</p>
+<p>First off, scraping the episode data from IMDb:</p>
+<pre class="r"><code>library(rvest)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages ---------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 2.2.1.9000     v purrr   0.2.4     
+## v tibble  1.4.1          v dplyr   0.7.4     
+## v tidyr   0.7.2          v stringr 1.2.0     
+## v readr   1.1.1          v forcats 0.2.0</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter()         masks stats::filter()
+## x readr::guess_encoding() masks rvest::guess_encoding()
+## x dplyr::lag()            masks stats::lag()
+## x purrr::pluck()          masks rvest::pluck()</code></pre>
+<pre class="r"><code>library(knitr)
+library(kableExtra)
+
+data.dropmic &lt;- read_html(&quot;http://www.imdb.com/title/tt6396094/episodes?season=1&amp;ref_=tt_eps_sn_1&quot;) %&gt;%
+        html_nodes(&quot;strong a&quot;) %&gt;%
+        html_text() %&gt;%
+        as.data.frame()
+
+names(data.dropmic) &lt;- &quot;Episode&quot;
+
+kable(data.dropmic, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Episode
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Halle Berry vs. James Corden &amp; Usher vs. Anthony Anderson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Van Der Beek vs. Randall Park &amp; Rob Gronkowski vs. Gina Rodriguez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs. Cedric the Entertainer and Liam Payne vs. Jason Derulo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tony Hale vs Timothy Simons and Rascal Flatts vs. Boyz II Men
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicole Scherzinger vs. Lil Rel Howery &amp; Charlie Puth vs. Backstreet Boys
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vanessa Hudgens vs. Michael Bennett and James Corden vs. Nicole Richie
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mayim Bialik vs. Kunal Nayyar and Ashley Tisdale vs. Nick Lachey
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne Brady vs. Jake Owen and Kenny G vs. Richard Marx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+David Arquette vs. Brian Tyree Henry and Jesse Tyler Ferguson vs. Chrissy Metz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pentatonix vs. Bell Biv Devoe and Padma Lakshmi vs. Randy Jackson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs. Jonathan Lipnicki and Shania Twain vs. Meghan Trainor
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+My TV Shows
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+October TV Calendar
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+tv shows
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kodi
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TV Shows
+</td>
+</tr>
+</tbody>
+</table>
+<p>(The pretty table styles are courtesy of <a href="https://twitter.com/haozhu233"><code>@haozhu233</code></a> and his excellent <code>kableExtra</code> package!)</p>
+<p>In the above table, there are some non-episode data in the last few rows. Let’s filter that out with the following code:</p>
+<pre class="r"><code>data.clean &lt;- data.dropmic[grepl(&quot;vs&quot;, data.dropmic$Episode),] %&gt;%
+        data.frame(Episode = .)
+
+kable(data.clean, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Episode
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Halle Berry vs. James Corden &amp; Usher vs. Anthony Anderson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Van Der Beek vs. Randall Park &amp; Rob Gronkowski vs. Gina Rodriguez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs. Cedric the Entertainer and Liam Payne vs. Jason Derulo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tony Hale vs Timothy Simons and Rascal Flatts vs. Boyz II Men
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicole Scherzinger vs. Lil Rel Howery &amp; Charlie Puth vs. Backstreet Boys
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vanessa Hudgens vs. Michael Bennett and James Corden vs. Nicole Richie
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mayim Bialik vs. Kunal Nayyar and Ashley Tisdale vs. Nick Lachey
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne Brady vs. Jake Owen and Kenny G vs. Richard Marx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+David Arquette vs. Brian Tyree Henry and Jesse Tyler Ferguson vs. Chrissy Metz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pentatonix vs. Bell Biv Devoe and Padma Lakshmi vs. Randy Jackson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs. Jonathan Lipnicki and Shania Twain vs. Meghan Trainor
+</td>
+</tr>
+</tbody>
+</table>

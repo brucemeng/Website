@@ -1,8 +1,8 @@
 ---
-title: '"Drop the Mic" pattern analysis...'
+title: '"Drop the Mic" winner algorithm!'
 author: Bruce Meng
 date: '2018-01-08'
-slug: drop-the-mic-pattern-analysis
+slug: drop-the-mic
 categories: []
 tags:
   - R
@@ -10,7 +10,7 @@ tags:
   - fun
 ---
 
-I've been watching lots of episodes of "Drop the Mic" on Youtube lately with [`@klam227`](https://twitter.com/klam227) and I think I noticed a pattern on how the winners were selected. It got to a point where I will guess who the winner is and I have found that I was right 8/9 times.
+I've been watching lots of episodes of "Drop the Mic" on Youtube lately with [`@klam227`](https://twitter.com/klam227) and I think I noticed a pattern on how the winners are selected. It got to a point where I will guess who the winner is before the episode really gets underway and I would be right 8/9 times.
 
 If you haven't yet found the simple pleasure of watching Drop the Mic, here's a summary from IMDb:
 
@@ -18,4 +18,47 @@ If you haven't yet found the simple pleasure of watching Drop the Mic, here's a 
 
 And here's one of the episodes I particularly liked:
 
-[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)
+<center>[![Halle Berry vs. James Corden](https://img.youtube.com/vi/d4LYh_ukbas/0.jpg)](https://www.youtube.com/watch?v=d4LYh_ukbas)</center>
+
+Now, granted I have not watched every single episode, but of the ones I did watch I noticed two factors which determined the winner.
+
+My simple-in-head-algorithm for determining the winner is:
+
+1. If one contestant is female and the other is male, the female wins!
+2. If both are male, or both are female, or if they are a group, the one standing to the left of the screen at end wins!
+
+`r emo::ji("smile")`
+
+Now I want to actually see how good this algorithm is!
+
+First off, scraping the episode data from IMDb:
+
+```{r data}
+library(rvest)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+
+data.dropmic <- read_html("http://www.imdb.com/title/tt6396094/episodes?season=1&ref_=tt_eps_sn_1") %>%
+        html_nodes("strong a") %>%
+        html_text() %>%
+        as.data.frame()
+
+names(data.dropmic) <- "Episode"
+
+kable(data.dropmic, "html") %>%
+        kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+(The pretty table styles are courtesy of [`@haozhu233`](https://twitter.com/haozhu233) and his excellent `kableExtra` package!)
+
+In the above table, there are some non-episode data in the last few rows. Let's filter that out with the following code:
+
+```{r data.clean}
+data.clean <- data.dropmic[grepl("vs", data.dropmic$Episode),] %>%
+        data.frame(Episode = .)
+
+kable(data.clean, "html") %>%
+        kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
