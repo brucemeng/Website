@@ -1,7 +1,7 @@
 ---
 title: '"Drop the Mic" machine learning (part 2)'
 author: Bruce Meng
-date: '2018-01-14'
+date: '2018-01-10'
 slug: drop-the-mic-machine-learning-part-2
 categories: []
 tags:
@@ -175,7 +175,7 @@ Shania Twain vs. Meghan Trainor
 <p>The Battles were properly scraped in the above table. Let’s grab the following features from it:</p>
 <ol style="list-style-type: decimal">
 <li>Who are the contestants?</li>
-<li>What is the gender of contestant 1 (we shall designate the first name in the battle as contestant 1)?</li>
+<li>What are the genders of the contestants (we shall designate the first name in the battle as contestant 1)?</li>
 <li>Where is contestant 1 standing (left or right on the screen)?</li>
 </ol>
 <pre class="r"><code># One data cleaning step needs to be done... make all &quot;vs. &quot; to &quot;vs &quot;
@@ -452,7 +452,7 @@ Meghan Trainor
 </tr>
 </tbody>
 </table>
-<p>We have our contestants! Let’s now add the genders of both contestants (I’m doing this manually… training a convolutional neural network to recognize females is a bit out of scope for this post 😛) as well as the positions and winners:</p>
+<p>We have our contestants! Let’s now add the genders of both contestants (I’m doing this manually… training a convolutional neural network to recognize females is a bit out of scope for this post 😛) as well as the positions and note the winners:</p>
 <table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -990,6 +990,7 @@ NA
 </table>
 <p>Nice! We are now ready to train a machine learning model to predict the winner:</p>
 <pre class="r"><code>library(caret)
+set.seed(1)
 
 # Create training dataset
 train.index &lt;- createDataPartition(data.model.comp$winner, 
@@ -1025,17 +1026,17 @@ machine.model</code></pre>
 ## 
 ## No pre-processing
 ## Resampling: Cross-Validated (10 fold, repeated 10 times) 
-## Summary of sample sizes: 14, 15, 15, 16, 16, 16, ... 
+## Summary of sample sizes: 16, 16, 15, 15, 14, 15, ... 
 ## Resampling results across tuning parameters:
 ## 
 ##   mtry  Accuracy   Kappa    
-##   2     0.9016667  0.6666667
-##   3     0.8766667  0.6349206
-##   5     0.8433333  0.5753846
+##   2     0.8916667  0.7078125
+##   3     0.8866667  0.6969231
+##   5     0.8483333  0.6223881
 ## 
 ## Accuracy was used to select the optimal model using the largest value.
 ## The final value used for the model was mtry = 2.</code></pre>
-<p>The model, based on training data, is reporting a 71% accuracy. But the real test is on the test dataset, <code>data.test</code>:</p>
+<p>The model, based on training data, is reporting a 89% accuracy. But the real test is on the test dataset, <code>data.test</code>:</p>
 <pre class="r"><code># Predicting winners on test dataset
 mm.predict &lt;- predict(machine.model, newdata = data.test)
 
@@ -1076,19 +1077,45 @@ mm.predict
 <tbody>
 <tr>
 <td style="text-align:left;">
-Charlie Puth vs Backstreet Boys
+James Van Der Beek vs Randall Park
 </td>
 <td style="text-align:left;">
-Charlie Puth
+James Van Der Beek
 </td>
 <td style="text-align:left;">
-Backstreet Boys
+Randall Park
 </td>
 <td style="text-align:left;">
 male
 </td>
 <td style="text-align:left;">
-group
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs Cedric the Entertainer
+</td>
+<td style="text-align:left;">
+Niecy Nash
+</td>
+<td style="text-align:left;">
+Cedric the Entertainer
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
 </td>
 <td style="text-align:left;">
 left
@@ -1097,44 +1124,18 @@ left
 1
 </td>
 <td style="text-align:left;">
-2
+1
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-James Corden vs Nicole Richie
+Mayim Bialik vs Kunal Nayyar
 </td>
 <td style="text-align:left;">
-James Corden
+Mayim Bialik
 </td>
 <td style="text-align:left;">
-Nicole Richie
-</td>
-<td style="text-align:left;">
-male
-</td>
-<td style="text-align:left;">
-female
-</td>
-<td style="text-align:left;">
-left
-</td>
-<td style="text-align:left;">
-2
-</td>
-<td style="text-align:left;">
-2
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Ashley Tisdale vs Nick Lachey
-</td>
-<td style="text-align:left;">
-Ashley Tisdale
-</td>
-<td style="text-align:left;">
-Nick Lachey
+Kunal Nayyar
 </td>
 <td style="text-align:left;">
 female
@@ -1143,7 +1144,7 @@ female
 male
 </td>
 <td style="text-align:left;">
-left
+right
 </td>
 <td style="text-align:left;">
 1
@@ -1156,7 +1157,7 @@ left
 </table>
 <p>The machine learning algorithm predicted that contestant 1 would win all 3 battles. It was right 2/3 times.</p>
 <p>And now finally… the main battle!</p>
-<p>When I made part 1, the results of the last two battles were not released yet. Machine vs. Human… Joshua, give me a beat!</p>
+<p>When I made the earlier, part 1, post, the results of the last two battles were not released yet. Now we can set up a battle of Machine vs. Human… Joshua, give me a beat!</p>
 <p>Human prediction (based on algo developed in part 1):</p>
 <ol style="list-style-type: decimal">
 <li>Danielle Fishel will beat Jonathan Lipnicki (female)</li>
