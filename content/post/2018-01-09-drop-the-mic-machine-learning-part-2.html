@@ -1,0 +1,1281 @@
+---
+title: '"Drop the Mic" machine learning (part 2)'
+author: Bruce Meng
+date: '2018-01-14'
+slug: drop-the-mic-machine-learning-part-2
+categories: []
+tags:
+  - R
+  - modelling
+  - fun
+---
+
+
+
+<p>I wrote about an ‘algorithm’ that I concocted in my head for determining “Drop the Mic” winners in an earlier post: <a href="https://www.brucemeng.ca/post/drop-the-mic/">“Drop the MIC” winner algorithm!</a>. In that post I found that my silly little algorithm has accurately predicted the winner 85% of the time. 👍</p>
+<p>To rehash that algorithm I said:</p>
+<ol style="list-style-type: decimal">
+<li>If one contestant is female and the other is male, the female wins!</li>
+<li>If both are male, or both are female, or if they are a group, the one standing to the left of the screen at the end wins!</li>
+</ol>
+<p>That was fun, but it wasn’t very data science-y. So… let’s apply a more proper machine learning method to determine the winner algorithm.</p>
+<p>We start again with scraping the data from IMDb:</p>
+<pre class="r"><code>library(rvest)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages ---------------------------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 2.2.1.9000     v purrr   0.2.4     
+## v tibble  1.4.1          v dplyr   0.7.4     
+## v tidyr   0.7.2          v stringr 1.2.0     
+## v readr   1.1.1          v forcats 0.2.0</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter()         masks stats::filter()
+## x readr::guess_encoding() masks rvest::guess_encoding()
+## x dplyr::lag()            masks stats::lag()
+## x purrr::pluck()          masks rvest::pluck()</code></pre>
+<pre class="r"><code>library(knitr)
+library(kableExtra)
+
+# Scrape data from IMDb
+data.dropmic &lt;- read_html(&quot;http://www.imdb.com/title/tt6396094/episodes?season=1&amp;ref_=tt_eps_sn_1&quot;) %&gt;%
+        html_nodes(&quot;strong a&quot;) %&gt;%
+        html_text() %&gt;%
+        as.data.frame() %&gt;%
+        .[grepl(&quot;vs&quot;, .[,1]),] %&gt;%
+        data.frame(Episode = .)
+
+data.clean &lt;- str_split(data.dropmic$Episode, &quot;&amp;| and &quot;) %&gt;%
+        unlist() %&gt;%
+        data.frame(Battles = .)
+
+# Display results
+kable(data.clean, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Battles
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Halle Berry vs. James Corden
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Usher vs. Anthony Anderson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Van Der Beek vs. Randall Park
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rob Gronkowski vs. Gina Rodriguez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs. Cedric the Entertainer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Liam Payne vs. Jason Derulo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tony Hale vs Timothy Simons
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rascal Flatts vs. Boyz II Men
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicole Scherzinger vs. Lil Rel Howery
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Charlie Puth vs. Backstreet Boys
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vanessa Hudgens vs. Michael Bennett
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Corden vs. Nicole Richie
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mayim Bialik vs. Kunal Nayyar
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ashley Tisdale vs. Nick Lachey
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne Brady vs. Jake Owen
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kenny G vs. Richard Marx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+David Arquette vs. Brian Tyree Henry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jesse Tyler Ferguson vs. Chrissy Metz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pentatonix vs. Bell Biv Devoe
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Padma Lakshmi vs. Randy Jackson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs. Jonathan Lipnicki
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shania Twain vs. Meghan Trainor
+</td>
+</tr>
+</tbody>
+</table>
+<p>The Battles were properly scraped in the above table. Let’s grab the following features from it:</p>
+<ol style="list-style-type: decimal">
+<li>Who are the contestants?</li>
+<li>What is the gender of contestant 1 (we shall designate the first name in the battle as contestant 1)?</li>
+<li>Where is contestant 1 standing (left or right on the screen)?</li>
+</ol>
+<pre class="r"><code># One data cleaning step needs to be done... make all &quot;vs. &quot; to &quot;vs &quot;
+data.clean$Battles &lt;- gsub(&quot;vs. &quot;, &quot;vs &quot;, data.clean$Battles)
+
+## 1. Who are the contestants?
+# Separate contestants
+features &lt;- str_split(data.clean$Battles, &quot;vs &quot;)
+
+# Use purrr::map to add Contestants to data.clean
+data.model &lt;- cbind(data.clean, 
+                    Contestant.1 = purrr::map(features, 1) %&gt;% unlist(),
+                    Contestant.2 = purrr::map(features, 2) %&gt;% unlist())
+
+# Display results
+kable(data.model, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Battles
+</th>
+<th style="text-align:left;">
+Contestant.1
+</th>
+<th style="text-align:left;">
+Contestant.2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Halle Berry vs James Corden
+</td>
+<td style="text-align:left;">
+Halle Berry
+</td>
+<td style="text-align:left;">
+James Corden
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Usher vs Anthony Anderson
+</td>
+<td style="text-align:left;">
+Usher
+</td>
+<td style="text-align:left;">
+Anthony Anderson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Van Der Beek vs Randall Park
+</td>
+<td style="text-align:left;">
+James Van Der Beek
+</td>
+<td style="text-align:left;">
+Randall Park
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rob Gronkowski vs Gina Rodriguez
+</td>
+<td style="text-align:left;">
+Rob Gronkowski
+</td>
+<td style="text-align:left;">
+Gina Rodriguez
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs Cedric the Entertainer
+</td>
+<td style="text-align:left;">
+Niecy Nash
+</td>
+<td style="text-align:left;">
+Cedric the Entertainer
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Liam Payne vs Jason Derulo
+</td>
+<td style="text-align:left;">
+Liam Payne
+</td>
+<td style="text-align:left;">
+Jason Derulo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tony Hale vs Timothy Simons
+</td>
+<td style="text-align:left;">
+Tony Hale
+</td>
+<td style="text-align:left;">
+Timothy Simons
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rascal Flatts vs Boyz II Men
+</td>
+<td style="text-align:left;">
+Rascal Flatts
+</td>
+<td style="text-align:left;">
+Boyz II Men
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicole Scherzinger vs Lil Rel Howery
+</td>
+<td style="text-align:left;">
+Nicole Scherzinger
+</td>
+<td style="text-align:left;">
+Lil Rel Howery
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Charlie Puth vs Backstreet Boys
+</td>
+<td style="text-align:left;">
+Charlie Puth
+</td>
+<td style="text-align:left;">
+Backstreet Boys
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vanessa Hudgens vs Michael Bennett
+</td>
+<td style="text-align:left;">
+Vanessa Hudgens
+</td>
+<td style="text-align:left;">
+Michael Bennett
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Corden vs Nicole Richie
+</td>
+<td style="text-align:left;">
+James Corden
+</td>
+<td style="text-align:left;">
+Nicole Richie
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mayim Bialik vs Kunal Nayyar
+</td>
+<td style="text-align:left;">
+Mayim Bialik
+</td>
+<td style="text-align:left;">
+Kunal Nayyar
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ashley Tisdale vs Nick Lachey
+</td>
+<td style="text-align:left;">
+Ashley Tisdale
+</td>
+<td style="text-align:left;">
+Nick Lachey
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne Brady vs Jake Owen
+</td>
+<td style="text-align:left;">
+Wayne Brady
+</td>
+<td style="text-align:left;">
+Jake Owen
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kenny G vs Richard Marx
+</td>
+<td style="text-align:left;">
+Kenny G
+</td>
+<td style="text-align:left;">
+Richard Marx
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+David Arquette vs Brian Tyree Henry
+</td>
+<td style="text-align:left;">
+David Arquette
+</td>
+<td style="text-align:left;">
+Brian Tyree Henry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jesse Tyler Ferguson vs Chrissy Metz
+</td>
+<td style="text-align:left;">
+Jesse Tyler Ferguson
+</td>
+<td style="text-align:left;">
+Chrissy Metz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pentatonix vs Bell Biv Devoe
+</td>
+<td style="text-align:left;">
+Pentatonix
+</td>
+<td style="text-align:left;">
+Bell Biv Devoe
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Padma Lakshmi vs Randy Jackson
+</td>
+<td style="text-align:left;">
+Padma Lakshmi
+</td>
+<td style="text-align:left;">
+Randy Jackson
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs Jonathan Lipnicki
+</td>
+<td style="text-align:left;">
+Danielle Fishel
+</td>
+<td style="text-align:left;">
+Jonathan Lipnicki
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shania Twain vs Meghan Trainor
+</td>
+<td style="text-align:left;">
+Shania Twain
+</td>
+<td style="text-align:left;">
+Meghan Trainor
+</td>
+</tr>
+</tbody>
+</table>
+<p>We have our contestants! Let’s now add the genders of both contestants (I’m doing this manually… training a convolutional neural network to recognize females is a bit out of scope for this post 😛) as well as the positions and winners:</p>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Battles
+</th>
+<th style="text-align:left;">
+Contestant.1
+</th>
+<th style="text-align:left;">
+Contestant.2
+</th>
+<th style="text-align:left;">
+Con1.gender
+</th>
+<th style="text-align:left;">
+Con2.gender
+</th>
+<th style="text-align:left;">
+Con1.position
+</th>
+<th style="text-align:left;">
+winner
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Halle Berry vs James Corden
+</td>
+<td style="text-align:left;">
+Halle Berry
+</td>
+<td style="text-align:left;">
+James Corden
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Usher vs Anthony Anderson
+</td>
+<td style="text-align:left;">
+Usher
+</td>
+<td style="text-align:left;">
+Anthony Anderson
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Van Der Beek vs Randall Park
+</td>
+<td style="text-align:left;">
+James Van Der Beek
+</td>
+<td style="text-align:left;">
+Randall Park
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rob Gronkowski vs Gina Rodriguez
+</td>
+<td style="text-align:left;">
+Rob Gronkowski
+</td>
+<td style="text-align:left;">
+Gina Rodriguez
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Niecy Nash vs Cedric the Entertainer
+</td>
+<td style="text-align:left;">
+Niecy Nash
+</td>
+<td style="text-align:left;">
+Cedric the Entertainer
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Liam Payne vs Jason Derulo
+</td>
+<td style="text-align:left;">
+Liam Payne
+</td>
+<td style="text-align:left;">
+Jason Derulo
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tony Hale vs Timothy Simons
+</td>
+<td style="text-align:left;">
+Tony Hale
+</td>
+<td style="text-align:left;">
+Timothy Simons
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Rascal Flatts vs Boyz II Men
+</td>
+<td style="text-align:left;">
+Rascal Flatts
+</td>
+<td style="text-align:left;">
+Boyz II Men
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Nicole Scherzinger vs Lil Rel Howery
+</td>
+<td style="text-align:left;">
+Nicole Scherzinger
+</td>
+<td style="text-align:left;">
+Lil Rel Howery
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Charlie Puth vs Backstreet Boys
+</td>
+<td style="text-align:left;">
+Charlie Puth
+</td>
+<td style="text-align:left;">
+Backstreet Boys
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Vanessa Hudgens vs Michael Bennett
+</td>
+<td style="text-align:left;">
+Vanessa Hudgens
+</td>
+<td style="text-align:left;">
+Michael Bennett
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Corden vs Nicole Richie
+</td>
+<td style="text-align:left;">
+James Corden
+</td>
+<td style="text-align:left;">
+Nicole Richie
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mayim Bialik vs Kunal Nayyar
+</td>
+<td style="text-align:left;">
+Mayim Bialik
+</td>
+<td style="text-align:left;">
+Kunal Nayyar
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ashley Tisdale vs Nick Lachey
+</td>
+<td style="text-align:left;">
+Ashley Tisdale
+</td>
+<td style="text-align:left;">
+Nick Lachey
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Wayne Brady vs Jake Owen
+</td>
+<td style="text-align:left;">
+Wayne Brady
+</td>
+<td style="text-align:left;">
+Jake Owen
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kenny G vs Richard Marx
+</td>
+<td style="text-align:left;">
+Kenny G
+</td>
+<td style="text-align:left;">
+Richard Marx
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+David Arquette vs Brian Tyree Henry
+</td>
+<td style="text-align:left;">
+David Arquette
+</td>
+<td style="text-align:left;">
+Brian Tyree Henry
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jesse Tyler Ferguson vs Chrissy Metz
+</td>
+<td style="text-align:left;">
+Jesse Tyler Ferguson
+</td>
+<td style="text-align:left;">
+Chrissy Metz
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pentatonix vs Bell Biv Devoe
+</td>
+<td style="text-align:left;">
+Pentatonix
+</td>
+<td style="text-align:left;">
+Bell Biv Devoe
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Padma Lakshmi vs Randy Jackson
+</td>
+<td style="text-align:left;">
+Padma Lakshmi
+</td>
+<td style="text-align:left;">
+Randy Jackson
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs Jonathan Lipnicki
+</td>
+<td style="text-align:left;">
+Danielle Fishel
+</td>
+<td style="text-align:left;">
+Jonathan Lipnicki
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shania Twain vs Meghan Trainor
+</td>
+<td style="text-align:left;">
+Shania Twain
+</td>
+<td style="text-align:left;">
+Meghan Trainor
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+<p>Nice! We are now ready to train a machine learning model to predict the winner:</p>
+<pre class="r"><code>library(caret)
+
+# Create training dataset
+train.index &lt;- createDataPartition(data.model.comp$winner, 
+                                   p = 0.8,
+                                   list = F)
+
+data.train &lt;- data.model.comp[train.index,]
+data.test &lt;- data.model.comp[-train.index,]
+
+## Establish caret parameters
+# Training controls
+caret.train.control &lt;- trainControl(
+        method = &quot;repeatedcv&quot;,
+        number = 10,
+        repeats = 10
+        )
+# Training machine learning model
+doParallel::registerDoParallel(cores = 6)
+
+machine.model &lt;- train(winner ~ Con1.gender + Con2.gender + Con1.position, 
+                       data = data.train, 
+                       method = &quot;rf&quot;,
+                       trControl = caret.train.control)</code></pre>
+<pre><code>## Warning in nominalTrainWorkflow(x = x, y = y, wts = weights, info =
+## trainInfo, : There were missing values in resampled performance measures.</code></pre>
+<pre class="r"><code># Model details
+machine.model</code></pre>
+<pre><code>## Random Forest 
+## 
+## 17 samples
+##  3 predictor
+##  2 classes: &#39;1&#39;, &#39;2&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## Summary of sample sizes: 14, 15, 15, 16, 16, 16, ... 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy   Kappa    
+##   2     0.9016667  0.6666667
+##   3     0.8766667  0.6349206
+##   5     0.8433333  0.5753846
+## 
+## Accuracy was used to select the optimal model using the largest value.
+## The final value used for the model was mtry = 2.</code></pre>
+<p>The model, based on training data, is reporting a 71% accuracy. But the real test is on the test dataset, <code>data.test</code>:</p>
+<pre class="r"><code># Predicting winners on test dataset
+mm.predict &lt;- predict(machine.model, newdata = data.test)
+
+results &lt;- cbind(data.test, mm.predict)
+
+# Display results
+kable(results, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Battles
+</th>
+<th style="text-align:left;">
+Contestant.1
+</th>
+<th style="text-align:left;">
+Contestant.2
+</th>
+<th style="text-align:left;">
+Con1.gender
+</th>
+<th style="text-align:left;">
+Con2.gender
+</th>
+<th style="text-align:left;">
+Con1.position
+</th>
+<th style="text-align:left;">
+winner
+</th>
+<th style="text-align:left;">
+mm.predict
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Charlie Puth vs Backstreet Boys
+</td>
+<td style="text-align:left;">
+Charlie Puth
+</td>
+<td style="text-align:left;">
+Backstreet Boys
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+James Corden vs Nicole Richie
+</td>
+<td style="text-align:left;">
+James Corden
+</td>
+<td style="text-align:left;">
+Nicole Richie
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ashley Tisdale vs Nick Lachey
+</td>
+<td style="text-align:left;">
+Ashley Tisdale
+</td>
+<td style="text-align:left;">
+Nick Lachey
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>The machine learning algorithm predicted that contestant 1 would win all 3 battles. It was right 2/3 times.</p>
+<p>And now finally… the main battle!</p>
+<p>When I made part 1, the results of the last two battles were not released yet. Machine vs. Human… Joshua, give me a beat!</p>
+<p>Human prediction (based on algo developed in part 1):</p>
+<ol style="list-style-type: decimal">
+<li>Danielle Fishel will beat Jonathan Lipnicki (female)</li>
+<li>Shania will beat Meghan</li>
+</ol>
+<pre class="r"><code>data.battle &lt;- data.model[(nrow(data.model) - 1): nrow(data.model),]
+
+# Machine prediction
+mm.predict &lt;- predict(machine.model, data.battle)
+
+results &lt;- cbind(data.battle, mm.predict)
+
+# Display results
+kable(results, &quot;html&quot;) %&gt;%
+        kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Battles
+</th>
+<th style="text-align:left;">
+Contestant.1
+</th>
+<th style="text-align:left;">
+Contestant.2
+</th>
+<th style="text-align:left;">
+Con1.gender
+</th>
+<th style="text-align:left;">
+Con2.gender
+</th>
+<th style="text-align:left;">
+Con1.position
+</th>
+<th style="text-align:left;">
+winner
+</th>
+<th style="text-align:left;">
+mm.predict
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Danielle Fishel vs Jonathan Lipnicki
+</td>
+<td style="text-align:left;">
+Danielle Fishel
+</td>
+<td style="text-align:left;">
+Jonathan Lipnicki
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+male
+</td>
+<td style="text-align:left;">
+right
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Shania Twain vs Meghan Trainor
+</td>
+<td style="text-align:left;">
+Shania Twain
+</td>
+<td style="text-align:left;">
+Meghan Trainor
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+female
+</td>
+<td style="text-align:left;">
+left
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:left;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+<p>Machine prediction:</p>
+<ol style="list-style-type: decimal">
+<li>Danielle Fishel will beat Jonathan Lipnicki</li>
+<li>Meghan will beat Shania</li>
+</ol>
+<p>(I was a bit worried that the machine learning algo would make the same prediction as me… that would’ve been quite… anti-climactic)</p>
+<div id="battle-1-danielle-fishel-vs.jonathan-lipnicki" class="section level2">
+<h2>Battle 1: Danielle Fishel vs. Jonathan Lipnicki</h2>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XxTjaF02u7E" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</center>
+<p><br></p>
+<p>And the winner is Danielle! Both human and machine score a point!</p>
+</div>
+<div id="battle-2-tie-breaker-shania-twain-vs.meghan-trainor" class="section level2">
+<h2>Battle 2: Tie-breaker: Shania Twain vs. Meghan Trainor</h2>
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_ckccU8ojRg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</center>
+<p><br></p>
+</div>
