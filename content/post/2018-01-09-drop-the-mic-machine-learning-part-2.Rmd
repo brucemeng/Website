@@ -10,7 +10,7 @@ tags:
   - fun
 ---
 
-I wrote about an 'algorithm' that I concocted in my head for determining "Drop the Mic" winners in an earlier post: ["Drop the MIC" winner algorithm!](https://www.brucemeng.ca/post/drop-the-mic/). In that post I found that my silly little algorithm has accurately predicted the winner 85% of the time. `r emo::ji("thumbsup")`
+I wrote about an 'algorithm' that I concocted in my head for determining "Drop the Mic" winners in an earlier post: (["Drop the Mic" winner algorithm!](https://www.brucemeng.ca/post/drop-the-mic/)). In that post I found that my silly little algorithm has accurately predicted the winner 85% of the time. `r emo::ji("thumbsup")`
 
 To rehash that algorithm I said:
 
@@ -21,7 +21,7 @@ That was fun, but it wasn't very data science-y. So... let's apply a more proper
 
 We start again with scraping the data from IMDb:
 
-```{r data}
+```{r data, message=F}
 library(rvest)
 library(tidyverse)
 library(knitr)
@@ -87,7 +87,7 @@ kable(data.model, "html") %>%
 
 Nice! We are now ready to train a machine learning model to predict the winner:
 
-```{r caret, message = F}
+```{r caret, message = F, warning = F}
 library(caret)
 set.seed(1)
 
@@ -134,14 +134,14 @@ kable(results, "html") %>%
 
 The machine learning algorithm predicted that contestant 1 would win all 3 battles. It was right 2/3 times.
 
-And now finally... the main battle!
+## Main Battle
 
-When I made the earlier, part 1, post, the results of the last two battles were not released yet. Now we can set up a battle of Machine vs. Human... Joshua, give me a beat!
+When I made the earlier post, the results of the last two battles were not released yet. Now that the last episode has been posted, we can set up a battle of Machine vs. Human... Joshua, give me a beat!
 
 Human prediction (based on algo developed in part 1):
 
 1. Danielle Fishel will beat Jonathan Lipnicki (female)
-2. Shania will beat Meghan
+2. Shania will beat Meghan (Shania is standing left)
 
 ```{r battle}
 data.battle <- data.model[(nrow(data.model) - 1): nrow(data.model),]

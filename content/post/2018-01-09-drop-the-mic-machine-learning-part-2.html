@@ -12,7 +12,7 @@ tags:
 
 
 
-<p>I wrote about an ‘algorithm’ that I concocted in my head for determining “Drop the Mic” winners in an earlier post: <a href="https://www.brucemeng.ca/post/drop-the-mic/">“Drop the MIC” winner algorithm!</a>. In that post I found that my silly little algorithm has accurately predicted the winner 85% of the time. 👍</p>
+<p>I wrote about an ‘algorithm’ that I concocted in my head for determining “Drop the Mic” winners in an earlier post: (<a href="https://www.brucemeng.ca/post/drop-the-mic/">“Drop the Mic” winner algorithm!</a>). In that post I found that my silly little algorithm has accurately predicted the winner 85% of the time. 👍</p>
 <p>To rehash that algorithm I said:</p>
 <ol style="list-style-type: decimal">
 <li>If one contestant is female and the other is male, the female wins!</li>
@@ -20,20 +20,9 @@ tags:
 </ol>
 <p>That was fun, but it wasn’t very data science-y. So… let’s apply a more proper machine learning method to determine the winner algorithm.</p>
 <p>We start again with scraping the data from IMDb:</p>
-<pre class="r"><code>library(rvest)</code></pre>
-<pre><code>## Loading required package: xml2</code></pre>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages ---------------------------------------------- tidyverse 1.2.1 --</code></pre>
-<pre><code>## v ggplot2 2.2.1.9000     v purrr   0.2.4     
-## v tibble  1.4.1          v dplyr   0.7.4     
-## v tidyr   0.7.2          v stringr 1.2.0     
-## v readr   1.1.1          v forcats 0.2.0</code></pre>
-<pre><code>## -- Conflicts ------------------------------------------------- tidyverse_conflicts() --
-## x dplyr::filter()         masks stats::filter()
-## x readr::guess_encoding() masks rvest::guess_encoding()
-## x dplyr::lag()            masks stats::lag()
-## x purrr::pluck()          masks rvest::pluck()</code></pre>
-<pre class="r"><code>library(knitr)
+<pre class="r"><code>library(rvest)
+library(tidyverse)
+library(knitr)
 library(kableExtra)
 
 # Scrape data from IMDb
@@ -1013,10 +1002,9 @@ doParallel::registerDoParallel(cores = 6)
 machine.model &lt;- train(winner ~ Con1.gender + Con2.gender + Con1.position, 
                        data = data.train, 
                        method = &quot;rf&quot;,
-                       trControl = caret.train.control)</code></pre>
-<pre><code>## Warning in nominalTrainWorkflow(x = x, y = y, wts = weights, info =
-## trainInfo, : There were missing values in resampled performance measures.</code></pre>
-<pre class="r"><code># Model details
+                       trControl = caret.train.control)
+
+# Model details
 machine.model</code></pre>
 <pre><code>## Random Forest 
 ## 
@@ -1156,12 +1144,13 @@ right
 </tbody>
 </table>
 <p>The machine learning algorithm predicted that contestant 1 would win all 3 battles. It was right 2/3 times.</p>
-<p>And now finally… the main battle!</p>
-<p>When I made the earlier, part 1, post, the results of the last two battles were not released yet. Now we can set up a battle of Machine vs. Human… Joshua, give me a beat!</p>
+<div id="main-battle" class="section level2">
+<h2>Main Battle</h2>
+<p>When I made the earlier post, the results of the last two battles were not released yet. Now that the last episode has been posted, we can set up a battle of Machine vs. Human… Joshua, give me a beat!</p>
 <p>Human prediction (based on algo developed in part 1):</p>
 <ol style="list-style-type: decimal">
 <li>Danielle Fishel will beat Jonathan Lipnicki (female)</li>
-<li>Shania will beat Meghan</li>
+<li>Shania will beat Meghan (Shania is standing left)</li>
 </ol>
 <pre class="r"><code>data.battle &lt;- data.model[(nrow(data.model) - 1): nrow(data.model),]
 
@@ -1263,6 +1252,7 @@ NA
 <li>Meghan will beat Shania</li>
 </ol>
 <p>(I was a bit worried that the machine learning algo would make the same prediction as me… that would’ve been quite… anti-climactic)</p>
+</div>
 <div id="battle-1-danielle-fishel-vs.jonathan-lipnicki" class="section level2">
 <h2>Battle 1: Danielle Fishel vs. Jonathan Lipnicki</h2>
 <center>
