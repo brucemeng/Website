@@ -24,3 +24,8 @@ I am an avid R user, and also like to cycle when the sun is out `r emo::ji("smil
 ![(It wasn't sunny outside, hence I am inside... the helmet improves the airflow...)](/img/me-bike-edit.jpg)
 
 If you enjoyed my site, check out David Robinson's excellent posts at [Variance Explained](http://varianceexplained.org/), and also the broader R community as well at [R-bloggers](https://www.r-bloggers.com/).
+
+**Thanks for the tweet Dave!**
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Cool <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> post from <a href="https://twitter.com/BManalyst?ref_src=twsrc%5Etfw">@BManalyst</a> about training a model to predict &quot;Drop the Mic&quot; winners using caret: <a href="https://t.co/XK10LnHiwq">https://t.co/XK10LnHiwq</a> <a href="https://twitter.com/hashtag/datablog?src=hash&amp;ref_src=twsrc%5Etfw">#datablog</a> <a href="https://t.co/XXeMccRGBA">pic.twitter.com/XXeMccRGBA</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/953669683529551874?ref_src=twsrc%5Etfw">January 17, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
