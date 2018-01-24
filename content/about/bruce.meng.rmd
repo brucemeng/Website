@@ -23,7 +23,7 @@ I am an avid R user, and also like to cycle when the sun is out `r emo::ji("smil
 
 ![(It wasn't sunny outside, hence I am inside... the helmet improves the airflow...)](/img/me-bike-edit.jpg)
 
-If you enjoyed my site, check out David Robinson's excellent posts at [Variance Explained](http://varianceexplained.org/), and also the broader R community as well at [R-bloggers](https://www.r-bloggers.com/).
+If you enjoyed my site, check out David Robinson's excellent posts at **[Variance Explained](http://varianceexplained.org/)**, and also the broader R community as well at **[R Weekly](https://rweekly.org/)** & **[R-bloggers](https://www.r-bloggers.com/)**.
 
 **Thanks for the tweet Dave!**
 
