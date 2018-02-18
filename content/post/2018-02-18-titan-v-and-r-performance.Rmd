@@ -14,11 +14,22 @@ library(knitr)
 library(kableExtra)
 ```
 
-I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2013 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that Tensorflow in R is only in CUDA). 
+I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that TensorFlow is only in CUDA). 
 
-# Say hello to TITAN V
+# Goodbye ol'faithful 7970
 
-The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend [Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy).
+I'm going to miss this card. It's held up very well over the years, and the Arctic Accelero cooler I put on top of it was whisper quiet!
+
+[pic1][pic2]
+
+
+# Hello TITAN V
+
+I got the TITAN V as the replacement to the 7970. Here's some unboxing pics I took:
+
+[pic1][pic2]
+
+The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend **[Anandtech]**(https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy).
 
 ```{r specs, echo = F, fig.cap = "Specs table courtesy of Anandtech", message = F}
 library(rvest)
@@ -41,7 +52,8 @@ names(table.data) <- table.data.names
 
 # Display data
 kable(table.data, "html") %>%
-        kable_styling(c("striped", "hover")) %>%
+        kable_styling(c("striped", "hover"),
+                      font_size = 10) %>%
         add_header_above(c("Specification Comparison" = 5))
 
 ```
