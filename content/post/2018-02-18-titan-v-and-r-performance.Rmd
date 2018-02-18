@@ -29,7 +29,7 @@ I got the TITAN V as the replacement to the 7970. Here's some unboxing pics I to
 
 [pic1][pic2]
 
-The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend **[Anandtech]**(https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy).
+The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend **[Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy)**.
 
 ```{r specs, echo = F, fig.cap = "Specs table courtesy of Anandtech", message = F}
 library(rvest)
@@ -57,3 +57,17 @@ kable(table.data, "html") %>%
         add_header_above(c("Specification Comparison" = 5))
 
 ```
+
+# Benchmarks
+
+This is a run against the *Quora Question Pairs* Kaggle competition dataset, as found as an example on the Keras for R website:
+
+>The dataset first appeared in the Kaggle competition Quora Question Pairs. The dataset consists of ~400k pairs of questions and a column indicating if the question pair is duplicated.
+
+Training time with an Intel i7 980x CPU at 4.27 GHz:
+
+![](/img/tf.cpu.gif)
+
+Training time with TITAN V:
+
+[gif2]
