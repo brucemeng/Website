@@ -1,0 +1,47 @@
+---
+title: "TITAN V and R performance"
+author: "Bruce Meng"
+date: '2018-02-18'
+slug: titan-v-and-r-performance
+tags:
+  - R
+  - fun
+categories: []
+---
+
+```{r setup, include=F}
+library(knitr)
+library(kableExtra)
+```
+
+I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2013 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that Tensorflow in R is only in CUDA). 
+
+# Say hello to TITAN V
+
+The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend [Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy).
+
+```{r specs, echo = F, fig.cap = "Specs table courtesy of Anandtech", message = F}
+library(rvest)
+library(tidyverse)
+
+# Get data
+table.url <- "https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy"
+
+table.data <- read_html(table.url) %>%
+        html_node("table") %>%
+        html_table(fill = T) %>%
+        select(num_range("X", 1:5))
+
+table.data.names <- table.data[2,]
+
+table.data <- table.data %>%
+        slice(-(1:2))
+
+names(table.data) <- table.data.names
+
+# Display data
+kable(table.data, "html") %>%
+        kable_styling(c("striped", "hover")) %>%
+        add_header_above(c("Specification Comparison" = 5))
+
+```

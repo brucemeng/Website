@@ -1,0 +1,404 @@
+---
+title: "TITAN V and R performance"
+author: "Bruce Meng"
+date: '2018-02-18'
+slug: titan-v-and-r-performance
+tags:
+  - R
+  - fun
+categories: []
+---
+
+
+
+<p>I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2013 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that Tensorflow in R is only in CUDA).</p>
+<div id="say-hello-to-titan-v" class="section level1">
+<h1>Say hello to TITAN V</h1>
+<p>The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend <a href="https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy">Anandtech</a>.</p>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center; border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;" colspan="5">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+Specification Comparison
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Titan V
+</th>
+<th style="text-align:left;">
+Titan Xp
+</th>
+<th style="text-align:left;">
+GTX Titan X (Maxwell)
+</th>
+<th style="text-align:left;">
+GTX Titan
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CUDA Cores
+</td>
+<td style="text-align:left;">
+5120
+</td>
+<td style="text-align:left;">
+3840
+</td>
+<td style="text-align:left;">
+3072
+</td>
+<td style="text-align:left;">
+2688
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tensor Cores
+</td>
+<td style="text-align:left;">
+640
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ROPs
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Core Clock
+</td>
+<td style="text-align:left;">
+1200MHz
+</td>
+<td style="text-align:left;">
+1485MHz
+</td>
+<td style="text-align:left;">
+1000MHz
+</td>
+<td style="text-align:left;">
+837MHz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Boost Clock
+</td>
+<td style="text-align:left;">
+1455MHz
+</td>
+<td style="text-align:left;">
+1582MHz
+</td>
+<td style="text-align:left;">
+1075MHz
+</td>
+<td style="text-align:left;">
+876MHz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Clock
+</td>
+<td style="text-align:left;">
+1.7Gbps HBM2
+</td>
+<td style="text-align:left;">
+11.4Gbps GDDR5X
+</td>
+<td style="text-align:left;">
+7Gbps GDDR5
+</td>
+<td style="text-align:left;">
+6Gbps GDDR5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Bus Width
+</td>
+<td style="text-align:left;">
+3072-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Bandwidth
+</td>
+<td style="text-align:left;">
+653GB/sec
+</td>
+<td style="text-align:left;">
+547GB/sec
+</td>
+<td style="text-align:left;">
+336GB/sec
+</td>
+<td style="text-align:left;">
+228GB/sec
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VRAM
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+6GB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+L2 Cache
+</td>
+<td style="text-align:left;">
+4.5MB
+</td>
+<td style="text-align:left;">
+3MB
+</td>
+<td style="text-align:left;">
+3MB
+</td>
+<td style="text-align:left;">
+1.5MB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single Precision
+</td>
+<td style="text-align:left;">
+13.8 TFLOPS
+</td>
+<td style="text-align:left;">
+12.1 TFLOPS
+</td>
+<td style="text-align:left;">
+6.6 TFLOPS
+</td>
+<td style="text-align:left;">
+4.7 TFLOPS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Double Precision
+</td>
+<td style="text-align:left;">
+6.9 TFLOPS (1/2 rate)
+</td>
+<td style="text-align:left;">
+0.38 TFLOPS (1/32 rate)
+</td>
+<td style="text-align:left;">
+0.2 TFLOPS (1/32 rate)
+</td>
+<td style="text-align:left;">
+1.5 TFLOPS (1/3 rate)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Half Precision
+</td>
+<td style="text-align:left;">
+27.6 TFLOPS (2x rate)
+</td>
+<td style="text-align:left;">
+0.19 TFLOPs (1/64 rate)
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tensor Performance (Deep Learning)
+</td>
+<td style="text-align:left;">
+110 TFLOPS
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPU
+</td>
+<td style="text-align:left;">
+GV100 (815mm2)
+</td>
+<td style="text-align:left;">
+GP102 (471mm2)
+</td>
+<td style="text-align:left;">
+GM200 (601mm2)
+</td>
+<td style="text-align:left;">
+GK110 (561mm2)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transistor Count
+</td>
+<td style="text-align:left;">
+21.1B
+</td>
+<td style="text-align:left;">
+12B
+</td>
+<td style="text-align:left;">
+8B
+</td>
+<td style="text-align:left;">
+7.1B
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TDP
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manufacturing Process
+</td>
+<td style="text-align:left;">
+TSMC 12nm FFN
+</td>
+<td style="text-align:left;">
+TSMC 16nm FinFET
+</td>
+<td style="text-align:left;">
+TSMC 28nm
+</td>
+<td style="text-align:left;">
+TSMC 28nm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Architecture
+</td>
+<td style="text-align:left;">
+Volta
+</td>
+<td style="text-align:left;">
+Pascal
+</td>
+<td style="text-align:left;">
+Maxwell 2
+</td>
+<td style="text-align:left;">
+Kepler
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Launch Date
+</td>
+<td style="text-align:left;">
+12/07/2017
+</td>
+<td style="text-align:left;">
+04/07/2017
+</td>
+<td style="text-align:left;">
+08/02/2016
+</td>
+<td style="text-align:left;">
+02/21/13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Price
+</td>
+<td style="text-align:left;">
+$2999
+</td>
+<td style="text-align:left;">
+$1299
+</td>
+<td style="text-align:left;">
+$999
+</td>
+<td style="text-align:left;">
+$999
+</td>
+</tr>
+</tbody>
+</table>
+</div>
