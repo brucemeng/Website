@@ -14,14 +14,14 @@ categories: []
 <p>I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that TensorFlow is only in CUDA).</p>
 <div id="goodbye-olfaithful-7970" class="section level1">
 <h1>Goodbye ol’faithful 7970</h1>
-<p>I’m going to miss this card. It’s held up very well over the years, and the Arctic Accelero cooler I put on top of it was whisper quiet!</p>
+<p>I’m going to miss this card. It’s held up very well over the years, and the Arctic Accelero cooler I put on top of it made the card whisper quiet in addition to cooling it better by about 20C!</p>
 <p>[pic1][pic2]</p>
 </div>
 <div id="hello-titan-v" class="section level1">
 <h1>Hello TITAN V</h1>
 <p>I got the TITAN V as the replacement to the 7970. Here’s some unboxing pics I took:</p>
 <p>[pic1][pic2]</p>
-<p>The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend <strong><a href="https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy">Anandtech</a></strong>.</p>
+<p>The TITAN V was released a few months ago and there are already several excellent reviews out about the card already. I highly recommend <strong><a href="https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy">Anandtech</a></strong>.</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -411,14 +411,14 @@ $999
 </div>
 <div id="benchmarks" class="section level1">
 <h1>Benchmarks</h1>
-<p>This is a run against the <em>IMDb sentiment classification task</em> dataset, as found as an example on the <a href="https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html">Keras for R website</a>.</p>
+<p>This is a run against the <em>IMDb sentiment classification task</em> dataset, as found as an example on the <a href="https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html">Keras RStudio website</a>.</p>
 <p>The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training and 25,000 for validation.</p>
 <p>Training time with an Intel i7 980x CPU at 4.27 GHz:</p>
 <div class="figure">
 <img src="/img/tf.cpu.gif" />
 
 </div>
-<p>It’s taking about 25s to complete 1 epoch on the Intel CPU.</p>
+<p><br> It’s taking about 25s to complete 1 epoch on the Intel CPU.</p>
 <p>Training time with TITAN V:</p>
 <p>[gif2]</p>
 </div>

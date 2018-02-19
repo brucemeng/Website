@@ -18,7 +18,7 @@ I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012
 
 # Goodbye ol'faithful 7970
 
-I'm going to miss this card. It's held up very well over the years, and the Arctic Accelero cooler I put on top of it was whisper quiet!
+I'm going to miss this card. It's held up very well over the years, and the Arctic Accelero cooler I put on top of it made the card whisper quiet in addition to cooling it better by about 20C!
 
 [pic1][pic2]
 
@@ -29,7 +29,7 @@ I got the TITAN V as the replacement to the 7970. Here's some unboxing pics I to
 
 [pic1][pic2]
 
-The TITAN V was released a few months ago and there are several excellent reviews out about the card already. I highly recommend **[Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy)**.
+The TITAN V was released a few months ago and there are already several excellent reviews out about the card already. I highly recommend **[Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy)**.
 
 ```{r specs, echo = F, fig.cap = "Specs table courtesy of Anandtech", message = F}
 library(rvest)
@@ -60,7 +60,7 @@ kable(table.data, "html") %>%
 
 # Benchmarks
 
-This is a run against the *IMDb sentiment classification task* dataset, as found as an example on the [Keras for R website](https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html).
+This is a run against the *IMDb sentiment classification task* dataset, as found as an example on the [Keras RStudio website](https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html).
 
 The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training and 25,000 for validation.
 
@@ -68,7 +68,7 @@ Training time with an Intel i7 980x CPU at 4.27 GHz:
 
 ![](/img/tf.cpu.gif)
 
-
+<br>
 It's taking about 25s to complete 1 epoch on the Intel CPU.
 
 
