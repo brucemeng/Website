@@ -411,15 +411,14 @@ $999
 </div>
 <div id="benchmarks" class="section level1">
 <h1>Benchmarks</h1>
-<p>This is a run against the <em>Quora Question Pairs</em> Kaggle competition dataset, as found as an example on the Keras for R website:</p>
-<blockquote>
-<p>The dataset first appeared in the Kaggle competition Quora Question Pairs. The dataset consists of ~400k pairs of questions and a column indicating if the question pair is duplicated.</p>
-</blockquote>
+<p>This is a run against the <em>IMDb sentiment classification task</em> dataset, as found as an example on the <a href="https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html">Keras for R website</a>.</p>
+<p>The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training and 25,000 for validation.</p>
 <p>Training time with an Intel i7 980x CPU at 4.27 GHz:</p>
 <div class="figure">
 <img src="/img/tf.cpu.gif" />
 
 </div>
+<p>It’s taking about 25s to complete 1 epoch on the Intel CPU.</p>
 <p>Training time with TITAN V:</p>
 <p>[gif2]</p>
 </div>
