@@ -422,8 +422,16 @@ $999
 </div>
 <p><br> It’s taking about 25s to complete 1 epoch on the Intel CPU.</p>
 <p>Training time with TITAN V:</p>
-<p>[gif2]</p>
-<p>[Commentary on performance difference]</p>
+<div class="figure">
+<img src="/img/tf.gpu.gif" />
+
+</div>
+<p><br> It’s taking about 4s to complete 1 epoch on the TITAN V.</p>
+<div class="figure">
+<img src="/img/bench1.plot.png" />
+
+</div>
+<p>The first run on the TITAN V seems to be abnormally longer, at 14s, however each successive run after that completed in 4s. As seen in the graph above, the TITAN V absolutely crushes the Intel CPU whilst using the same batch size. Note, that the TITAN V is only using about 30% of its capacity. On average, the Intel CPU was 6.25x slower than the TITAN V.</p>
 </div>
 <div id="rkeras---mlp-model" class="section level2">
 <h2>R/Keras - MLP Model</h2>
@@ -433,8 +441,17 @@ $999
 <div id="other---mining-garlicoins-cryptocurrency" class="section level2">
 <h2>Other - Mining Garlicoins (cryptocurrency)</h2>
 <p><strong><a href="https://garlicoin.io/">Garlicoin</a></strong> is a new cryptocurrency and I’ve been mining it for fun on my 7970 GPU, and now will do some mining (or baking rather) on my new TITAN V.</p>
-<p>Speed comparison on 7970: <img src="/img/grlc.amd.gif" alt="7970 hashrate" /></p>
-<p>Speed comparison on TITAN V: [gif2]</p>
+<p>Speed comparison on 7970:</p>
+<div class="figure">
+<img src="/img/grlc.amd.gif" alt="7970 hashrate" />
+<p class="caption">7970 hashrate</p>
+</div>
+<p>Speed comparison on TITAN V:</p>
+<p>[gif2]</p>
 <p>The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. xxxKh/s. That’s a yyy% improvement!</p>
+</div>
+<div id="other---cinebench-r15" class="section level2">
+<h2>Other - Cinebench R15</h2>
+<p>MAXON CINEBENCH is based on the high performance animation and rendering software MAXON CINEMA 4D.</p>
 </div>
 </div>

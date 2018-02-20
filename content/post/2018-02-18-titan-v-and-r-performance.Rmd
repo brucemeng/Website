@@ -76,9 +76,14 @@ It's taking about 25s to complete 1 epoch on the Intel CPU.
 
 Training time with TITAN V:
 
-[gif2]
+![](/img/tf.gpu.gif)
 
-[Commentary on performance difference]
+<br>
+It's taking about 4s to complete 1 epoch on the TITAN V.
+
+![](/img/bench1.plot.png)
+
+The first run on the TITAN V seems to be abnormally longer, at 14s, however each successive run after that completed in 4s. As seen in the graph above, the TITAN V absolutely crushes the Intel CPU whilst using the same batch size. Note, that the TITAN V is only using about 30% of its capacity.  On average, the Intel CPU was `r 25/4`x slower than the TITAN V.
 
 ## R/Keras - MLP Model
 
@@ -92,9 +97,19 @@ A multilayer perceptron model trained on Reuters newswire data for a topic class
 **[Garlicoin](https://garlicoin.io/)** is a new cryptocurrency and I've been mining it for fun on my 7970 GPU, and now will do some mining (or baking rather) on my new TITAN V.
 
 Speed comparison on 7970:
+
+
 ![7970 hashrate](/img/grlc.amd.gif)
 
+
+
 Speed comparison on TITAN V:
+
+
 [gif2]
 
 The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. xxxKh/s. That's a yyy% improvement!
+
+## Other - Cinebench R15
+
+MAXON CINEBENCH is based on the high performance animation and rendering software MAXON CINEMA 4D.
