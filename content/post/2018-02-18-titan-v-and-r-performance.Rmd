@@ -126,7 +126,11 @@ Superposition is a new-generation benchmark tailored for testing reliability and
 
 Running at 1080p Extreme - scores:
 
-> NVIDIA TITAN V:       8742
+> NVIDIA TITAN V:       8742  
 > AMD 7970:             1887
 
 The TITAN V is `r round(8742 / 1887, 2)`x faster here.
+
+# Conclusion
+
+Really expensive... but really fast!
