@@ -20,16 +20,16 @@ I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012
 
 I'm going to miss this card. It's held up very well over the years, and the Arctic Accelero cooler I put on top of it made the card whisper quiet in addition to cooling it better by about 20C!
 
-![](/img/titan.v/IMG_20180220_144236.jpg)
-![](/img/titan.v/IMG_20180220_144040.jpg)
+![7970 w/ Accelero cooler 1](/img/titan.v/IMG_20180220_144236.jpg)
+![7970 w/ Accelero cooler 2](/img/titan.v/IMG_20180220_144040.jpg)
 
 # Hello TITAN V
 
 I got the TITAN V as the replacement to the 7970. Here's some unboxing pics I took:
 
-![](/img/titan.v/IMG_20180220_141246.jpg)
-![](/img/titan.v/IMG_20180220_141408.jpg)
-![](/img/titan.v/IMG_20180220_145232.jpg)
+![Pretty white box](/img/titan.v/IMG_20180220_141246.jpg)
+![Card in box](/img/titan.v/IMG_20180220_141408.jpg)
+![TITAN V next to 7970](/img/titan.v/IMG_20180220_145232.jpg)
 
 The TITAN V was released a few months ago and there are already several excellent reviews out about the card already. I highly recommend **[Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy)**.
 
@@ -112,7 +112,7 @@ Speed comparison on TITAN V:
 
 ![TITAN V hashrate](/img/grlc.nvda.gif)
 
-The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. xxxKh/s. That's a yyy% improvement!
+The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. 12,500Kh/s. That's a `r round(12500/310, 2)`x improvement!
 
 ## Other - Cinebench R15
 
