@@ -60,11 +60,13 @@ kable(table.data, "html") %>%
 
 # Benchmarks
 
+## R/Keras - CNN/LSTM Model
+
 This is a run against the *IMDb sentiment classification task* dataset, as found as an example on the [Keras RStudio website](https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html).
 
-The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training and 25,000 for validation.
+The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training.
 
-Training time with an Intel i7 980x CPU at 4.27 GHz:
+Training time with an Intel i7 980x CPU at 3.34 GHz:
 
 ![](/img/tf.cpu.gif)
 
@@ -75,3 +77,24 @@ It's taking about 25s to complete 1 epoch on the Intel CPU.
 Training time with TITAN V:
 
 [gif2]
+
+[Commentary on performance difference]
+
+## R/Keras - MLP Model
+
+A multilayer perceptron model trained on Reuters newswire data for a topic classification task, found [here](https://keras.rstudio.com/articles/examples/reuters_mlp.html).
+
+
+[Commentary on performance]
+
+## Other - Mining Garlicoins (cryptocurrency)
+
+**[Garlicoin](https://garlicoin.io/)** is a new cryptocurrency and I've been mining it for fun on my 7970 GPU, and now will do some mining (or baking rather) on my new TITAN V.
+
+Speed comparison on 7970:
+![7970 hashrate](/img/grlc.amd.gif)
+
+Speed comparison on TITAN V:
+[gif2]
+
+The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. xxxKh/s. That's a yyy% improvement!
