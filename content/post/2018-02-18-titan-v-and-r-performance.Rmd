@@ -1,0 +1,136 @@
+---
+title: "TITAN V and R performance"
+author: "Bruce Meng"
+date: '2018-02-20'
+slug: titan-v-and-r-performance
+tags:
+  - R
+  - fun
+categories: []
+---
+
+```{r setup, include=F}
+library(knitr)
+library(kableExtra)
+```
+
+I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that TensorFlow is only in CUDA). 
+
+# Goodbye ol'faithful 7970
+
+I'm going to miss this card. It's held up very well over the years, and the Arctic Accelero cooler I put on top of it made the card whisper quiet in addition to cooling it better by about 20C!
+
+![7970 w/ Accelero cooler 1](/img/titan.v/IMG_20180220_144236.jpg)
+
+
+![7970 w/ Accelero cooler 2](/img/titan.v/IMG_20180220_144040.jpg)
+
+# Hello TITAN V
+
+I got the TITAN V as the replacement to the 7970. Here's some unboxing pics I took:
+
+![Pretty white box](/img/titan.v/IMG_20180220_141246.jpg)
+
+
+![Card in box](/img/titan.v/IMG_20180220_141408.jpg)
+
+
+![TITAN V next to 7970](/img/titan.v/IMG_20180220_145232.jpg)
+
+The TITAN V was released a few months ago and there are already several excellent reviews out about the card already. I highly recommend **[Anandtech](https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy)**.
+
+```{r specs, echo = F, fig.cap = "Specs table courtesy of Anandtech", message = F}
+library(rvest)
+library(tidyverse)
+
+# Get data
+table.url <- "https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy"
+
+table.data <- read_html(table.url) %>%
+        html_node("table") %>%
+        html_table(fill = T) %>%
+        select(num_range("X", 1:5))
+
+table.data.names <- table.data[2,]
+
+table.data <- table.data %>%
+        slice(-(1:2))
+
+names(table.data) <- table.data.names
+
+# Display data
+kable(table.data, "html") %>%
+        kable_styling(c("striped", "hover"),
+                      font_size = 10) %>%
+        add_header_above(c("Specification Comparison" = 5))
+
+```
+
+# Benchmarks
+
+## R/Keras - CNN/LSTM Model
+
+This is a run against the *IMDb sentiment classification task* dataset, as found as an example on the [Keras RStudio website](https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html).
+
+The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training.
+
+Training time with an Intel i7 980x CPU at 3.4GHz:
+
+![](/img/tf.cpu.gif)
+
+<br>
+It's taking about 25s to complete 1 epoch on the Intel CPU.
+
+
+Training time with TITAN V:
+
+![](/img/tf.gpu.gif)
+
+<br>
+It's taking about 4s to complete 1 epoch on the TITAN V.
+
+![](/img/bench1.plot.png)
+
+The first run on the TITAN V seems to be abnormally longer, at 14s, however each successive run after that completed in 4s. As seen in the graph above, the TITAN V absolutely crushes the Intel CPU whilst using the same batch size. Note, that the TITAN V is only using about 30% of its capacity.  On average, the Intel CPU was `r 25/4`x slower than the TITAN V.
+
+## R/Keras - MLP Model
+
+A multilayer perceptron model trained on Reuters newswire data for a topic classification task, found [here](https://keras.rstudio.com/articles/examples/reuters_mlp.html).
+
+
+![](/img/bench2.plot.png)
+
+Here, the TITAN V is again faster, but not by quite as much as the CNN/LSTM model. The Intel CPU is 1.9x slower.
+
+## Other - Mining Garlicoins (cryptocurrency)
+
+**[Garlicoin](https://garlicoin.io/)** is a new cryptocurrency and I've been mining it for fun on my 7970 GPU. I will also do some mining (or baking rather) on the TITAN V.
+
+Speed comparison on 7970:
+
+
+![7970 hashrate](/img/grlc.amd.gif)
+
+
+
+Speed comparison on TITAN V:
+
+
+![TITAN V hashrate](/img/grlc.nvda.gif)
+
+The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. 12,500Kh/s. That's a `r round(12500/310, 2)`x improvement!
+
+## Other - Unigine Superposition
+
+Superposition is a new-generation benchmark tailored for testing reliability and performance of the latest GPUs. 
+
+Running at 1080p Extreme - scores:
+
+> NVIDIA TITAN V:       8742  
+> AMD 7970:             1887
+
+The TITAN V is `r round(8742 / 1887, 2)`x faster here.
+
+# Conclusion
+
+Really expensive... but really fast!

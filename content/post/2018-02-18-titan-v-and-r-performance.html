@@ -1,0 +1,492 @@
+---
+title: "TITAN V and R performance"
+author: "Bruce Meng"
+date: '2018-02-20'
+slug: titan-v-and-r-performance
+tags:
+  - R
+  - fun
+categories: []
+---
+
+
+
+<p>I have been using an AMD/ATI Radeon 7970 3GB GPU since it first came out in 2012 and for a number of reasons I have finally decided it was time for an upgrade! (One of the reasons is that TensorFlow is only in CUDA).</p>
+<div id="goodbye-olfaithful-7970" class="section level1">
+<h1>Goodbye ol’faithful 7970</h1>
+<p>I’m going to miss this card. It’s held up very well over the years, and the Arctic Accelero cooler I put on top of it made the card whisper quiet in addition to cooling it better by about 20C!</p>
+<div class="figure">
+<img src="/img/titan.v/IMG_20180220_144236.jpg" alt="7970 w/ Accelero cooler 1" />
+<p class="caption">7970 w/ Accelero cooler 1</p>
+</div>
+<div class="figure">
+<img src="/img/titan.v/IMG_20180220_144040.jpg" alt="7970 w/ Accelero cooler 2" />
+<p class="caption">7970 w/ Accelero cooler 2</p>
+</div>
+</div>
+<div id="hello-titan-v" class="section level1">
+<h1>Hello TITAN V</h1>
+<p>I got the TITAN V as the replacement to the 7970. Here’s some unboxing pics I took:</p>
+<div class="figure">
+<img src="/img/titan.v/IMG_20180220_141246.jpg" alt="Pretty white box" />
+<p class="caption">Pretty white box</p>
+</div>
+<div class="figure">
+<img src="/img/titan.v/IMG_20180220_141408.jpg" alt="Card in box" />
+<p class="caption">Card in box</p>
+</div>
+<div class="figure">
+<img src="/img/titan.v/IMG_20180220_145232.jpg" alt="TITAN V next to 7970" />
+<p class="caption">TITAN V next to 7970</p>
+</div>
+<p>The TITAN V was released a few months ago and there are already several excellent reviews out about the card already. I highly recommend <strong><a href="https://www.anandtech.com/show/12170/nvidia-titan-v-preview-titanomachy">Anandtech</a></strong>.</p>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center; border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;" colspan="5">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px;">
+Specification Comparison
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+Titan V
+</th>
+<th style="text-align:left;">
+Titan Xp
+</th>
+<th style="text-align:left;">
+GTX Titan X (Maxwell)
+</th>
+<th style="text-align:left;">
+GTX Titan
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+CUDA Cores
+</td>
+<td style="text-align:left;">
+5120
+</td>
+<td style="text-align:left;">
+3840
+</td>
+<td style="text-align:left;">
+3072
+</td>
+<td style="text-align:left;">
+2688
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tensor Cores
+</td>
+<td style="text-align:left;">
+640
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ROPs
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+96
+</td>
+<td style="text-align:left;">
+48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Core Clock
+</td>
+<td style="text-align:left;">
+1200MHz
+</td>
+<td style="text-align:left;">
+1485MHz
+</td>
+<td style="text-align:left;">
+1000MHz
+</td>
+<td style="text-align:left;">
+837MHz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Boost Clock
+</td>
+<td style="text-align:left;">
+1455MHz
+</td>
+<td style="text-align:left;">
+1582MHz
+</td>
+<td style="text-align:left;">
+1075MHz
+</td>
+<td style="text-align:left;">
+876MHz
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Clock
+</td>
+<td style="text-align:left;">
+1.7Gbps HBM2
+</td>
+<td style="text-align:left;">
+11.4Gbps GDDR5X
+</td>
+<td style="text-align:left;">
+7Gbps GDDR5
+</td>
+<td style="text-align:left;">
+6Gbps GDDR5
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Bus Width
+</td>
+<td style="text-align:left;">
+3072-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+<td style="text-align:left;">
+384-bit
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Memory Bandwidth
+</td>
+<td style="text-align:left;">
+653GB/sec
+</td>
+<td style="text-align:left;">
+547GB/sec
+</td>
+<td style="text-align:left;">
+336GB/sec
+</td>
+<td style="text-align:left;">
+228GB/sec
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+VRAM
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+12GB
+</td>
+<td style="text-align:left;">
+6GB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+L2 Cache
+</td>
+<td style="text-align:left;">
+4.5MB
+</td>
+<td style="text-align:left;">
+3MB
+</td>
+<td style="text-align:left;">
+3MB
+</td>
+<td style="text-align:left;">
+1.5MB
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single Precision
+</td>
+<td style="text-align:left;">
+13.8 TFLOPS
+</td>
+<td style="text-align:left;">
+12.1 TFLOPS
+</td>
+<td style="text-align:left;">
+6.6 TFLOPS
+</td>
+<td style="text-align:left;">
+4.7 TFLOPS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Double Precision
+</td>
+<td style="text-align:left;">
+6.9 TFLOPS (1/2 rate)
+</td>
+<td style="text-align:left;">
+0.38 TFLOPS (1/32 rate)
+</td>
+<td style="text-align:left;">
+0.2 TFLOPS (1/32 rate)
+</td>
+<td style="text-align:left;">
+1.5 TFLOPS (1/3 rate)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Half Precision
+</td>
+<td style="text-align:left;">
+27.6 TFLOPS (2x rate)
+</td>
+<td style="text-align:left;">
+0.19 TFLOPs (1/64 rate)
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Tensor Performance (Deep Learning)
+</td>
+<td style="text-align:left;">
+110 TFLOPS
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+<td style="text-align:left;">
+N/A
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GPU
+</td>
+<td style="text-align:left;">
+GV100 (815mm2)
+</td>
+<td style="text-align:left;">
+GP102 (471mm2)
+</td>
+<td style="text-align:left;">
+GM200 (601mm2)
+</td>
+<td style="text-align:left;">
+GK110 (561mm2)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Transistor Count
+</td>
+<td style="text-align:left;">
+21.1B
+</td>
+<td style="text-align:left;">
+12B
+</td>
+<td style="text-align:left;">
+8B
+</td>
+<td style="text-align:left;">
+7.1B
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TDP
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+<td style="text-align:left;">
+250W
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Manufacturing Process
+</td>
+<td style="text-align:left;">
+TSMC 12nm FFN
+</td>
+<td style="text-align:left;">
+TSMC 16nm FinFET
+</td>
+<td style="text-align:left;">
+TSMC 28nm
+</td>
+<td style="text-align:left;">
+TSMC 28nm
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Architecture
+</td>
+<td style="text-align:left;">
+Volta
+</td>
+<td style="text-align:left;">
+Pascal
+</td>
+<td style="text-align:left;">
+Maxwell 2
+</td>
+<td style="text-align:left;">
+Kepler
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Launch Date
+</td>
+<td style="text-align:left;">
+12/07/2017
+</td>
+<td style="text-align:left;">
+04/07/2017
+</td>
+<td style="text-align:left;">
+08/02/2016
+</td>
+<td style="text-align:left;">
+02/21/13
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Price
+</td>
+<td style="text-align:left;">
+$2999
+</td>
+<td style="text-align:left;">
+$1299
+</td>
+<td style="text-align:left;">
+$999
+</td>
+<td style="text-align:left;">
+$999
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="benchmarks" class="section level1">
+<h1>Benchmarks</h1>
+<div id="rkeras---cnnlstm-model" class="section level2">
+<h2>R/Keras - CNN/LSTM Model</h2>
+<p>This is a run against the <em>IMDb sentiment classification task</em> dataset, as found as an example on the <a href="https://keras.rstudio.com/articles/examples/imdb_cnn_lstm.html">Keras RStudio website</a>.</p>
+<p>The model itself consists of a convolutional network layer, followed by a LSTM layer and 1 epoch contains 25,000 samples for training.</p>
+<p>Training time with an Intel i7 980x CPU at 3.4GHz:</p>
+<div class="figure">
+<img src="/img/tf.cpu.gif" />
+
+</div>
+<p><br> It’s taking about 25s to complete 1 epoch on the Intel CPU.</p>
+<p>Training time with TITAN V:</p>
+<div class="figure">
+<img src="/img/tf.gpu.gif" />
+
+</div>
+<p><br> It’s taking about 4s to complete 1 epoch on the TITAN V.</p>
+<div class="figure">
+<img src="/img/bench1.plot.png" />
+
+</div>
+<p>The first run on the TITAN V seems to be abnormally longer, at 14s, however each successive run after that completed in 4s. As seen in the graph above, the TITAN V absolutely crushes the Intel CPU whilst using the same batch size. Note, that the TITAN V is only using about 30% of its capacity. On average, the Intel CPU was 6.25x slower than the TITAN V.</p>
+</div>
+<div id="rkeras---mlp-model" class="section level2">
+<h2>R/Keras - MLP Model</h2>
+<p>A multilayer perceptron model trained on Reuters newswire data for a topic classification task, found <a href="https://keras.rstudio.com/articles/examples/reuters_mlp.html">here</a>.</p>
+<div class="figure">
+<img src="/img/bench2.plot.png" />
+
+</div>
+<p>Here, the TITAN V is again faster, but not by quite as much as the CNN/LSTM model. The Intel CPU is 1.9x slower.</p>
+</div>
+<div id="other---mining-garlicoins-cryptocurrency" class="section level2">
+<h2>Other - Mining Garlicoins (cryptocurrency)</h2>
+<p><strong><a href="https://garlicoin.io/">Garlicoin</a></strong> is a new cryptocurrency and I’ve been mining it for fun on my 7970 GPU. I will also do some mining (or baking rather) on the TITAN V.</p>
+<p>Speed comparison on 7970:</p>
+<div class="figure">
+<img src="/img/grlc.amd.gif" alt="7970 hashrate" />
+<p class="caption">7970 hashrate</p>
+</div>
+<p>Speed comparison on TITAN V:</p>
+<div class="figure">
+<img src="/img/grlc.nvda.gif" alt="TITAN V hashrate" />
+<p class="caption">TITAN V hashrate</p>
+</div>
+<p>The 7970 was able to mine with a hashrate of approx. 310Kh/s, while the TITAN V was able to mine with a hashrate of approx. 12,500Kh/s. That’s a 40.32x improvement!</p>
+</div>
+<div id="other---unigine-superposition" class="section level2">
+<h2>Other - Unigine Superposition</h2>
+<p>Superposition is a new-generation benchmark tailored for testing reliability and performance of the latest GPUs.</p>
+<p>Running at 1080p Extreme - scores:</p>
+<blockquote>
+<p>NVIDIA TITAN V: 8742<br />
+AMD 7970: 1887</p>
+</blockquote>
+<p>The TITAN V is 4.63x faster here.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Really expensive… but really fast!</p>
+</div>
