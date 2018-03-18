@@ -1,5 +1,5 @@
 ---
-title: Animations in R
+title: Two Methods for Animations in R
 author: Bruce Meng
 date: '2018-03-18'
 slug: animations-in-r
@@ -25,20 +25,27 @@ tags:
 <div id="pulling-in-the-data" class="section level2">
 <h2>Pulling in the data</h2>
 <p>We’ll begin with downloading the data.</p>
-<pre class="r"><code># Link to income data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx
-# Link to children data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx
-
-library(readxl)
+<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx">Link to Gapminder income data</a></p>
+<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx">Link to Gapminder babies data</a></p>
+<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&amp;output=xlsx">Link to Gapminder population data</a></p>
+<pre class="r"><code>library(readxl)
 
 data.income &lt;- read_excel(&quot;../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx&quot;)
-data.babies &lt;- read_excel(&quot;../../data/gapminder/indicator undata total_fertility.xlsx&quot;)</code></pre>
+data.babies &lt;- read_excel(&quot;../../data/gapminder/indicator undata total_fertility.xlsx&quot;)
+data.pop &lt;- read_excel(&quot;../../data/gapminder/indicator gapminder population.xlsx&quot;)</code></pre>
 <p>I’m going to do some data cleanup but I will skip the code to keep this post more brief.</p>
 <p>[…data cleanup…]</p>
-<p>Here’s what the first 20 data points looks like:</p>
-<pre class="r"><code>head(data.income.clean, 20) %&gt;%
-        kable(&quot;html&quot;) %&gt;%
-                kable_styling(c(&quot;striped&quot;, &quot;hover&quot;),
-                              font_size = 10)</code></pre>
+<p>After the data cleanup, we will join all the datasets together for one unified set:</p>
+<pre class="r"><code># Join datasets
+data.join &lt;- left_join(data.income.clean, data.babies.clean) %&gt;%
+        left_join(data.pop.clean) %&gt;%
+        left_join(data.region)</code></pre>
+<pre><code>## Joining, by = c(&quot;country&quot;, &quot;year&quot;)
+## Joining, by = c(&quot;country&quot;, &quot;year&quot;)</code></pre>
+<pre><code>## Joining, by = &quot;country&quot;</code></pre>
+<pre><code>## Warning: Column `country` joining character vector and factor, coercing
+## into character vector</code></pre>
+<p>Here’s what the first 20 data points look like:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -49,7 +56,16 @@ country
 year
 </th>
 <th style="text-align:right;">
-value
+income
+</th>
+<th style="text-align:right;">
+babies
+</th>
+<th style="text-align:right;">
+pop
+</th>
+<th style="text-align:left;">
+continent
 </th>
 </tr>
 </thead>
@@ -64,6 +80,15 @@ Abkhazia
 <td style="text-align:right;">
 NA
 </td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -75,6 +100,235 @@ Afghanistan
 <td style="text-align:right;">
 603
 </td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+7.0
+</td>
+<td style="text-align:right;">
+3280000
+</td>
+<td style="text-align:left;">
+Asia
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
@@ -84,6 +338,15 @@ Akrotiri and Dhekelia
 1800
 </td>
 <td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
 NA
 </td>
 </tr>
@@ -97,181 +360,114 @@ Albania
 <td style="text-align:right;">
 667
 </td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
+<td style="text-align:left;">
+Europe
+</td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Algeria
+Albania
 </td>
 <td style="text-align:right;">
 1800
 </td>
 <td style="text-align:right;">
-716
+667
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
+<td style="text-align:left;">
+Europe
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-American Samoa
+Albania
 </td>
 <td style="text-align:right;">
 1800
 </td>
 <td style="text-align:right;">
-NA
+667
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
+<td style="text-align:left;">
+Europe
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Andorra
+Albania
 </td>
 <td style="text-align:right;">
 1800
 </td>
 <td style="text-align:right;">
-1197
+667
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
+<td style="text-align:left;">
+Europe
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Angola
+Albania
 </td>
 <td style="text-align:right;">
 1800
 </td>
 <td style="text-align:right;">
-618
+667
+</td>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
+<td style="text-align:left;">
+Europe
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Anguilla
+Albania
 </td>
 <td style="text-align:right;">
 1800
 </td>
 <td style="text-align:right;">
-NA
+667
 </td>
-</tr>
-<tr>
+<td style="text-align:right;">
+4.6
+</td>
+<td style="text-align:right;">
+410445
+</td>
 <td style="text-align:left;">
-Antigua and Barbuda
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-757
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Argentina
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1507
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Armenia
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-514
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Aruba
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-833
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Australia
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-815
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Austria
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1848
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Azerbaijan
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-775
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bahamas
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1445
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bahrain
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1235
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bangladesh
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-876
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Barbados
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-913
+Europe
 </td>
 </tr>
 </tbody>
@@ -281,4 +477,231 @@ Barbados
 <div id="gganimate-with-tweenr" class="section level1">
 <h1><code>gganimate</code> with <code>tweenr</code></h1>
 <p>First up, is a solution that’s fully self-contained within the ggplot2 universe: the package <code>gganimate</code> developed by David Robinson.</p>
+<pre class="r"><code>library(gganimate)
+
+# Plot
+p &lt;- ggplot(data.join) +
+        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent))</code></pre>
+<pre><code>## Warning: Ignoring unknown aesthetics: frame</code></pre>
+<pre class="r"><code># Animate Plot
+gganimate(p)</code></pre>
+<pre><code>## Warning: Removed 109 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 109 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 97 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1792 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 85 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 98 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 98 rows containing missing values (geom_point).</code></pre>
+<video width="672"  controls loop>
+<source src="/post/2018-03-18-animations-in-r_files/figure-html/gganimate.webm" />
+</video>
 </div>

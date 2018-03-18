@@ -1,5 +1,5 @@
 ---
-title: Animations in R
+title: Two Methods for Animations in R
 author: Bruce Meng
 date: '2018-03-18'
 slug: animations-in-r
@@ -35,16 +35,20 @@ We shall look at how income per person has been affecting the number of children
 
 ## Pulling in the data
 
-We'll begin with downloading the data.
+We'll begin with downloading the data. 
+
+[Link to Gapminder income data](https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&output=xlsx)
+
+[Link to Gapminder babies data](https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&output=xlsx)
+
+[Link to Gapminder population data](https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&output=xlsx)
 
 ```{r data}
-# Link to income data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&output=xlsx
-# Link to children data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&output=xlsx
-
 library(readxl)
 
 data.income <- read_excel("../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx")
 data.babies <- read_excel("../../data/gapminder/indicator undata total_fertility.xlsx")
+data.pop <- read_excel("../../data/gapminder/indicator gapminder population.xlsx")
 ```
 
 I'm going to do some data cleanup but I will skip the code to keep this post more brief.
@@ -56,7 +60,7 @@ I'm going to do some data cleanup but I will skip the code to keep this post mor
 # Wide to long data conversion
 names(data.income)[1] <- "country"
 data.income %>%
-        gather(year, value, `1800.0`:`2015.0`) -> data.income.clean
+        gather(year, income, `1800.0`:`2015.0`) -> data.income.clean
 
 # Convert year to numeric
 data.income.clean$year <- as.numeric(data.income.clean$year)
@@ -65,16 +69,39 @@ data.income.clean$year <- as.numeric(data.income.clean$year)
 # Wide to long data conversion
 names(data.babies)[1] <- "country"
 data.babies %>%
-        gather(year, value, `1800.0`:`2015.0`) -> data.babies.clean
+        gather(year, babies, `1800.0`:`2015.0`) -> data.babies.clean
 
 # Convert year to numeric
 data.babies.clean$year <- as.numeric(data.babies.clean$year)
+
+## Population
+# Wide to long data conversion
+names(data.pop)[1] <- "country"
+data.pop %>%
+        gather(year, pop, `1800.0`:`2015.0`) -> data.pop.clean
+
+# Convert year to numeric
+data.pop.clean$year <- as.numeric(data.pop.clean$year)
+
+## Get region data
+data.region <- gapminder::gapminder %>%
+        select(country, continent)
 ```
+
+After the data cleanup, we will join all the datasets together for one unified set:
+
+```{r data.join}
+# Join datasets
+data.join <- left_join(data.income.clean, data.babies.clean) %>%
+        left_join(data.pop.clean) %>%
+        left_join(data.region)
+```
+
 
 Here's what the first 20 data points look like:
 
-```{r data.present}
-head(data.income.clean, 20) %>%
+```{r data.present, echo = F}
+head(data.join, 20) %>%
         kable("html") %>%
                 kable_styling(c("striped", "hover"),
                               font_size = 10)
@@ -85,7 +112,17 @@ head(data.income.clean, 20) %>%
 
 First up, is a solution that's fully self-contained within the ggplot2 universe: the package `gganimate` developed by David Robinson.
 
+```{r gganimate, fig.show="animate"}
+library(gganimate)
 
+# Plot
+p <- ggplot(data.join) +
+        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent))
+
+# Animate Plot
+gganimate(p)
+
+```
 
 
 
