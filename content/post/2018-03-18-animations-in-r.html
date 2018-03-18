@@ -10,14 +10,275 @@ tags:
 
 
 
-<p>When I was in school, I always found that the blackboard was the best teaching tool (as opposed to say a pre-prepared static slide in PowerPoint). As a student, I found it really helpful to see a concept get built up from nothing, and accordingly when I was a teaching assistant in economics, I also preferred using the blackboard to build up concepts together with my students (I also found it more fun as it was now a collaborative experience). Now in the business world, developing concepts is still as important as when I was in school, and the closest computer-presentation equivalent to the blackboard is… the animation!</p>
+<p>When I was in school, I always found that the blackboard was the best teaching tool (as opposed to say a pre-prepared static slide in PowerPoint). As a student, I found it really helpful to see a concept get built up from nothing, and accordingly when I was a teaching assistant in economics, I also preferred using the blackboard to build up concepts together with my students (I also found it more fun as it was now a collaborative experience). Now in the business world, developing concepts is still as important as when I was in school, but using a blackboard will likely get me… looks… luckily, there’s a very neat alternative: the animation!</p>
 <p>I’ve been trying two methods with animations:</p>
 <ol style="list-style-type: decimal">
 <li><code>gganimate</code> &amp; <code>tweenr</code></li>
 <li><code>plotly</code></li>
 </ol>
 <p>Let’s build a quick demo of each!</p>
+<div id="dataset" class="section level1">
+<h1>Dataset</h1>
+<p>This post will be more on creating animations, rather than focus on the specific dataset being animated. Having said that, an interesting dataset will make this all the more exciting.</p>
+<p>Gapminder has put together a series of data about the world across time and has made the video that has been described as <a href="https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen">‘The best stats you’ve ever seen’</a>. I certainly agree.</p>
+<p>We shall look at how income per person has been affecting the number of children women have given birth to throughout the years.</p>
+<div id="pulling-in-the-data" class="section level2">
+<h2>Pulling in the data</h2>
+<p>We’ll begin with downloading the data.</p>
+<pre class="r"><code># Link to income data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx
+# Link to children data: https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx
+
+library(readxl)
+
+data.income &lt;- read_excel(&quot;../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx&quot;)
+data.babies &lt;- read_excel(&quot;../../data/gapminder/indicator undata total_fertility.xlsx&quot;)</code></pre>
+<p>I’m going to do some data cleanup but I will skip the code to keep this post more brief.</p>
+<p>[…data cleanup…]</p>
+<p>Here’s what the first 20 data points looks like:</p>
+<pre class="r"><code>head(data.income.clean, 20) %&gt;%
+        kable(&quot;html&quot;) %&gt;%
+                kable_styling(c(&quot;striped&quot;, &quot;hover&quot;),
+                              font_size = 10)</code></pre>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+country
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:right;">
+value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Abkhazia
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Afghanistan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+603
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Akrotiri and Dhekelia
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Albania
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+667
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Algeria
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+716
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+American Samoa
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Andorra
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+1197
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Angola
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+618
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Anguilla
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Antigua and Barbuda
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Argentina
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+1507
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Armenia
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+514
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Aruba
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+833
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Australia
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+815
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Austria
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+1848
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Azerbaijan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+775
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bahamas
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+1445
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bahrain
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+1235
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bangladesh
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+876
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Barbados
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+913
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="gganimate-with-tweenr" class="section level1">
 <h1><code>gganimate</code> with <code>tweenr</code></h1>
-<p>First up, is a solution that’s fully self-contained within the ggplot2 universe: the package <code>gganimate</code>.</p>
+<p>First up, is a solution that’s fully self-contained within the ggplot2 universe: the package <code>gganimate</code> developed by David Robinson.</p>
 </div>
