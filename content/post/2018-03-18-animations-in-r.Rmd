@@ -85,12 +85,13 @@ data.pop.clean$year <- as.numeric(data.pop.clean$year)
 
 ## Get region data
 data.region <- gapminder::gapminder %>%
-        select(country, continent)
+        select(country, continent) %>%
+        unique()
 ```
 
 After the data cleanup, we will join all the datasets together for one unified set:
 
-```{r data.join}
+```{r data.join, message=F}
 # Join datasets
 data.join <- left_join(data.income.clean, data.babies.clean) %>%
         left_join(data.pop.clean) %>%
@@ -112,7 +113,7 @@ head(data.join, 20) %>%
 
 First up, is a solution that's fully self-contained within the ggplot2 universe: the package `gganimate` developed by David Robinson.
 
-```{r gganimate, fig.show="animate"}
+```{r gganimate, message = F}
 library(gganimate)
 
 # Plot
