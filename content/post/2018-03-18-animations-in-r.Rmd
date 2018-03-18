@@ -13,7 +13,7 @@ library(tidyverse)
 library(plotly)
 library(knitr)
 library(kableExtra)
-
+library(scales)
 ```
 
 When I was in school, I always found that the blackboard was the best teaching tool (as opposed to say a pre-prepared static slide in PowerPoint). As a student, I found it really helpful to see a concept get built up from nothing, and accordingly when I was a teaching assistant in economics, I also preferred using the blackboard to build up concepts together with my students (I also found it more fun as it was now a collaborative experience). Now in the business world, developing concepts is still as important as when I was in school, but using a blackboard will likely get me... looks... luckily, there's a very neat alternative: the animation!
@@ -113,12 +113,20 @@ head(data.join, 20) %>%
 
 First up, is a solution that's fully self-contained within the ggplot2 universe: the package `gganimate` developed by David Robinson.
 
-```{r gganimate, message = F}
+```{r gganimate, message = F, warning = F, fig.show="animate"}
 library(gganimate)
 
 # Plot
-p <- ggplot(data.join) +
-        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent))
+p <- ggplot(data.join, aes( x = income, y = babies)) +
+        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent)) +  
+        xlab("GDP per capita") +
+        ylab("Number of Babies Born per Woman") +
+        theme_minimal(base_size = 12, base_family = "Georgia") +
+        scale_size_area(guide = FALSE, max_size = 15) +
+        scale_x_continuous(labels = dollar) +
+        stat_smooth(formula = y ~ log10(x), se = FALSE, size = 0.5, color = "black", linetype="dotted") +
+        scale_color_brewer(name = "", palette = "Set2") +
+        theme(legend.position=c(0.8,0.4))
 
 # Animate Plot
 gganimate(p)
