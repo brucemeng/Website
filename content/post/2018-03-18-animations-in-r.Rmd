@@ -43,12 +43,13 @@ We'll begin with downloading the data.
 
 [Link to Gapminder population data](https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&output=xlsx)
 
-```{r data}
+```{r data, warnings = F, echo = F}
 library(readxl)
 
 data.income <- read_excel("../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx")
 data.babies <- read_excel("../../data/gapminder/indicator undata total_fertility.xlsx")
 data.pop <- read_excel("../../data/gapminder/indicator gapminder population.xlsx")
+data.region <- read_csv("../../data/gapminder/nations.csv")
 ```
 
 I'm going to do some data cleanup but I will skip the code to keep this post more brief.
@@ -84,8 +85,7 @@ data.pop %>%
 data.pop.clean$year <- as.numeric(data.pop.clean$year)
 
 ## Get region data
-data.region <- gapminder::gapminder %>%
-        select(country, continent) %>%
+data.region.clean <- select(data.region, country, region) %>%
         unique()
 ```
 
@@ -95,7 +95,10 @@ After the data cleanup, we will join all the datasets together for one unified s
 # Join datasets
 data.join <- left_join(data.income.clean, data.babies.clean) %>%
         left_join(data.pop.clean) %>%
-        left_join(data.region)
+        left_join(data.region.clean)
+
+data.join[complete.cases(data.join),] -> data.join
+
 ```
 
 
@@ -115,21 +118,34 @@ First up, is a solution that's fully self-contained within the ggplot2 universe:
 
 ```{r gganimate, message = F, warning = F, fig.show="animate"}
 library(gganimate)
+library(tweenr)
 
 # Plot
-p <- ggplot(data.join, aes( x = income, y = babies)) +
-        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent)) +  
+p <- ggplot(data.join, aes(x = income, y = babies)) +
+        geom_point(aes(size = pop, frame = year, colour = region), alpha = 0.7) +  
         xlab("GDP per capita") +
         ylab("Number of Babies Born per Woman") +
         theme_minimal(base_size = 12, base_family = "Georgia") +
-        scale_size_area(guide = FALSE, max_size = 15) +
-        scale_x_continuous(labels = dollar) +
-        stat_smooth(formula = y ~ log10(x), se = FALSE, size = 0.5, color = "black", linetype="dotted") +
-        scale_color_brewer(name = "", palette = "Set2") +
-        theme(legend.position=c(0.8,0.4))
+        geom_smooth(aes(group = year, frame = year), method = "loess", color = "black", linetype = "dashed", se = F, size = 0.5) +
+        theme(legend.position=c(0.8,0.4)) +
+        scale_x_continuous(labels = dollar) + 
+        scale_size_area(guide = FALSE, max_size = 20) +
+        scale_color_brewer(name = "", palette = "Set2")
+
+# Tween for smoother animations
+data.join.tween <- data.join %>%
+        rename(x = income,
+               y = babies,
+               time = year,
+               id = country) %>%
+        mutate(ease = "linear") %>%
+        select(-region) %>%
+        tween_elements("time", "id", "ease", nframes = 1000)
+
+data.join.tween <- left_join(data.join.tween, data.region.clean, by = c(".group" = "country"))
 
 # Animate Plot
-gganimate(p)
+gganimate(p, interval = 0.2)
 
 ```
 

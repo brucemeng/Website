@@ -28,20 +28,35 @@ tags:
 <p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx">Link to Gapminder income data</a></p>
 <p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx">Link to Gapminder babies data</a></p>
 <p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&amp;output=xlsx">Link to Gapminder population data</a></p>
-<pre class="r"><code>library(readxl)
-
-data.income &lt;- read_excel(&quot;../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx&quot;)
-data.babies &lt;- read_excel(&quot;../../data/gapminder/indicator undata total_fertility.xlsx&quot;)
-data.pop &lt;- read_excel(&quot;../../data/gapminder/indicator gapminder population.xlsx&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   iso2c = col_character(),
+##   iso3c = col_character(),
+##   country = col_character(),
+##   year = col_integer(),
+##   gdp_percap = col_double(),
+##   life_expect = col_double(),
+##   population = col_integer(),
+##   birth_rate = col_double(),
+##   neonat_mortal_rate = col_double(),
+##   region = col_character(),
+##   income = col_character()
+## )</code></pre>
+<pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
+## a multiple of vector length (arg 1)</code></pre>
+<pre><code>## Warning: 14 parsing failures.
+## row # A tibble: 5 x 5 col     row col        expected               actual   file                    expected   &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;    &lt;chr&gt;                   actual 1  5203 population no trailing characters .5234195 &#39;../../data/gapminder/~ file 2  5204 population no trailing characters .5814796 &#39;../../data/gapminder/~ row 3  5205 population no trailing characters .6773771 &#39;../../data/gapminder/~ col 4  5206 population no trailing characters .1421408 &#39;../../data/gapminder/~ expected 5  5207 population no trailing characters .3403884 &#39;../../data/gapminder/~
+## ... ................. ... .......................................................................... ........ .......................................................................... ...... .......................................................................... .... .......................................................................... ... .......................................................................... ... .......................................................................... ........ ..........................................................................
+## See problems(...) for more details.</code></pre>
 <p>I’m going to do some data cleanup but I will skip the code to keep this post more brief.</p>
 <p>[…data cleanup…]</p>
 <p>After the data cleanup, we will join all the datasets together for one unified set:</p>
 <pre class="r"><code># Join datasets
 data.join &lt;- left_join(data.income.clean, data.babies.clean) %&gt;%
         left_join(data.pop.clean) %&gt;%
-        left_join(data.region)</code></pre>
-<pre><code>## Warning: Column `country` joining character vector and factor, coercing
-## into character vector</code></pre>
+        left_join(data.region.clean)
+
+data.join[complete.cases(data.join),] -&gt; data.join</code></pre>
 <p>Here’s what the first 20 data points look like:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -62,31 +77,11 @@ babies
 pop
 </th>
 <th style="text-align:left;">
-continent
+region
 </th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Abkhazia
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
 <tr>
 <td style="text-align:left;">
 Afghanistan
@@ -104,27 +99,7 @@ Afghanistan
 3280000
 </td>
 <td style="text-align:left;">
-Asia
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Akrotiri and Dhekelia
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:left;">
-NA
+South Asia
 </td>
 </tr>
 <tr>
@@ -144,7 +119,7 @@ Albania
 410445
 </td>
 <td style="text-align:left;">
-Europe
+Europe &amp; Central Asia
 </td>
 </tr>
 <tr>
@@ -164,47 +139,7 @@ Algeria
 2503218
 </td>
 <td style="text-align:left;">
-Africa
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-American Samoa
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-8170
-</td>
-<td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Andorra
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1197
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-2654
-</td>
-<td style="text-align:left;">
-NA
+Middle East &amp; North Africa
 </td>
 </tr>
 <tr>
@@ -224,27 +159,7 @@ Angola
 1567028
 </td>
 <td style="text-align:left;">
-Africa
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Anguilla
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-NA
-</td>
-<td style="text-align:right;">
-2025
-</td>
-<td style="text-align:left;">
-NA
+Sub-Saharan Africa
 </td>
 </tr>
 <tr>
@@ -264,7 +179,7 @@ Antigua and Barbuda
 37000
 </td>
 <td style="text-align:left;">
-NA
+Latin America &amp; Caribbean
 </td>
 </tr>
 <tr>
@@ -284,7 +199,7 @@ Argentina
 534000
 </td>
 <td style="text-align:left;">
-Americas
+Latin America &amp; Caribbean
 </td>
 </tr>
 <tr>
@@ -304,7 +219,7 @@ Armenia
 413326
 </td>
 <td style="text-align:left;">
-NA
+Europe &amp; Central Asia
 </td>
 </tr>
 <tr>
@@ -324,7 +239,7 @@ Aruba
 19286
 </td>
 <td style="text-align:left;">
-NA
+Latin America &amp; Caribbean
 </td>
 </tr>
 <tr>
@@ -344,7 +259,7 @@ Australia
 351014
 </td>
 <td style="text-align:left;">
-Oceania
+East Asia &amp; Pacific
 </td>
 </tr>
 <tr>
@@ -364,7 +279,7 @@ Austria
 3205587
 </td>
 <td style="text-align:left;">
-Europe
+Europe &amp; Central Asia
 </td>
 </tr>
 <tr>
@@ -384,27 +299,7 @@ Azerbaijan
 879960
 </td>
 <td style="text-align:left;">
-NA
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Bahamas
-</td>
-<td style="text-align:right;">
-1800
-</td>
-<td style="text-align:right;">
-1445
-</td>
-<td style="text-align:right;">
-5.90
-</td>
-<td style="text-align:right;">
-27350
-</td>
-<td style="text-align:left;">
-NA
+Europe &amp; Central Asia
 </td>
 </tr>
 <tr>
@@ -424,7 +319,7 @@ Bahrain
 64474
 </td>
 <td style="text-align:left;">
-Asia
+Middle East &amp; North Africa
 </td>
 </tr>
 <tr>
@@ -444,7 +339,7 @@ Bangladesh
 19227358
 </td>
 <td style="text-align:left;">
-Asia
+South Asia
 </td>
 </tr>
 <tr>
@@ -464,7 +359,127 @@ Barbados
 81729
 </td>
 <td style="text-align:left;">
-NA
+Latin America &amp; Caribbean
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Belarus
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+608
+</td>
+<td style="text-align:right;">
+7.00
+</td>
+<td style="text-align:right;">
+2355081
+</td>
+<td style="text-align:left;">
+Europe &amp; Central Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Belgium
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+2412
+</td>
+<td style="text-align:right;">
+4.85
+</td>
+<td style="text-align:right;">
+3138137
+</td>
+<td style="text-align:left;">
+Europe &amp; Central Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Belize
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+579
+</td>
+<td style="text-align:right;">
+6.69
+</td>
+<td style="text-align:right;">
+25526
+</td>
+<td style="text-align:left;">
+Latin America &amp; Caribbean
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Benin
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+597
+</td>
+<td style="text-align:right;">
+5.55
+</td>
+<td style="text-align:right;">
+636559
+</td>
+<td style="text-align:left;">
+Sub-Saharan Africa
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bhutan
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+629
+</td>
+<td style="text-align:right;">
+6.67
+</td>
+<td style="text-align:right;">
+89989
+</td>
+<td style="text-align:left;">
+South Asia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bolivia
+</td>
+<td style="text-align:right;">
+1800
+</td>
+<td style="text-align:right;">
+854
+</td>
+<td style="text-align:right;">
+6.48
+</td>
+<td style="text-align:right;">
+1100000
+</td>
+<td style="text-align:left;">
+Latin America &amp; Caribbean
 </td>
 </tr>
 </tbody>
@@ -477,19 +492,19 @@ NA
 <pre class="r"><code>library(gganimate)
 
 # Plot
-p &lt;- ggplot(data.join, aes( x = income, y = babies)) +
-        geom_point(aes(x = income, y = babies, size = pop, frame = year, colour = continent)) +  
+p &lt;- ggplot(data.join, aes(x = income, y = babies)) +
+        geom_point(aes(size = pop, frame = year, colour = region), alpha = 0.7) +  
         xlab(&quot;GDP per capita&quot;) +
         ylab(&quot;Number of Babies Born per Woman&quot;) +
         theme_minimal(base_size = 12, base_family = &quot;Georgia&quot;) +
-        scale_size_area(guide = FALSE, max_size = 15) +
-        scale_x_continuous(labels = dollar) +
-        stat_smooth(formula = y ~ log10(x), se = FALSE, size = 0.5, color = &quot;black&quot;, linetype=&quot;dotted&quot;) +
-        scale_color_brewer(name = &quot;&quot;, palette = &quot;Set2&quot;) +
-        theme(legend.position=c(0.8,0.4))
+        geom_smooth(aes(group = year, frame = year), method = &quot;loess&quot;, color = &quot;black&quot;, linetype = &quot;dashed&quot;, se = F, size = 0.5) +
+        theme(legend.position=c(0.8,0.4)) +
+        scale_x_continuous(labels = dollar) + 
+        scale_size_area(guide = FALSE, max_size = 20) +
+        scale_color_brewer(name = &quot;&quot;, palette = &quot;Set2&quot;)
 
 # Animate Plot
-gganimate(p)</code></pre>
+gganimate(p, interval = 0.2)</code></pre>
 <video width="672"  controls loop>
 <source src="/post/2018-03-18-animations-in-r_files/figure-html/gganimate.webm" />
 </video>
