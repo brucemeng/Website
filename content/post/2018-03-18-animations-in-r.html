@@ -25,23 +25,11 @@ tags:
 <div id="pulling-in-the-data" class="section level2">
 <h2>Pulling in the data</h2>
 <p>We’ll begin with downloading the data.</p>
-<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx">Link to Gapminder income data</a></p>
-<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx">Link to Gapminder babies data</a></p>
-<p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&amp;output=xlsx">Link to Gapminder population data</a></p>
-<pre><code>## Parsed with column specification:
-## cols(
-##   iso2c = col_character(),
-##   iso3c = col_character(),
-##   country = col_character(),
-##   year = col_integer(),
-##   gdp_percap = col_double(),
-##   life_expect = col_double(),
-##   population = col_integer(),
-##   birth_rate = col_double(),
-##   neonat_mortal_rate = col_double(),
-##   region = col_character(),
-##   income = col_character()
-## )</code></pre>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj1jiMAkmq1iMg&amp;output=xlsx">Link to Gapminder income data</a></p></li>
+<li><p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx">Link to Gapminder babies data</a></p></li>
+<li><p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&amp;output=xlsx">Link to Gapminder population data</a></p></li>
+</ol>
 <pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
 ## a multiple of vector length (arg 1)</code></pre>
 <pre><code>## Warning: 14 parsing failures.
@@ -490,22 +478,40 @@ Latin America &amp; Caribbean
 <h1><code>gganimate</code> with <code>tweenr</code></h1>
 <p>First up, is a solution that’s fully self-contained within the ggplot2 universe: the package <code>gganimate</code> developed by David Robinson.</p>
 <pre class="r"><code>library(gganimate)
+library(tweenr)
+
+# Tween for smoother animations
+data.join.tween &lt;- data.join %&gt;%
+        rename(x = income,
+               y = babies,
+               time = year,
+               id = country) %&gt;%
+        mutate(ease = &quot;linear&quot;) %&gt;%
+        select(-region) %&gt;%
+        tween_elements(&quot;time&quot;, &quot;id&quot;, &quot;ease&quot;, nframes = 1000)
+
+# Re-add prior data
+data.join.tween &lt;- inner_join(data.join.tween, data.region.clean, by = c(&quot;.group&quot; = &quot;country&quot;)) 
 
 # Plot
-p &lt;- ggplot(data.join, aes(x = income, y = babies)) +
-        geom_point(aes(size = pop, frame = year, colour = region), alpha = 0.7) +  
+p &lt;- ggplot(data.join.tween, aes(x = x, y = y)) +
+        geom_point(aes(size = pop, frame = .frame, colour = region), alpha = 0.7) +  
         xlab(&quot;GDP per capita&quot;) +
         ylab(&quot;Number of Babies Born per Woman&quot;) +
         theme_minimal(base_size = 12, base_family = &quot;Georgia&quot;) +
-        geom_smooth(aes(group = year, frame = year), method = &quot;loess&quot;, color = &quot;black&quot;, linetype = &quot;dashed&quot;, se = F, size = 0.5) +
-        theme(legend.position=c(0.8,0.4)) +
+        geom_smooth(aes(group = .frame, frame = .frame), method = &quot;loess&quot;, 
+                    color = &quot;black&quot;, linetype = &quot;dashed&quot;, se = F, size = 0.5) +
+        theme(legend.position=&quot;none&quot;) +
         scale_x_continuous(labels = dollar) + 
         scale_size_area(guide = FALSE, max_size = 20) +
-        scale_color_brewer(name = &quot;&quot;, palette = &quot;Set2&quot;)
+        scale_color_brewer(name = &quot;&quot;, palette = &quot;Set2&quot;) +
+        facet_wrap(~region)
+
 
 # Animate Plot
-gganimate(p, interval = 0.2)</code></pre>
-<video width="672"  controls loop>
-<source src="/post/2018-03-18-animations-in-r_files/figure-html/gganimate.webm" />
-</video>
+# gganimate(p, title_frame = T, interval = 0.02, &quot;../../static/img/gganimate.gif&quot;, ani.width = 1024, ani.height = 1024) #&lt;- Not run to save render time</code></pre>
+<div class="figure">
+<img src="/img/gganimate.gif" />
+
+</div>
 </div>
