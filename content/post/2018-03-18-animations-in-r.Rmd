@@ -29,8 +29,6 @@ Let's build a quick demo of each!
 
 This post will be more on creating animations, rather than focus on the specific dataset being animated. Having said that, an interesting dataset will make this all the more exciting. 
 
-Gapminder has put together a series of data about the world across time and has made the video that has been described as **['The best stats you've ever seen'](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen)**. I certainly agree.
-
 Lately in Canada, there has been some concern over the number of babies the country is producing. We shall then take a look at how income per person has been affecting the number of children women have given birth to throughout the years across all regions around the world.
 
 ## Pulling in the data
@@ -156,20 +154,20 @@ p <- ggplot(data.join.tween, aes(x = x, y = y)) +
 
 
 # Animate Plot
-gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif", 
-          ani.width = 800, ani.height = 800, 
+gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif",
+          ani.width = 800, ani.height = 800,
           ani.res = 90) #<- Not run to save render time
 
 ```
 ![](/img/gganimate.gif)
-
+<br>
 Voila, a pretty nice looking animated graph if I may say so myself `r emo::ji("smiley")`.
 
 # Method 2: `plotly`
 
 The second method is via the `plotly` package, developed by a Canadian company by the same name.
 
-`plotly` also has a function which allows you to translate a ggplot2 graph into a plotly graph which we will use below.
+Plotly also has a function which allows you to translate a ggplot2 graph into a plotly graph which we will use below.
 
 
 ```{r plotly, message = F, warning = F}
@@ -195,3 +193,12 @@ ggplotly(p2, height = 800, width = 800) %>%
                        redraw = FALSE)
 
 ```
+<br>
+
+# Conclusions
+
+Looking at the data, I found it particularly interesting to see China (the biggest ball in the East Asia region) bounce around so much, and goes to show how drastic the Great Famine was in 1959 - 1961, and also how effective the One Child Policy was after it was introduced in 1979.
+
+Outside of those shocks to China, it seems that for the most part the number of babies born had a distinct negative relationship with the amount of income for all regions except Africa. Maybe there is some cultural explanation there?
+
+As for the animations themselves, I find that these are two good methods for creating animations, both online and offline. I tend to prefer the plotly solution if I'm posting to a website. The vector graphics and built-in smoothing are very nice touches by Plotly.
