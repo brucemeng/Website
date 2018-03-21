@@ -160,6 +160,8 @@ gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif",
 
 ```
 ![](/img/gganimate.gif)
+
+
 <br>
 Voila, a pretty nice looking animated graph if I may say so myself `r emo::ji("smiley")`.
 
@@ -193,12 +195,14 @@ ggplotly(p2, height = 800, width = 800) %>%
                        redraw = FALSE)
 
 ```
+
+
 <br>
 
 # Conclusions
 
 Looking at the data, I found it particularly interesting to see China (the biggest ball in the East Asia region) bounce around so much, and goes to show how drastic the Great Famine was in 1959 - 1961, and also how effective the One Child Policy was after it was introduced in 1979.
 
-Outside of those shocks to China, it seems that for the most part the number of babies born had a distinct negative relationship with the amount of income for all regions except Africa. Maybe there is some cultural explanation there?
+Outside of those shocks to China, it seems that for the most part the number of babies born had a distinct negative relationship with the amount of income for all regions.
 
 As for the animations themselves, I find that these are two good methods for creating animations, both online and offline. I tend to prefer the plotly solution if I'm posting to a website. The vector graphics and built-in smoothing are very nice touches by Plotly.
