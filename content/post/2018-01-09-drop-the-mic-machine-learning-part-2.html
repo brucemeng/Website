@@ -30,7 +30,7 @@ data.dropmic &lt;- read_html(&quot;http://www.imdb.com/title/tt6396094/episodes?
         html_nodes(&quot;strong a&quot;) %&gt;%
         html_text() %&gt;%
         as.data.frame() %&gt;%
-        .[grepl(&quot;vs&quot;, .[,1]),] %&gt;%
+        .[grepl(&quot; vs&quot;, .[,1]),] %&gt;%
         data.frame(Episode = .)
 
 data.clean &lt;- str_split(data.dropmic$Episode, &quot;&amp;| and &quot;) %&gt;%

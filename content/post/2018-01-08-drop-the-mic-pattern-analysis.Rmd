@@ -59,7 +59,7 @@ In the above table, there are some non-episode data in the last few rows. Let's 
 
 ```{r data.clean}
 # Filter
-data.clean <- data.dropmic[grepl("vs", data.dropmic$Episode),] %>%
+data.clean <- data.dropmic[grepl(" vs", data.dropmic$Episode),] %>%
         data.frame(Episode = .)
 
 # Display results

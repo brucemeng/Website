@@ -30,12 +30,6 @@ tags:
 <li><p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0TAlJeCEzcGQ&amp;output=xlsx">Link to Gapminder babies data</a></p></li>
 <li><p><a href="https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&amp;output=xlsx">Link to Gapminder population data</a></p></li>
 </ol>
-<pre><code>## Warning in rbind(names(probs), probs_f): number of columns of result is not
-## a multiple of vector length (arg 1)</code></pre>
-<pre><code>## Warning: 14 parsing failures.
-## row # A tibble: 5 x 5 col     row col        expected               actual   file                    expected   &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt;    &lt;chr&gt;                   actual 1  5203 population no trailing characters .5234195 &#39;../../data/gapminder/~ file 2  5204 population no trailing characters .5814796 &#39;../../data/gapminder/~ row 3  5205 population no trailing characters .6773771 &#39;../../data/gapminder/~ col 4  5206 population no trailing characters .1421408 &#39;../../data/gapminder/~ expected 5  5207 population no trailing characters .3403884 &#39;../../data/gapminder/~
-## ... ................. ... .......................................................................... ........ .......................................................................... ...... .......................................................................... .... .......................................................................... ... .......................................................................... ... .......................................................................... ........ ..........................................................................
-## See problems(...) for more details.</code></pre>
 <p>I’m going to do some data cleanup but I will skip the code to keep this post more brief.</p>
 <p>[…data cleanup…]</p>
 <p>After the data cleanup, we will join all the datasets together for one unified set:</p>
@@ -498,18 +492,20 @@ p &lt;- ggplot(data.join.tween, aes(x = x, y = y)) +
         geom_point(aes(size = pop, frame = .frame, colour = region), alpha = 0.7) +  
         xlab(&quot;GDP per capita&quot;) +
         ylab(&quot;Number of Babies Born per Woman&quot;) +
-        theme_minimal(base_size = 12, base_family = &quot;Georgia&quot;) +
+        theme_minimal(base_size = 16) +
         geom_smooth(aes(group = .frame, frame = .frame), method = &quot;loess&quot;, 
                     color = &quot;black&quot;, linetype = &quot;dashed&quot;, se = F, size = 0.5) +
         theme(legend.position=&quot;none&quot;) +
-        scale_x_continuous(labels = dollar) + 
+        scale_x_log10(labels = dollar) + 
         scale_size_area(guide = FALSE, max_size = 20) +
         scale_color_brewer(name = &quot;&quot;, palette = &quot;Set2&quot;) +
         facet_wrap(~region)
 
 
 # Animate Plot
-# gganimate(p, title_frame = T, interval = 0.02, &quot;../../static/img/gganimate.gif&quot;, ani.width = 1024, ani.height = 1024) #&lt;- Not run to save render time</code></pre>
+gganimate(p, title_frame = T, interval = 0.02, &quot;../../static/img/gganimate.gif&quot;, 
+          ani.width = 800, ani.height = 800, 
+          ani.res = 90) #&lt;- Not run to save render time</code></pre>
 <div class="figure">
 <img src="/img/gganimate.gif" />
 

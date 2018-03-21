@@ -43,7 +43,7 @@ We'll begin with downloading the data.
 
 3. [Link to Gapminder population data](https://docs.google.com/spreadsheet/pub?key=phAwcNAVuyj0XOoBL_n5tAQ&output=xlsx)
 
-```{r data, warnings = F, echo = F, message = F}
+```{r data, warning = F, echo = F, message = F}
 library(readxl)
 
 data.income <- read_excel("../../data/gapminder/indicator gapminder gdp_per_capita_ppp.xlsx")
@@ -116,7 +116,7 @@ head(data.join, 20) %>%
 
 First up, is a solution that's fully self-contained within the ggplot2 universe: the package `gganimate` developed by David Robinson.
 
-```{r gganimate, message = F, warning = F}
+```{r gganimate, message = F, warning = F, eval=FALSE}
 library(gganimate)
 library(tweenr)
 
@@ -138,18 +138,20 @@ p <- ggplot(data.join.tween, aes(x = x, y = y)) +
         geom_point(aes(size = pop, frame = .frame, colour = region), alpha = 0.7) +  
         xlab("GDP per capita") +
         ylab("Number of Babies Born per Woman") +
-        theme_minimal(base_size = 12, base_family = "Georgia") +
+        theme_minimal(base_size = 16) +
         geom_smooth(aes(group = .frame, frame = .frame), method = "loess", 
                     color = "black", linetype = "dashed", se = F, size = 0.5) +
         theme(legend.position="none") +
-        scale_x_continuous(labels = dollar) + 
+        scale_x_log10(labels = dollar) + 
         scale_size_area(guide = FALSE, max_size = 20) +
         scale_color_brewer(name = "", palette = "Set2") +
         facet_wrap(~region)
 
 
 # Animate Plot
-# gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif", ani.width = 1024, ani.height = 1024) #<- Not run to save render time
+gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif", 
+          ani.width = 800, ani.height = 800, 
+          ani.res = 90) #<- Not run to save render time
 
 ```
 ![](/img/gganimate.gif)

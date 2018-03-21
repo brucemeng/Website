@@ -32,7 +32,7 @@ data.dropmic <- read_html("http://www.imdb.com/title/tt6396094/episodes?season=1
         html_nodes("strong a") %>%
         html_text() %>%
         as.data.frame() %>%
-        .[grepl("vs", .[,1]),] %>%
+        .[grepl(" vs", .[,1]),] %>%
         data.frame(Episode = .)
 
 data.clean <- str_split(data.dropmic$Episode, "&| and ") %>%

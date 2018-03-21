@@ -125,27 +125,27 @@ October TV Calendar
 </tr>
 <tr>
 <td style="text-align:left;">
+My tv show watchlist
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 tv shows
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-TV shows I’ve seen
+2017 Series
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-TV Shows
+my favs
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-TV
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Future hit shows
+To watch
 </td>
 </tr>
 </tbody>
@@ -153,7 +153,7 @@ Future hit shows
 <p>(The pretty table styles are courtesy of <a href="https://twitter.com/haozhu233"><code>@haozhu233</code></a> and his excellent <code>kableExtra</code> package!)</p>
 <p>In the above table, there are some non-episode data in the last few rows. Let’s filter that out with the following code:</p>
 <pre class="r"><code># Filter
-data.clean &lt;- data.dropmic[grepl(&quot;vs&quot;, data.dropmic$Episode),] %&gt;%
+data.clean &lt;- data.dropmic[grepl(&quot; vs&quot;, data.dropmic$Episode),] %&gt;%
         data.frame(Episode = .)
 
 # Display results
