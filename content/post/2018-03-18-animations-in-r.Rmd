@@ -189,15 +189,13 @@ p2 <- ggplot(data.join, aes(x = income, y = babies)) +
         facet_wrap(~region)
 
 # Create plotly graph
-ggplotly(p2, height = 800, width = 800) %>%
-        animation_opts(frame = 300,
+ggplotly(p2, height = 1000, width = 750) %>%
+        animation_opts(frame = 200,
                        easing = "linear",
                        redraw = FALSE)
 
 ```
 
-
-<br>
 
 # Conclusions
 
