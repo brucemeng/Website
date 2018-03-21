@@ -16,12 +16,12 @@ library(kableExtra)
 library(scales)
 ```
 
-When I was in school, I always found that the blackboard was the best teaching tool (as opposed to say a pre-prepared static slide in PowerPoint). As a student, I found it really helpful to see a concept get built up from nothing, and accordingly when I was a teaching assistant in economics, I also preferred using the blackboard to build up concepts together with my students (I also found it more fun as it was now a collaborative experience). Now in the business world, developing concepts is still as important as when I was in school, but using a blackboard will likely get me... looks... luckily, there's a very neat alternative: the animation!
+When I was in school, I always found that the blackboard was the best teaching tool (as opposed to say a pre-prepared static slide in PowerPoint). As a student, I found it really helpful to see a concept get built up from nothing, and accordingly when I was a teaching assistant in economics, I also preferred using the blackboard to build up concepts together with my students (I also found it more fun as it was now a collaborative experience). Now in the business world, developing concepts is still as important as when I was in school, but using a blackboard will likely get me... looks... Luckily, there's a very neat alternative: the animation!
 
 I've been trying two methods with animations:
 
-1. `gganimate` & `tweenr`
-2. `plotly`
+1. Method 1: `gganimate` & `tweenr`
+2. Method 2: `plotly`
 
 Let's build a quick demo of each!
 
@@ -29,9 +29,9 @@ Let's build a quick demo of each!
 
 This post will be more on creating animations, rather than focus on the specific dataset being animated. Having said that, an interesting dataset will make this all the more exciting. 
 
-Gapminder has put together a series of data about the world across time and has made the video that has been described as ['The best stats you've ever seen'](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen). I certainly agree.
+Gapminder has put together a series of data about the world across time and has made the video that has been described as **['The best stats you've ever seen'](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen)**. I certainly agree.
 
-We shall look at how income per person has been affecting the number of children women have given birth to throughout the years.
+Lately in Canada, there has been some concern over the number of babies the country is producing. We shall then take a look at how income per person has been affecting the number of children women have given birth to throughout the years across all regions around the world.
 
 ## Pulling in the data
 
@@ -102,19 +102,22 @@ data.join[complete.cases(data.join),] -> data.join
 ```
 
 
-Here's what the first 20 data points look like:
+Here's a random sample of what 10 data points look like:
 
 ```{r data.present, echo = F}
-head(data.join, 20) %>%
+sample_n(data.join, 10) %>%
         kable("html") %>%
                 kable_styling(c("striped", "hover"),
                               font_size = 10)
 
 ```
 
-# `gganimate` with `tweenr`
+# Method 1: `gganimate` with `tweenr`
 
-First up, is a solution that's fully self-contained within the ggplot2 universe: the package `gganimate` developed by David Robinson.
+First up, is a combo-solution that directly extends the ggplot2 universe: the package `gganimate` developed by David Robinson (@drob) along with the package `tweenr` developed by Thomas Lin Pedersen (@thomasp85).
+
+
+Let's develop this animation.
 
 ```{r gganimate, message = F, warning = F, eval=FALSE}
 library(gganimate)
@@ -131,16 +134,20 @@ data.join.tween <- data.join %>%
         tween_elements("time", "id", "ease", nframes = 1000)
 
 # Re-add prior data
-data.join.tween <- inner_join(data.join.tween, data.region.clean, by = c(".group" = "country")) 
+data.join.tween <- inner_join(data.join.tween, 
+                              data.region.clean, 
+                              by = c(".group" = "country")) 
 
 # Plot
 p <- ggplot(data.join.tween, aes(x = x, y = y)) +
-        geom_point(aes(size = pop, frame = .frame, colour = region), alpha = 0.7) +  
+        geom_point(aes(size = pop, frame = .frame, colour = region), 
+                   alpha = 0.7) +  
         xlab("GDP per capita") +
         ylab("Number of Babies Born per Woman") +
         theme_minimal(base_size = 16) +
         geom_smooth(aes(group = .frame, frame = .frame), method = "loess", 
-                    color = "black", linetype = "dashed", se = F, size = 0.5) +
+                    color = "black", linetype = "dashed", 
+                    se = F, size = 0.5) +
         theme(legend.position="none") +
         scale_x_log10(labels = dollar) + 
         scale_size_area(guide = FALSE, max_size = 20) +
@@ -156,5 +163,35 @@ gganimate(p, title_frame = T, interval = 0.02, "../../static/img/gganimate.gif",
 ```
 ![](/img/gganimate.gif)
 
+Voila, a pretty nice looking animated graph if I may say so myself `r emo::ji("smiley")`.
+
+# Method 2: `plotly`
+
+The second method is via the `plotly` package, developed by a Canadian company by the same name.
+
+`plotly` also has a function which allows you to translate a ggplot2 graph into a plotly graph which we will use below.
 
 
+```{r plotly, message = F, warning = F}
+# Generate base ggplot2 graph
+p2 <- ggplot(data.join, aes(x = income, y = babies)) +
+        geom_point(aes(size = pop, frame = year, colour = region, group = country), 
+                   alpha = 0.7) +  
+        xlab("GDP per capita") +
+        ylab("Number of Babies Born per Woman") +
+        theme_minimal(base_size = 10) +
+        geom_smooth(aes(group = year, frame = year), method = "loess", 
+                    color = "black", linetype = "dashed", se = F, size = 0.5) +
+        theme(legend.position="none") +
+        scale_x_log10(labels = dollar) + 
+        scale_size_area(guide = FALSE, max_size = 20) +
+        scale_color_brewer(name = "", palette = "Set2") +
+        facet_wrap(~region)
+
+# Create plotly graph
+ggplotly(p2, height = 800, width = 800) %>%
+        animation_opts(frame = 300,
+                       easing = "linear",
+                       redraw = FALSE)
+
+```
