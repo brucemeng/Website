@@ -1,7 +1,7 @@
 ---
 title: Two Methods for Animations in R
 author: Bruce Meng
-date: '2018-03-18'
+date: '2018-03-21'
 slug: animations-in-r
 categories: []
 tags:
@@ -196,6 +196,7 @@ ggplotly(p2, height = 1000, width = 750) %>%
 
 ```
 
+<br>
 
 # Conclusions
 
