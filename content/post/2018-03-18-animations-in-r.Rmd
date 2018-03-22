@@ -1,7 +1,7 @@
 ---
-title: Two Methods for Animations in R
+title: gganimate vs. plotly - Which is better at animation?
 author: Bruce Meng
-date: '2018-03-21'
+date: '2018-03-22'
 slug: animations-in-r
 categories: []
 tags:
@@ -167,7 +167,7 @@ Voila, a pretty nice looking animated graph if I may say so myself `r emo::ji("s
 
 # Method 2: `plotly`
 
-The second method is via the `plotly` package, developed by a Canadian company by the same name.
+The second method is via the `plotly` package, developed by a Canadian company of the same name.
 
 Plotly also has a function which allows you to translate a ggplot2 graph into a plotly graph which we will use below.
 
@@ -200,8 +200,9 @@ ggplotly(p2, height = 900, width = 700) %>%
 
 # Conclusions
 
+**Animations** - I find that these are two good methods for creating animations. The gganimate option is ideal for offline animations, while I tend to prefer the plotly solution if I'm posting to a website. The vector graphics and built-in smoothing are very nice touches by Plotly, but most importantly, the popup detail when you move your mouse over a ball was crucial to helping me understand what's going on with the data.
+
 Looking at the data, I found it particularly interesting to see China (the biggest ball in the East Asia region) bounce around so much, and goes to show how drastic the Great Famine was in 1959 - 1961, and also how effective the One Child Policy was after it was introduced in 1979.
 
 Outside of those shocks to China, it seems that for the most part the number of babies born had a distinct negative relationship with the amount of income for all regions.
 
-As for the animations themselves, I find that these are two good methods for creating animations, both online and offline. I tend to prefer the plotly solution if I'm posting to a website. The vector graphics and built-in smoothing are very nice touches by Plotly.
