@@ -13,7 +13,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
+`r # iframe auto-resize`
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+
+`r #load iframe`
 <center>
-<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "1000" width = "725" frameborder = "0" scrolling = "auto"></iframe>
+<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "1300" width = "700" frameborder = "0" scrolling = "no" onload="resizeIframe(this)></iframe>
 </center>
 

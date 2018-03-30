@@ -11,7 +11,12 @@ tags:
 
 
 
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
 <center>
-<iframe src="https://bruce-meng.shinyapps.io/SentiBot/" height="1000" width="725" frameborder="0" scrolling="auto">
+<iframe src="https://bruce-meng.shinyapps.io/SentiBot/" height="1200" width="700" frameborder="0" scrolling="no" onload="resizeIframe(this)&gt;">
 </iframe>
 </center>
