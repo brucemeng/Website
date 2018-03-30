@@ -1,0 +1,17 @@
+---
+title: SentiBot
+description: A chatbot style app to access a custom trained sentiment algorithm
+author: Bruce Meng
+date: '2018-03-30'
+slug: sentibot
+categories: []
+tags:
+  - fun
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "600" width = "400"></iframe>
+
