@@ -10,19 +10,10 @@ tags:
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+# library(widgetframe)
 
 ```
 
-<!-- `r #css styles` -->
-<!-- <html> -->
-<!-- <style> -->
-<!-- #shiny { -->
-<!--         margin: 0; padding: 0; height: 100%; overflow: hidden -->
-<!-- } -->
-<!-- </style> -->
+<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "725" width = "100%" frameborder = "0" ></iframe>
 
-`r #load iframe`
-<!-- <div id = "shiny" -->
-<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "100%" width = "100%" frameborder = "0" scrolling = "no" ></iframe>
-<!-- </div> -->
-<!-- </html> -->
+
