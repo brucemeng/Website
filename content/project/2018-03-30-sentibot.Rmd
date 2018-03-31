@@ -13,15 +13,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-`r #css styles`
-<style>
-#shiny {
-        margin: 0; padding: 0; height: 100%; overflow: hidden
-}
-</style>
+<!-- `r #css styles` -->
+<!-- <html> -->
+<!-- <style> -->
+<!-- #shiny { -->
+<!--         margin: 0; padding: 0; height: 100%; overflow: hidden -->
+<!-- } -->
+<!-- </style> -->
 
 `r #load iframe`
-<div id = "shiny"
-<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "100%" width = "100%" frameborder = "0" scrolling = "auto" ></iframe>
-</div>
-
+<!-- <div id = "shiny" -->
+<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "100%" width = "100%" frameborder = "0" scrolling = "no" ></iframe>
+<!-- </div> -->
+<!-- </html> -->
