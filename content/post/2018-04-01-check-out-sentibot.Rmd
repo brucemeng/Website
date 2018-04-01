@@ -22,4 +22,4 @@ SentiBot was created so I (and you) can access this custom trained sentiment ana
 
 I'm not sure how well it will assess all Internet sentences since it was trained to specifically read one type of report, but I've been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
 
-Please feel free to try out **[SentiBot](URL)** yourself and let me know of how well (or not well!) it works for you!
+Please feel free to try out **[SentiBot](../project/sentibot/)** yourself and let me know of how well (or not well!) it works for you!
