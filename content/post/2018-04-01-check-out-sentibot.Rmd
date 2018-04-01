@@ -10,7 +10,7 @@ tags:
 
 I've been reading reddit for a while now, and I've noticed that reddit has a lot of really funny and really useful bots!
 
-The most impressive bot that I've encountered is **[AutoTLDR]((https://www.reddit.com/r/autotldr/comments/31b9fm/faq_autotldr_bot/)**. It will automatically reduce long articles by at least 70% and I found that the quality of the summaries it creates is often times indistinguishable from a human summary.
+The most impressive bot that I've encountered is **[AutoTLDR](https://www.reddit.com/r/autotldr/comments/31b9fm/faq_autotldr_bot/)**. It will automatically reduce long articles by at least 70% and I found that the quality of the summaries it creates is often times indistinguishable from a human summary.
 
 AutoTLDR inspired me to try to create something that resembles a bot too... and so SentiBot is born in the Projects section!
 
