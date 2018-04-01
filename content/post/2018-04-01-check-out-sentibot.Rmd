@@ -12,7 +12,7 @@ I've been reading reddit for a while now, and I've noticed that reddit has a lot
 
 The most impressive bot that I've encountered is **[AutoTLDR]((https://www.reddit.com/r/autotldr/comments/31b9fm/faq_autotldr_bot/)**. It will automatically reduce long articles by at least 70% and I found that the quality of the summaries it creates is often times indistinguishable from a human summary.
 
-AutoTLDR inspired me to try creating something that resembles a bot too... and so SentiBot is born in the Projects section!
+AutoTLDR inspired me to try to create something that resembles a bot too... and so SentiBot is born in the Projects section!
 
 # SentiBot
 
@@ -22,4 +22,4 @@ Previously, the sentiment algorithm would only run on the report and would only 
 
 I'm not sure how well it will assess on all Internet sentences since it was trained to specifically read one type of report, but I've been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
 
-Please feel free to try out [SentiBot](URL) yourself and let me know of how well (or not well!) it works for you!
+Please feel free to try out **[SentiBot](URL)** yourself and let me know of how well (or not well!) it works for you!
