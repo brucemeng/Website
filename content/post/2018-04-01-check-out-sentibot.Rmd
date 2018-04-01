@@ -1,0 +1,25 @@
+---
+title: Check out SentiBot!
+author: Bruce Meng
+date: '2018-04-01'
+slug: check-out-sentibot
+categories: []
+tags:
+  - fun
+---
+
+I've been reading reddit for a while now, and I've noticed that reddit has a lot of really funny and really useful bots!
+
+The most impressive bot that I've encountered is AutoTLDR. It will automatically reduce long articles by at least 70% and I found that the quality of the summaries it creates is often times indistinguishable from a human summary. [Here's a link to the AutoTLDR FAQ](https://www.reddit.com/r/autotldr/comments/31b9fm/faq_autotldr_bot/).
+
+AutoTLDR inspired me to try creating something that resembles a bot too... and so SentiBot is born in the Projects section!
+
+# SentiBot
+
+SentiBot was created so I (and you) can access this custom trained sentiment analysis algorithm I created at work to read and assess this particular business report that most of the folks at BMO read. 
+
+Previously, the sentiment algorithm would only run on the report and would only read the report. Now, the sentiment algorithm can be interactively accessed through SentiBot.
+
+I'm not sure how well it will assess on all Internet sentences since it was trained to specifically read one type of report, but I've been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
+
+Please feel free to try out [SentiBot](URL) yourself and let me know of how well (or not well!) it works for you!
