@@ -1,9 +1,9 @@
 ---
-title: SentiBot
+title: SNTI2-D2
 description: A chatbot style app to access a custom trained sentiment algorithm
 author: Bruce Meng
 date: '2018-03-30'
-slug: sentibot
+slug: snti2-d2
 categories: []
 tags:
   - fun
