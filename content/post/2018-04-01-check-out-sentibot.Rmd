@@ -6,6 +6,7 @@ slug: check-out-snti2-d2
 categories: []
 tags:
   - fun
+  - cool
 ---
 
 I've been reading reddit for a while now, and I've noticed that reddit has a lot of really funny and really useful bots!
