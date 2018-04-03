@@ -18,6 +18,6 @@ AutoTLDR inspired me to try to create something that resembles a bot too... and 
 
 SNTI2-D2 was created so I (and you) can interactively access a specific custom trained sentiment analysis algorithm I created at work to read and assess a particular business report that quite a few people at BMO read. 
 
-I'm not sure how well it will assess all Internet sentences since it was trained to specifically read one type of report, but I've been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
+I'm not sure how well it will assess all Internet sentences since it was trained to specifically read one type of report, but my volunteer testers and I have been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
 
 Please feel free to try out **[SNTI2-D2](https://www.brucemeng.ca/project/snti2-d2/)** yourself and let me know of how well (or not well!) it works for you!
