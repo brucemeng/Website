@@ -16,6 +16,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "900" width = "768" frameborder = "0"></iframe>
+<iframe src = "https://bruce-meng.shinyapps.io/SentiBot/" height = "905" width = "768" frameborder = "0"></iframe>
 
 
