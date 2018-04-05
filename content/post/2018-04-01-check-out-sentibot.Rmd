@@ -22,4 +22,4 @@ SN2-D2 was created so I (and you) can interactively access a specific custom tra
 
 I'm not sure how well it will assess all Internet sentences since it was trained to specifically read one type of report, but my volunteer testers and I have been having fun subjecting it to all sorts of weird and wacky sentences `r emo::ji("smile")`.
 
-Please feel free to try out **[SN2-D2](../project/sn2-d2/)** yourself and let me know of how well (or not well!) it works for you!
+Please feel free to try out **[SN2-D2](../../project/sn2-d2/)** yourself and let me know of how well (or not well!) it works for you!
