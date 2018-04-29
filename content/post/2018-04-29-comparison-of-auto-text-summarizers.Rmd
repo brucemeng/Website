@@ -13,11 +13,20 @@ I started off my text analytics journey with sentiment analysis because I just t
 
 This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.
 
-# Survey of current available automatic text summarizers
+Let's first see what is available on the internet.
+
+## Survey of current auto text summarizers
 
 A quick Google search for "auto text summarizer" yields the following (as of Apr. 29, 2018):
 
 ![](/img/autotext/google.search.png)
+
+## Text for auto summary test
+
+As a test of the auto text summary capabilities of the top 3 results, I'm going to use a random article from Wikipedia. The article I found is **[Subfossil lemur](https://en.wikipedia.org/wiki/Subfossil_lemur)**.
+
+![Wikipedia Article](/img/autotext/subfossil.lemur.png)
+
 
 Here's a look at the top 3 results from that Google search.
 <br>
