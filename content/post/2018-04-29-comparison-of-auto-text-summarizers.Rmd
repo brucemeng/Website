@@ -46,7 +46,7 @@ That's pretty cool! The Indominus Rex is indeed the main villain of the movie an
 For the second test, I went with a longer piece of text, the plot summary to the novel **[Rainbow Six](https://en.wikipedia.org/wiki/Rainbow_Six_(novel)#Plot_summary)** by Tom Clancy.
 
 <center>
-<img src = "/img/autotext/rainbow.6.jpg height = "400"/>
+<img src = "/img/autotext/rainbow.6.jpg" height = "400"/>
 </center>
 
 ### Test results
