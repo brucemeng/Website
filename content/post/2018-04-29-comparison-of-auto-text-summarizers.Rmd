@@ -23,7 +23,7 @@ And so... I created autosmry!
 
 
 
-## Text for auto summary test
+## Test 1: Jurassic World Movie
 
 As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
 
@@ -31,7 +31,7 @@ As a test for autosmry, I went with the text of something that I can comfortably
 ![](/img/autotext/jurassic.world.jpg)
 </center>
 
-## Test results
+### Test results
 
 Here are the results of autosmry after applying it to the plot of Jurassic World:
 
@@ -40,3 +40,21 @@ Here are the results of autosmry after applying it to the plot of Jurassic World
 </center>
 
 That's pretty cool! The Indominus Rex is indeed the main villain of the movie and is the cause of all the action to our protagonists!
+
+## Test 2: Rainbow Six Novel
+
+For the second test, I went with a longer piece of text, the plot summary to the novel **[Rainbow Six](https://en.wikipedia.org/wiki/Rainbow_Six_(novel)#Plot_summary)** by Tom Clancy.
+
+<center>
+![](/img/autotext/rainbow.6.jpg)
+</center>
+
+### Test results
+
+Here are the results of autosmry after applying it to the plot of Rainbow Six:
+
+<center>
+![](/img/autotext/wiki.auto.rainbow.png)
+</center>
+
+That's not bad either!
