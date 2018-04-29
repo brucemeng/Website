@@ -25,10 +25,10 @@ And so... I created autosmry!
 
 ## Test 1: Jurassic World Movie
 
-As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot =60x)** `r emo::ji("thumbsup")`.
+As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
 
 <center>
-![](/img/autotext/jurassic.world.jpg)
+![](/img/autotext/jurassic.world.jpg =60x)
 </center>
 
 ### Test results
