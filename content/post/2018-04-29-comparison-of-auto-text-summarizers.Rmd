@@ -23,13 +23,11 @@ A quick Google search for "auto text summarizer" yields the following (as of Apr
 
 ## Text for auto summary test
 
-As a test of the auto text summary capabilities of the top 3 results, I'm going to use a random article from Wikipedia. The article I found is **[Subfossil lemur](https://en.wikipedia.org/wiki/Subfossil_lemur)**.
+As a test of the auto text summary capabilities of the top 3 results, I'm going to use a random article from Wikipedia. The article I found is on the **[Subfossil lemur](https://en.wikipedia.org/wiki/Subfossil_lemur)**.
 
 ![Wikipedia Article](/img/autotext/subfossil.lemur.png)
 
-
-Here's a look at the top 3 results from that Google search.
-<br>
+### Test results
 
 **1. Automatic Text Summarizer**
 
