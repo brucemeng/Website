@@ -20,18 +20,18 @@ A quick Google search for "auto text summarizer" yields the following (as of Apr
 ![](/img/autotext/google.search.png)
 
 Here's a look at the top 3 results from that Google search.
---------------------------------------
+<br>
 
 **1. Automatic Text Summarizer**
 
 ![](/img/autotext/auto.text.summarizer.png)
 
---------------------------------------
+<br>
 **2. Text Summarizer**
 
 ![](/img/autotext/text.summarizer.png)
 
---------------------------------------
+<br>
 **3. Free Summarizer**
 
 ![](/img/autotext/free.summarizer.png)
