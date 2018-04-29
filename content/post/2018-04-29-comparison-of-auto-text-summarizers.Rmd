@@ -13,49 +13,21 @@ I started off my text analytics journey with sentiment analysis because I just t
 
 This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.
 
-Let's first see what is available on the internet.
+And so... I created autosmry!
 
-## Survey of current auto text summarizers
+## autosmry
 
-A quick Google search for "auto text summarizer" yields the following (as of Apr. 29, 2018):
+**[autosmry](../../project/autosmry/)** is a lightweight modern looking extractive text summarizer built entirely in R and R Shiny.
 
-![](/img/autotext/google.search.png)
+[gif]
+
+
 
 ## Text for auto summary test
 
-As a test of the auto text summary capabilities of the top 3 results, I'm going to use a random article from Wikipedia. The article I found is on the **[Subfossil lemur](https://en.wikipedia.org/wiki/Subfossil_lemur)**.
+As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbs")`.
 
-![Wikipedia Article](/img/autotext/subfossil.lemur.png)
+![](/img/autotext/jurassic.world.jpg)
 
 ## Test results
 
-**1. Automatic Text Summarizer**
-
-![](/img/autotext/auto.text.summarizer.png)
-
-<br>
-**My comments:**
-
-The summary produced begins with "They" and therefore makes it difficult to determine what the article is about. It also reads like a machine and doesn't flow very well.
-
-I'm also not crazy about the visuals. In my opinion, not a very great summary.
-
-<br>
-**2. Text Summarizer**
-
-![](/img/autotext/text.summarizer.png)
-
-<br>
-**My comments:**
-
-This one starts with "Subfossil lemurs" and therefore makes it clear what the article is about. It also flows much better than the first auto summary. Overall, a better result than the first one.
-
-<br>
-**3. Free Summarizer**
-
-![](/img/autotext/free.summarizer.png)
-
-<br>
-**My comments:**
-
-The third summarizer also starts with the proper topic sentence "Subfossil lemurs...". The next few factual sentences are slightly different than the second summarizer, but I wouldn't say it is better or worse.

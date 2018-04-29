@@ -13,45 +13,20 @@ tags:
 
 <p>I started off my text analytics journey with sentiment analysis because I just thought it was so very cool that a machine can detect positivity or negativity from humans! I ended up creating a report which summarized review-like reports after training and applying a sentiment algorithm to gauge the amount of positivity or negativity from the reviewers. I found that as a by product, by focusing on particularly positive or particularly negative comments, my created report also produced a fairly decent summary.</p>
 <p>This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.</p>
-<p>Let’s first see what is available on the internet.</p>
-<div id="survey-of-current-auto-text-summarizers" class="section level2">
-<h2>Survey of current auto text summarizers</h2>
-<p>A quick Google search for “auto text summarizer” yields the following (as of Apr. 29, 2018):</p>
-<div class="figure">
-<img src="/img/autotext/google.search.png" />
-
-</div>
+<p>And so… I created autosmry!</p>
+<div id="autosmry" class="section level2">
+<h2>autosmry</h2>
+<p><strong><a href="../../project/autosmry/">autosmry</a></strong> is a lightweight modern looking extractive text summarizer built entirely in R and R Shiny.</p>
+<p>[gif]</p>
 </div>
 <div id="text-for-auto-summary-test" class="section level2">
 <h2>Text for auto summary test</h2>
-<p>As a test of the auto text summary capabilities of the top 3 results, I’m going to use a random article from Wikipedia. The article I found is on the <strong><a href="https://en.wikipedia.org/wiki/Subfossil_lemur">Subfossil lemur</a></strong>.</p>
+<p>As a test for autosmry, I went with the text of something that I can comfortably recall and assess… the plot of the 2015 movie reboot, <strong><a href="https://en.wikipedia.org/wiki/Jurassic_World#Plot">Jurassic World</a></strong> 👎️.</p>
 <div class="figure">
-<img src="/img/autotext/subfossil.lemur.png" alt="Wikipedia Article" />
-<p class="caption">Wikipedia Article</p>
+<img src="/img/autotext/jurassic.world.jpg" />
+
 </div>
 </div>
 <div id="test-results" class="section level2">
 <h2>Test results</h2>
-<p><strong>1. Automatic Text Summarizer</strong></p>
-<div class="figure">
-<img src="/img/autotext/auto.text.summarizer.png" />
-
-</div>
-<p><br> <strong>My comments:</strong></p>
-<p>The summary produced begins with “They” and therefore makes it difficult to determine what the article is about. It also reads like a machine and doesn’t flow very well.</p>
-<p>I’m also not crazy about the visuals. In my opinion, not a very great summary.</p>
-<p><br> <strong>2. Text Summarizer</strong></p>
-<div class="figure">
-<img src="/img/autotext/text.summarizer.png" />
-
-</div>
-<p><br> <strong>My comments:</strong></p>
-<p>This one starts with “Subfossil lemurs” and therefore makes it clear what the article is about. It also flows much better than the first auto summary. Overall, a better result than the first one.</p>
-<p><br> <strong>3. Free Summarizer</strong></p>
-<div class="figure">
-<img src="/img/autotext/free.summarizer.png" />
-
-</div>
-<p><br> <strong>My comments:</strong></p>
-<p>The third summarizer also starts with the proper topic sentence “Subfossil lemurs…”. The next few factual sentences are slightly different than the second summarizer, but I wouldn’t say it is better or worse.</p>
 </div>
