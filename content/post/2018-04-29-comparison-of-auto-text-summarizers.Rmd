@@ -17,7 +17,7 @@ And so... I created autosmry!
 
 ## autosmry
 
-**[autosmry](../../project/autosmry/)** is a lightweight modern looking extractive text summarizer built entirely in R and R Shiny.
+**[autosmry](../../project/autosmry/)** is a lightweight modern looking extractive automatic text summarizer built entirely in R and R Shiny.
 
 [gif]
 
@@ -46,7 +46,7 @@ That's pretty cool! The Indominus Rex is indeed the main villain of the movie an
 For the second test, I went with a longer piece of text, the plot summary to the novel **[Rainbow Six](https://en.wikipedia.org/wiki/Rainbow_Six_(novel)#Plot_summary)** by Tom Clancy.
 
 <center>
-![](/img/autotext/rainbow.6.jpg)
+<img src = "/img/autotext/rainbow.6.jpg height = "400"/>
 </center>
 
 ### Test results
@@ -58,3 +58,27 @@ Here are the results of autosmry after applying it to the plot of Rainbow Six:
 </center>
 
 That's not bad either!
+
+## Test 3: Blog post from Ask A Manager
+
+I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here's a summary from a post titled **[company wants references from “coworkers you didn’t get along with"](http://www.askamanager.org/2016/10/company-wants-references-from-coworkers-you-didnt-get-along-with.html)**:
+
+A reader writes:
+
+<center>
+![](/img/autotext/aam.reader.png)
+</center>
+
+Response:
+
+<center>
+![](/img/autotext/aam.response.png)
+</center>
+
+These two summaries are probably the best summary out of them all!
+
+## Conclusion
+
+Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(It is located in the Projects section)](../../project/autosmry/)**
+
+
