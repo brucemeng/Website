@@ -27,7 +27,7 @@ As a test of the auto text summary capabilities of the top 3 results, I'm going 
 
 ![Wikipedia Article](/img/autotext/subfossil.lemur.png)
 
-### Test results
+## Test results
 
 **1. Automatic Text Summarizer**
 
@@ -48,7 +48,7 @@ I'm also not crazy about the visuals. In my opinion, not a very great summary.
 <br>
 **My comments:**
 
-My initial reaction is that this one starts with "Subfossil lemurs" and therefore makes it clear what the article is about. It also flows much better than the first auto summary. But then I realized, this summarizer simply just stated the first 5 sentences from the original article and so I'm unsure if it does anything more sophisticated than that.
+This one starts with "Subfossil lemurs" and therefore makes it clear what the article is about. It also flows much better than the first auto summary. Overall, a better result than the first one.
 
 <br>
 **3. Free Summarizer**
@@ -58,4 +58,4 @@ My initial reaction is that this one starts with "Subfossil lemurs" and therefor
 <br>
 **My comments:**
 
-The third summarizer appears to be the best of the 3. It starts off with mentioning "Subfossil lemurs" and proceeds to give a few relevant facts.
+The third summarizer also starts with the proper topic sentence "Subfossil lemurs...". The next few factual sentences are slightly different than the second summarizer, but I wouldn't say it is better or worse.
