@@ -28,7 +28,7 @@ And so... I created autosmry!
 As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
 
 <center>
-<img src = "/img/autotext/jurassic.world.jpg" height = "80"/>
+<img src = "/img/autotext/jurassic.world.jpg" height = "200"/>
 </center>
 
 ### Test results
