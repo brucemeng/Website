@@ -1,8 +1,8 @@
 ---
-title: Comparison of auto text summarizers
+title: Testing the performance of autosmry on Jurassic World
 author: Bruce Meng
 date: '2018-04-29'
-slug: comparison-of-auto-text-summarizers
+slug: autosmry-test
 categories: []
 tags:
   - text
@@ -25,9 +25,11 @@ And so... I created autosmry!
 
 ## Text for auto summary test
 
-As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbs")`.
+As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
 
+<center>
 ![](/img/autotext/jurassic.world.jpg)
+</center>
 
 ## Test results
 
