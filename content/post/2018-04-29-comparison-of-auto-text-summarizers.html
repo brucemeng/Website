@@ -1,5 +1,5 @@
 ---
-title: Auto Text Summarization (autosmry)
+title: Auto Text Summarization (autoSmry)
 author: Bruce Meng
 date: '2018-04-29'
 slug: autosmry-test
@@ -13,21 +13,23 @@ tags:
 
 <p>I started off my text analytics journey with sentiment analysis because I just thought it was so very cool that a machine can detect positivity or negativity from humans! I ended up creating a report which summarized review-like reports after training and applying a sentiment algorithm to gauge the amount of positivity or negativity from the reviewers. I found that as a by product, by focusing on particularly positive or particularly negative comments, my created report also produced a fairly decent summary.</p>
 <p>This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.</p>
-<p>And so… I created autosmry!</p>
+<p>And so… I created autoSmry!</p>
 <div id="autosmry" class="section level2">
-<h2>autosmry</h2>
-<p><strong><a href="../../project/autosmry/">autosmry</a></strong> is a lightweight modern looking extractive automatic text summarizer built entirely in R and R Shiny.</p>
-<p>[gif]</p>
+<h2>autoSmry</h2>
+<p><strong><a href="../../project/autosmry/">autoSmry</a></strong> is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.</p>
+<center>
+<img src="/img/autotext/autoSmry.gif" />
+</center>
 </div>
 <div id="test-1-jurassic-world-movie" class="section level2">
 <h2>Test 1: Jurassic World Movie</h2>
-<p>As a test for autosmry, I went with the text of something that I can comfortably recall and assess… the plot of the 2015 movie reboot, <strong><a href="https://en.wikipedia.org/wiki/Jurassic_World#Plot">Jurassic World</a></strong> 👍.</p>
+<p>As a test for autoSmry, I went with the text of something that I can comfortably recall and assess… the plot of the 2015 movie reboot, <strong><a href="https://en.wikipedia.org/wiki/Jurassic_World#Plot">Jurassic World</a></strong> 👍.</p>
 <center>
 <img src = "/img/autotext/jurassic.world.jpg" height = "400"/>
 </center>
 <div id="test-results" class="section level3">
 <h3>Test results</h3>
-<p>Here are the results of autosmry after applying it to the plot of Jurassic World:</p>
+<p>Here are the results of autoSmry after applying it to the plot of Jurassic World:</p>
 <center>
 <img src="/img/autotext/wiki.auto.png" />
 </center>
@@ -42,7 +44,7 @@ tags:
 </center>
 <div id="test-results-1" class="section level3">
 <h3>Test results</h3>
-<p>Here are the results of autosmry after applying it to the plot of Rainbow Six:</p>
+<p>Here are the results of autoSmry after applying it to the plot of Rainbow Six:</p>
 <center>
 <img src="/img/autotext/wiki.auto.rainbow.png" />
 </center>
@@ -60,9 +62,13 @@ tags:
 <center>
 <img src="/img/autotext/aam.response.png" />
 </center>
-<p>These two summaries are probably the best summary out of them all!</p>
+<p>These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven’t yet).</p>
+</div>
+<div id="test-4" class="section level2">
+<h2>Test 4:</h2>
+<p>I’m going to use the function directly to produce one sentence summaries for a bunch of movies:</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>Yes… I am biased… but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! <strong><a href="../../project/autosmry/">(It is located in the Projects section)</a></strong></p>
+<p>Yes… I am biased… but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! <strong><a href="../../project/autoSmry/">(It is located in the Projects section)</a></strong></p>
 </div>

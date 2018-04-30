@@ -1,5 +1,5 @@
 ---
-title: Auto Text Summarization (autosmry)
+title: Auto Text Summarization (autoSmry)
 author: Bruce Meng
 date: '2018-04-29'
 slug: autosmry-test
@@ -13,19 +13,21 @@ I started off my text analytics journey with sentiment analysis because I just t
 
 This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.
 
-And so... I created autosmry!
+And so... I created autoSmry!
 
-## autosmry
+## autoSmry
 
-**[autosmry](../../project/autosmry/)** is a lightweight modern looking extractive automatic text summarizer built entirely in R and R Shiny.
+**[autoSmry](../../project/autosmry/)** is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.
 
-[gif]
+<center>
+![](/img/autotext/autoSmry.gif)
+</center>
 
 
 
 ## Test 1: Jurassic World Movie
 
-As a test for autosmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
+As a test for autoSmry, I went with the text of something that I can comfortably recall and assess... the plot of the 2015 movie reboot, **[Jurassic World](https://en.wikipedia.org/wiki/Jurassic_World#Plot)** `r emo::ji("thumbsup")`.
 
 <center>
 <img src = "/img/autotext/jurassic.world.jpg" height = "400"/>
@@ -33,7 +35,7 @@ As a test for autosmry, I went with the text of something that I can comfortably
 
 ### Test results
 
-Here are the results of autosmry after applying it to the plot of Jurassic World:
+Here are the results of autoSmry after applying it to the plot of Jurassic World:
 
 <center>
 ![](/img/autotext/wiki.auto.png)
@@ -51,7 +53,7 @@ For the second test, I went with the plot summary to the novel **[Rainbow Six](h
 
 ### Test results
 
-Here are the results of autosmry after applying it to the plot of Rainbow Six:
+Here are the results of autoSmry after applying it to the plot of Rainbow Six:
 
 <center>
 ![](/img/autotext/wiki.auto.rainbow.png)
@@ -75,10 +77,18 @@ Response:
 ![](/img/autotext/aam.response.png)
 </center>
 
-These two summaries are probably the best summary out of them all!
+These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven't yet).
+
+## Test 4:
+
+I'm going to use the function directly to produce one sentence summaries for a bunch of movies:
+
+```{r setup, include = F}
+source("E:/Projects/text.summarizer/text.summary.function.udpipe.R")
+```
 
 ## Conclusion
 
-Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(It is located in the Projects section)](../../project/autosmry/)**
+Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(It is located in the Projects section)](../../project/autoSmry/)**
 
 
