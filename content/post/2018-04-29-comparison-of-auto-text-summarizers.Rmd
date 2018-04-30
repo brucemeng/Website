@@ -7,6 +7,9 @@ categories: []
 tags:
   - text
   - nlp
+  - R
+  - bot
+  - fun
 ---
 
 I started off my text analytics journey with sentiment analysis because I just thought it was so very cool that a machine can detect positivity or negativity from humans! I ended up creating a report which summarized review-like reports after training and applying a sentiment algorithm to gauge the amount of positivity or negativity from the reviewers. I found that as a by product, by focusing on particularly positive or particularly negative comments, my created report also produced a fairly decent summary.
@@ -20,7 +23,7 @@ And so... I created autoSmry!
 **[autoSmry](../../project/autosmry/)** is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.
 
 <center>
-![](/img/autotext/autoSmry.gif)
+![](/img/autotext/autoSmry.lg.gif)
 </center>
 
 
@@ -59,7 +62,7 @@ Here are the results of autoSmry after applying it to the plot of Rainbow Six:
 ![](/img/autotext/wiki.auto.rainbow.png)
 </center>
 
-That's not bad either!
+That's pretty good too!
 
 ## Test 3: Blog post from Ask A Manager
 
@@ -81,11 +84,63 @@ These two summaries really surprised me on how well it was done! (But even still
 
 ## Test 4:
 
-I'm going to use the function directly to produce one sentence summaries for a bunch of movies:
+I'm going to use the function directly to produce one sentence summaries for a bunch of movies.
 
 ```{r setup, include = F}
-source("E:/Projects/text.summarizer/text.summary.function.udpipe.R")
+source("E:/Projects/text.summarizer/text.summary.function.udpipe.nsent.R")
+library(tidyverse)
+library(rvest)
 ```
+
+First, a small bit of code to pull the top 10 highest grossing films from Wikipedia:
+```{r movies, echo = T, message = F}
+# Get top 10 movies
+movie.url <- "https://en.wikipedia.org/wiki/List_of_highest-grossing_films#Highest-grossing_films"
+
+movie.data <- read_html(movie.url) %>%
+        html_node("table") %>%
+        html_table() %>%
+        head(10)
+
+# Drop unneeded data
+movie.data.clean <- movie.data %>%
+        select(Rank, Title)
+
+# Load movie plots
+plot.data <- read_dir("E:/Projects/text.summarizer/data/movie.plots/") %>%
+        group_by(document) %>%
+        summarize(Plot = paste(content, collapse = " ") %>%
+                          replace_non_ascii())
+
+# Combine data
+movie.plot.data <- cbind(movie.data.clean, plot.data) %>%
+        select(-document)
+```
+
+And now, to run the auto_smry function for all 10 movie plots:
+
+```{r movie.autosmry, echo = T, message = F}
+# Run auto_smry for all plot lines
+movie.plot.autosmry <- movie.plot.data %>%
+        mutate(autoSmry = map(.$Plot, auto_smry, 1)) %>%
+        select(-Plot)
+
+```
+
+
+Gives us the following table:
+
+```{r movie.show, echo = F, message = F}
+library(knitr)
+library(kableExtra)
+
+kable(movie.plot.autosmry, "html") %>%
+        kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+Reducing down to only 1 sentence makes it much harder to produce a sensible summary. The worst summary in my opinion is the one produced for Black Panther, however, for the other movies, it doesn't appear to be too bad.
 
 ## Conclusion
 

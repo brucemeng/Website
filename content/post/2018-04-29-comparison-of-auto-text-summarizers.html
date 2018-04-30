@@ -7,6 +7,9 @@ categories: []
 tags:
   - text
   - nlp
+  - R
+  - bot
+  - fun
 ---
 
 
@@ -18,7 +21,7 @@ tags:
 <h2>autoSmry</h2>
 <p><strong><a href="../../project/autosmry/">autoSmry</a></strong> is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.</p>
 <center>
-<img src="/img/autotext/autoSmry.gif" />
+<img src="/img/autotext/autoSmry.lg.gif" />
 </center>
 </div>
 <div id="test-1-jurassic-world-movie" class="section level2">
@@ -48,7 +51,7 @@ tags:
 <center>
 <img src="/img/autotext/wiki.auto.rainbow.png" />
 </center>
-<p>That’s not bad either!</p>
+<p>That’s pretty good too!</p>
 </div>
 </div>
 <div id="test-3-blog-post-from-ask-a-manager" class="section level2">
@@ -66,7 +69,138 @@ tags:
 </div>
 <div id="test-4" class="section level2">
 <h2>Test 4:</h2>
-<p>I’m going to use the function directly to produce one sentence summaries for a bunch of movies:</p>
+<p>I’m going to use the function directly to produce one sentence summaries for a bunch of movies.</p>
+<p>First, a small bit of code to pull the top 10 highest grossing films from Wikipedia:</p>
+<p>And now, to run the auto_smry function for all 10 movie plots:</p>
+<p>Gives us the following table:</p>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Rank
+</th>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:left;">
+autoSmry
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+Avatar
+</td>
+<td style="text-align:left;">
+While protecting the avatars of Grace and fellow scientist Dr. Norm Spellman as they collect biological data, Jake’s avatar is attacked by a thanator and flees into the forest, where he is rescued by Neytiri, a female Na’vi.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Titanic
+</td>
+<td style="text-align:left;">
+Discovered with Jack, Rose tells a concerned Cal that she was peering over the edge and Jack saved her from falling.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+Star Wars: The Force Awakens
+</td>
+<td style="text-align:left;">
+Finn encounters Rey and BB-8, but the First Order tracks them and launches an airstrike.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+Jurassic World
+</td>
+<td style="text-align:left;">
+Owen re-establishes his bond with the raptors before the Indominus reappears.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+The Avengers
+</td>
+<td style="text-align:left;">
+Upon arrival, Loki is imprisoned while Banner and Stark attempt to locate the Tesseract.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+Furious 7
+</td>
+<td style="text-align:left;">
+Dom, Brian, Nobody and his team attempt to capture Shaw, but are ambushed by Jakande and his men and forced to flee while Jakande obtains God’s Eye.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+Avengers: Age of Ultron
+</td>
+<td style="text-align:left;">
+The Avengers fight amongst themselves when Stark secretly uploads J.A.R.V.I.S.a“who is still operational after hiding from Ultron inside the Interneta”into the synthetic body.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+Harry Potter and the Deathly Hallows – Part 2
+</td>
+<td style="text-align:left;">
+Harry discovers that he himself became a Horcrux when Voldemort originally failed to kill him and that Harry must die to destroy the piece of Voldemort’s soul within him.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+9
+</td>
+<td style="text-align:left;">
+Black Panther
+</td>
+<td style="text-align:left;">
+While Shuri heals Ross, T’Challa confronts Zuri about N’Jobu.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+Star Wars: The Last Jedi
+</td>
+<td style="text-align:left;">
+Unbeknownst to Luke, Rey and Kylo can communicate through the Force, puzzling the two enemies.
+</td>
+</tr>
+</tbody>
+</table>
+<p>Reducing down to only 1 sentence makes it much harder to produce a sensible summary. The worst summary in my opinion is the one produced for Black Panther, however, for the other movies, it doesn’t appear to be too bad.</p>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
