@@ -14,10 +14,10 @@ tags:
 <!-- Code to make iframe go fullscreen -->
 <!-- https://stackoverflow.com/questions/5867985/full-screen-iframe-with-a-height-of-100 -->
 
-<body style="margin:0px;padding:0px;overflow:hidden">
+<!-- <body style="margin:0px;padding:0px;overflow:hidden"> -->
     
 <iframe src="http://www.google.com" frameborder="0" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%">
 
 </iframe>
 
-</body>
+<!-- </body> -->
