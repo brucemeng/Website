@@ -16,7 +16,7 @@ tags:
 
 <!-- <body style="margin:0px;padding:0px;overflow:hidden"> -->
 
-<iframe src="https://bruce-meng.shinyapps.io/SentiBot/" frameborder="0" style="position: absolute; height: 100%; border: none">
+<iframe src="https://bruce-meng.shinyapps.io/SentiBot/" frameborder="0" style="position: absolute; height: 100%; border: none; width: 100%">
 
 </iframe>
 
