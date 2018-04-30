@@ -19,7 +19,7 @@ tags:
 <p>And so… I created autoSmry!</p>
 <div id="autosmry" class="section level2">
 <h2>autoSmry</h2>
-<p><strong><a href="../../project/autosmry/">autoSmry</a></strong> is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.</p>
+<p><strong><a href="../../project/autosmry/">autoSmry</a></strong> is a lightweight, modern-looking, automatic text summarizer built entirely in R and R Shiny.</p>
 <center>
 <img src="/img/autotext/autoSmry.lg.gif" />
 </center>
@@ -57,6 +57,8 @@ tags:
 <div id="test-3-blog-post-from-ask-a-manager" class="section level2">
 <h2>Test 3: Blog post from Ask A Manager</h2>
 <p>I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here’s the auto summary from a post titled <strong><a href="http://www.askamanager.org/2016/10/company-wants-references-from-coworkers-you-didnt-get-along-with.html">company wants references from “coworkers you didn’t get along with”</a></strong>:</p>
+<div id="test-results-2" class="section level3">
+<h3>Test results</h3>
 <p>A reader writes:</p>
 <center>
 <img src="/img/autotext/aam.reader.png" />
@@ -67,8 +69,9 @@ tags:
 </center>
 <p>These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven’t yet).</p>
 </div>
-<div id="test-4" class="section level2">
-<h2>Test 4:</h2>
+</div>
+<div id="test-4-one-sentence-summaries-for-a-bunch-of-movies" class="section level2">
+<h2>Test 4: One sentence summaries for a bunch of movies</h2>
 <p>I’m going to use the function directly to produce one sentence summaries for a bunch of movies.</p>
 <p>First, a small bit of code to pull the top 10 highest grossing films from Wikipedia:</p>
 <pre class="r"><code># Get top 10 movies
@@ -92,11 +95,13 @@ plot.data &lt;- read_dir(&quot;E:/Projects/text.summarizer/data/movie.plots/&quo
 # Combine data
 movie.plot.data &lt;- cbind(movie.data.clean, plot.data) %&gt;%
         select(-document)</code></pre>
-<p>And now, to run the auto_smry function for all 10 movie plots:</p>
+<p>And now, to run the <code>auto_smry</code> function for all 10 movie plots:</p>
 <pre class="r"><code># Run auto_smry for all plot lines
 movie.plot.autosmry &lt;- movie.plot.data %&gt;%
         mutate(autoSmry = map(.$Plot, auto_smry, 1)) %&gt;%
         select(-Plot)</code></pre>
+<div id="test-results-3" class="section level3">
+<h3>Test results</h3>
 <p>Gives us the following table:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
@@ -226,6 +231,7 @@ Unbeknownst to Luke, Rey and Kylo can communicate through the Force, puzzling th
 </tbody>
 </table>
 <p>Reducing down to only 1 sentence makes it much harder to produce a sensible summary. The worst summary in my opinion is the one produced for Black Panther, however, for the other movies, it doesn’t appear to be too bad.</p>
+</div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>

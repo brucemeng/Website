@@ -20,7 +20,7 @@ And so... I created autoSmry!
 
 ## autoSmry
 
-**[autoSmry](../../project/autosmry/)** is a lightweight, modern-looking, extractive, automatic text summarizer built entirely in R and R Shiny.
+**[autoSmry](../../project/autosmry/)** is a lightweight, modern-looking, automatic text summarizer built entirely in R and R Shiny.
 
 <center>
 ![](/img/autotext/autoSmry.lg.gif)
@@ -68,6 +68,8 @@ That's pretty good too!
 
 I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here's the auto summary from a post titled **[company wants references from “coworkers you didn’t get along with"](http://www.askamanager.org/2016/10/company-wants-references-from-coworkers-you-didnt-get-along-with.html)**:
 
+### Test results
+
 A reader writes:
 
 <center>
@@ -82,7 +84,7 @@ Response:
 
 These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven't yet).
 
-## Test 4:
+## Test 4: One sentence summaries for a bunch of movies
 
 I'm going to use the function directly to produce one sentence summaries for a bunch of movies.
 
@@ -117,7 +119,7 @@ movie.plot.data <- cbind(movie.data.clean, plot.data) %>%
         select(-document)
 ```
 
-And now, to run the auto_smry function for all 10 movie plots:
+And now, to run the `auto_smry` function for all 10 movie plots:
 
 ```{r movie.autosmry, echo = T, message = F}
 # Run auto_smry for all plot lines
@@ -127,6 +129,7 @@ movie.plot.autosmry <- movie.plot.data %>%
 
 ```
 
+### Test results
 
 Gives us the following table:
 
