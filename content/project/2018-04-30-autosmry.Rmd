@@ -11,6 +11,9 @@ tags:
   - text
 ---
 
+Please wait...
+The bot is loading...
+
 <!-- Code to make iframe go fullscreen -->
 <!-- https://stackoverflow.com/questions/5867985/full-screen-iframe-with-a-height-of-100 -->
 
