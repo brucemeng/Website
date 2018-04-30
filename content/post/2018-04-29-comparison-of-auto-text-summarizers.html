@@ -1,5 +1,5 @@
 ---
-title: Auto Text Summarization (autoSmry)
+title: Auto text summarization (autoSmry)
 author: Bruce Meng
 date: '2018-04-29'
 slug: autosmry-test
@@ -71,7 +71,32 @@ tags:
 <h2>Test 4:</h2>
 <p>I’m going to use the function directly to produce one sentence summaries for a bunch of movies.</p>
 <p>First, a small bit of code to pull the top 10 highest grossing films from Wikipedia:</p>
+<pre class="r"><code># Get top 10 movies
+movie.url &lt;- &quot;https://en.wikipedia.org/wiki/List_of_highest-grossing_films#Highest-grossing_films&quot;
+
+movie.data &lt;- read_html(movie.url) %&gt;%
+        html_node(&quot;table&quot;) %&gt;%
+        html_table() %&gt;%
+        head(10)
+
+# Drop unneeded data
+movie.data.clean &lt;- movie.data %&gt;%
+        select(Rank, Title)
+
+# Load movie plots
+plot.data &lt;- read_dir(&quot;E:/Projects/text.summarizer/data/movie.plots/&quot;) %&gt;%
+        group_by(document) %&gt;%
+        summarize(Plot = paste(content, collapse = &quot; &quot;) %&gt;%
+                          replace_non_ascii())
+
+# Combine data
+movie.plot.data &lt;- cbind(movie.data.clean, plot.data) %&gt;%
+        select(-document)</code></pre>
 <p>And now, to run the auto_smry function for all 10 movie plots:</p>
+<pre class="r"><code># Run auto_smry for all plot lines
+movie.plot.autosmry &lt;- movie.plot.data %&gt;%
+        mutate(autoSmry = map(.$Plot, auto_smry, 1)) %&gt;%
+        select(-Plot)</code></pre>
 <p>Gives us the following table:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
