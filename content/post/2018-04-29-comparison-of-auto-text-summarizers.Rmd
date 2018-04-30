@@ -153,4 +153,8 @@ Reducing down to only 1 sentence makes it much harder to produce a sensible summ
 
 Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(It is located in the Projects section)](../../project/autoSmry/)**
 
+### My plans
+
+I developed this tool as a quick and easy way for me to obtain summaries of text without worrying about whether my data will be logged or captured in some way. I plan on keeping it free for use for everyone for as long as I am able to.
+
 
