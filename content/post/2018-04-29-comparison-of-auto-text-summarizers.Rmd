@@ -43,6 +43,7 @@ Here are the results of autoSmry after applying it to the plot of Jurassic World
 <center>
 ![](/img/autotext/wiki.auto.png)
 </center>
+<br>
 
 That's pretty cool! The Indominus Rex is indeed the main villain of the movie and is the cause of all the action to our protagonists!
 
@@ -61,6 +62,7 @@ Here are the results of autoSmry after applying it to the plot of Rainbow Six:
 <center>
 ![](/img/autotext/wiki.auto.rainbow.png)
 </center>
+<br>
 
 That's pretty good too!
 
@@ -75,16 +77,18 @@ A reader writes:
 <center>
 ![](/img/autotext/aam.reader.png)
 </center>
+<br>
 
 Response:
 
 <center>
 ![](/img/autotext/aam.response.png)
 </center>
+<br>
 
 These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven't yet).
 
-## Test 4: One sentence summaries for a bunch of movies
+## Test 4: A bunch of movies
 
 I'm going to use the function directly to produce one sentence summaries for a bunch of movies.
 
