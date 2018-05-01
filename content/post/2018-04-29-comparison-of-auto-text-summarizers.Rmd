@@ -155,6 +155,6 @@ Yes... I am biased... but I really do think the results are fairly good! It can 
 
 ### My plans
 
-I developed this tool as a quick and easy way for me to obtain summaries of text without worrying about whether my data will be logged or captured in some way. I plan on keeping it free for use for everyone for as long as I am able to.
+I developed this tool as a quick and easy way for me to obtain summaries of text without worrying about if my data will be logged or captured in some way. I plan on keeping it free for use for everyone for as long as I am able to.
 
 
