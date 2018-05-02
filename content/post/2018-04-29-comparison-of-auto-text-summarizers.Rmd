@@ -23,7 +23,7 @@ And so... I created autoSmry!
 **[autoSmry](../../project/autosmry/)** is a lightweight, modern-looking, automatic text summarizer built entirely in R and R Shiny.
 
 <center>
-![](/img/autotext/autoSmry.lg.nocap.gif)
+![](/img/autotext/autoSmry.sm.nocap.gif)
 </center>
 
 
