@@ -12,6 +12,8 @@ tags:
 ---
 
 Please wait...
+
+
 The bot is loading...
 
 <!-- Code to make iframe go fullscreen -->
@@ -25,3 +27,7 @@ The bot is loading...
 
 
 </body>
+
+<script> $(function() {
+    $("header, footer").hide();
+});</script>
