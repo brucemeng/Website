@@ -15,7 +15,7 @@ tags:
 
 
 <p>I started off my text analytics journey with sentiment analysis because I just thought it was so very cool that a machine can detect positivity or negativity from humans! I ended up creating a report which summarized review-like reports after training and applying a sentiment algorithm to gauge the amount of positivity or negativity from the reviewers. I found that as a by product, by focusing on particularly positive or particularly negative comments, my created report also produced a fairly decent summary.</p>
-<p>This however only works on reviews. I wanted to look into a generic automatic text summarizer that will work on factual documents as well as more sentiment charged articles.</p>
+<p>This however only works on reviews. I wanted to look into a universal automatic text summarizer that will work on factual documents as well as more sentiment charged articles.</p>
 <p>And so… I created autoSmry!</p>
 <div id="autosmry" class="section level2">
 <h2>autoSmry</h2>
@@ -91,7 +91,7 @@ movie.data.clean &lt;- movie.data %&gt;%
         select(Rank, Title)
 
 # Load movie plots
-plot.data &lt;- read_dir(&quot;E:/Projects/text.summarizer/data/movie.plots/&quot;) %&gt;%
+plot.data &lt;- read_dir(&quot;E:/Projects/Website/data/movie.plots&quot;) %&gt;%
         group_by(document) %&gt;%
         summarize(Plot = paste(content, collapse = &quot; &quot;) %&gt;%
                           replace_non_ascii())
@@ -130,7 +130,7 @@ autoSmry
 Avatar
 </td>
 <td style="text-align:left;">
-While protecting the avatars of Grace and fellow scientist Dr. Norm Spellman as they collect biological data, Jake’s avatar is attacked by a thanator and flees into the forest, where he is rescued by Neytiri, a female Na’vi.
+Quaritch prepares to slit the throat of Jake’s avatar, but Neytiri kills Quaritch and saves Jake from suffocation.
 </td>
 </tr>
 <tr>
@@ -152,7 +152,7 @@ Discovered with Jack, Rose tells a concerned Cal that she was peering over the e
 Star Wars: The Force Awakens
 </td>
 <td style="text-align:left;">
-Finn encounters Rey and BB-8, but the First Order tracks them and launches an airstrike.
+Rey and Chewbacca escape with the unconscious Finn in the Falcon.
 </td>
 </tr>
 <tr>
@@ -174,7 +174,7 @@ Owen re-establishes his bond with the raptors before the Indominus reappears.
 The Avengers
 </td>
 <td style="text-align:left;">
-Upon arrival, Loki is imprisoned while Banner and Stark attempt to locate the Tesseract.
+The Tesseract suddenly activates and opens a wormhole, allowing Loki to reach Earth.
 </td>
 </tr>
 <tr>
@@ -218,7 +218,7 @@ Harry discovers that he himself became a Horcrux when Voldemort originally faile
 Black Panther
 </td>
 <td style="text-align:left;">
-While Shuri heals Ross, T’Challa confronts Zuri about N’Jobu.
+Fighting in Wakanda’s vibranium mine, T’Challa disrupts Killmonger’s suit and stabs him.
 </td>
 </tr>
 <tr>
