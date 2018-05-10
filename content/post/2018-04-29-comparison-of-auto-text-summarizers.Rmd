@@ -66,31 +66,31 @@ Here are the results of autoSmry after applying it to the plot of Rainbow Six:
 
 That's pretty good too!
 
-## Test 3: Blog post from Ask A Manager
+<!-- ## Test 3: Blog post from Ask A Manager -->
 
-I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here's the auto summary from a post titled **[CEO’s wife ruined my job prospects](http://www.askamanager.org/2017/07/ceos-wife-ruined-my-job-prospects.html)**:
+<!-- I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here's the auto summary from a post titled **[CEO’s wife ruined my job prospects](http://www.askamanager.org/2017/07/ceos-wife-ruined-my-job-prospects.html)**: -->
 
-### Test results
+<!-- ### Test results -->
 
-A reader writes:
+<!-- A reader writes: -->
 
-<center>
-![](/img/autotext/aam.reader.png)
-</center>
-<br>
+<!-- <center> -->
+<!-- ![](/img/autotext/aam.reader.png) -->
+<!-- </center> -->
+<!-- <br> -->
 
-Response:
+<!-- Response: -->
 
-<center>
-![](/img/autotext/aam.response.png)
-</center>
-<br>
+<!-- <center> -->
+<!-- ![](/img/autotext/aam.response.png) -->
+<!-- </center> -->
+<!-- <br> -->
 
-The reader summary started off very well, but the summary never got into what happened on the train, which was critical to understanding what happened. The response summary however, I thought was pretty good! (I would recommend that you read the full original text from Ask A Manager if you haven't yet).
+<!-- The reader summary started off very well, but the summary never got into what happened on the train, which was critical to understanding what happened. The response summary however, I thought was pretty good! (I would recommend that you read the full original text from Ask A Manager if you haven't yet). -->
 
-## Test 4: Another blog post from Ask a Manager
+## Test 3: A blog post from Ask a Manager
 
-This post is titled **[when writing to a hiring manager, should I mention a shared hobby?](http://www.askamanager.org/2018/05/when-writing-to-a-hiring-manager-should-i-mention-a-shared-hobby.html)**.
+I enjoy reading Ask A Manager for its great practical, everyday working advice, and also for some great entertainment too! Here's the auto summary from a post titled **[when writing to a hiring manager, should I mention a shared hobby?](http://www.askamanager.org/2018/05/when-writing-to-a-hiring-manager-should-i-mention-a-shared-hobby.html)**.
 
 ### Test results:
 
@@ -108,7 +108,20 @@ Response:
 </center>
 <br>
 
-I thought this was pretty well done. The reader summary could've been better if it included a sentence on what that hobby was, but the response summary was pretty spot on in my opinion.
+I thought this was okay. The reader summary could've been better if it included a sentence on what that hobby was, but the response summary was pretty spot on in my opinion.
+
+## Test 4: The about page from **[Prince of Travel](https://princeoftravel.com/about)**.
+
+A friend of mine recently started a blog on how to travel the world in style, all on rewards and points. I ran autoSmry on his **[About | Prince of Travel](https://princeoftravel.com/about)** page. Here are the results.
+
+### Test results:
+
+<center>
+![](/img/autotext/pot.about.PNG)
+</center>
+<br>
+
+I can't really find any faults on this summary. I'd say it's the best one yet. (I'd also recommend giving his site a look if you are looking to travel somewhere!).
 
 ## Test 5: A bunch of movies
 
@@ -173,7 +186,7 @@ Reducing down to only 1 sentence makes it much harder to produce a sensible summ
 
 ## Conclusion
 
-Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(It is located in the Projects section)](../../project/autoSmry/)**
+Yes... I am biased... but I really do think the results are fairly good! It can certainly serve as a fast initial first screen on things that I would otherwise just not read at all. Feel free to try it out yourself and let me know if you have any thoughts! **[(autoSmry is located in the Projects section)](../../project/autoSmry/)**
 
 ### My plans
 
