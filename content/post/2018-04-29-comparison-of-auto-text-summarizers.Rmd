@@ -90,7 +90,7 @@ The reader summary started off very well, but the summary never got into what ha
 
 ## Test 4: Another blog post from Ask a Manager
 
-This post is titled **[when writing to a hiring manager, should I mention a shared hobby?](http://www.askamanager.org/2018/05/when-writing-to-a-hiring-manager-should-i-mention-a-shared-hobby.html).
+This post is titled **[when writing to a hiring manager, should I mention a shared hobby?](http://www.askamanager.org/2018/05/when-writing-to-a-hiring-manager-should-i-mention-a-shared-hobby.html)**.
 
 ### Test results:
 
