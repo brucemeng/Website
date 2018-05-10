@@ -86,9 +86,31 @@ Response:
 </center>
 <br>
 
-These two summaries really surprised me on how well it was done! (But even still, I would recommend that you read the full original text from Ask A Manager if you haven't yet).
+The reader summary started off very well, but the summary never got into what happened on the train, which was critical to understanding what happened. The response summary however, I thought was pretty good! (I would recommend that you read the full original text from Ask A Manager if you haven't yet).
 
-## Test 4: A bunch of movies
+## Test 4: Another blog post from Ask a Manager
+
+This post is titled **[when writing to a hiring manager, should I mention a shared hobby?](http://www.askamanager.org/2018/05/when-writing-to-a-hiring-manager-should-i-mention-a-shared-hobby.html).
+
+### Test results:
+
+A reader writes:
+
+<center>
+![](/img/autotext/aam.reader2.png)
+</center>
+<br>
+
+Response:
+
+<center>
+![](/img/autotext/aam.response2.png)
+</center>
+<br>
+
+I was really impressed with this one. I can't really find any faults with these summaries.
+
+## Test 5: A bunch of movies
 
 I'm going to use the function directly to produce one sentence summaries for a bunch of movies.
 
