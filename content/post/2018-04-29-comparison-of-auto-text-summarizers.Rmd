@@ -110,7 +110,7 @@ Response:
 
 I thought this was okay. The reader summary could've been better if it included a sentence on what that hobby was, but the response summary was pretty spot on in my opinion.
 
-## Test 4: The about page from **[Prince of Travel](https://princeoftravel.com/about)**.
+## Test 4: The about page from Prince of Travel
 
 A friend of mine recently started a blog on how to travel the world in style, all on rewards and points. I ran autoSmry on his **[About | Prince of Travel](https://princeoftravel.com/about)** page. Here are the results.
 
