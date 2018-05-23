@@ -1,7 +1,7 @@
 ---
 title: Auto text summarization (autoSmry)
 author: Bruce Meng
-date: '2018-05-27'
+date: '2018-05-23'
 slug: autosmry-test
 categories: []
 tags:
