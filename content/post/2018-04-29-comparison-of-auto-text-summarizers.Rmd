@@ -155,7 +155,7 @@ plot.data <- read_dir("E:/Projects/Website/data/movie.plots") %>%
 
 # Combine data
 movie.plot.data <- cbind(movie.data.clean, plot.data) %>%
-        select(-document)
+        select(-document) 
 ```
 
 And now, to run the `auto_smry` function for all 10 movie plots:
