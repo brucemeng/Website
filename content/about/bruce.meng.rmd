@@ -25,8 +25,5 @@ I am an avid R user, and also like to cycle when the sun is out `r emo::ji("smil
 
 If you enjoyed my site, check out David Robinson's excellent posts at **[Variance Explained](http://varianceexplained.org/)**, and also the broader R community as well at **[R Weekly](https://rweekly.org/)**.
 
-**Thanks for the tweet Mara!**
+Right now, I'm probably most famous for the creation of **[autoSmry](../../project/autosmry/)**. Thank you **[Reddit](https://www.reddit.com/r/dataisbeautiful/comments/8m9ha6/i_created_a_tool_to_automatically_extract_the/)** for your amazing support!
 
-<center><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">📉🎞 head-to-head, w/ code:<br>&quot;gganimate vs. plotly - Which is better at animation?&quot; by <a href="https://twitter.com/BManalyst?ref_src=twsrc%5Etfw">@BManalyst</a> <a href="https://t.co/UIlCaNQfOD">https://t.co/UIlCaNQfOD</a> <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://twitter.com/hashtag/tweenr?src=hash&amp;ref_src=twsrc%5Etfw">#tweenr</a> <a href="https://t.co/APzfqiBCNP">pic.twitter.com/APzfqiBCNP</a></p>&mdash; Mara Averick (@dataandme) <a href="https://twitter.com/dataandme/status/978316165230587904?ref_src=twsrc%5Etfw">March 26, 2018</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-</center>
