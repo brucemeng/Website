@@ -15,6 +15,8 @@ library(nnfor)
 library(zoo)
 library(keras)
 library(recipes)
+library(plotly)
+library(ggrepel)
 set.seed(1)
 ```
 
@@ -56,7 +58,7 @@ We will use the following code to generate a forecast with `nnetar`:
 # Fitting nnetar model
 sun.fit.mlp <- nnetar(sun.train, lambda = 1, P = 1)
 
-sun.fcst.mlp <- forecast(sun.fit.mlp, h = 311)
+sun.fcst.mlp <- forecast(sun.fit.mlp, h = 299)
 ```
 
 (Note that it only takes 2 lines of code to generate this forecast!)
@@ -166,7 +168,7 @@ for (i in 1:5) {
 
 ```
 
-```{r keras.show.model, message=F}
+```{r keras.show.model, message=F, echo = F}
 # Model details
 model.keras
 
@@ -175,10 +177,10 @@ model.keras
 Step 4 - we can now make predictions from the model:
 
 ```{r keras.model.predict, message = F, warning = F}
-## Predict based on last observed passenger number
-n <- 311
+## Predict based on last observed sunspot number
+n <- 299 #number of predictions to make
 
-predictions <- numeric()
+predictions <- numeric() #vector to hold predictions
 
 # Generate predictions
 for(i in 1:n){
@@ -193,7 +195,7 @@ for(i in 1:n){
     # Add to previous dataset sun.tibble.rec
     sun.tibble.rec <- rbind(sun.tibble.rec, fcst.y)
     
-    # Recalc lag matrix
+    ## Recalc lag matrix
     # Setup a lagged matrix (using helper function from nnfor)
     sun.tibble.rec.lag <- nnfor::lagmatrix(sun.tibble.rec$x, 0:lookback)
     colnames(sun.tibble.rec.lag) <- paste0("x-", 0:lookback)
@@ -228,16 +230,61 @@ pred.nnetar <- sun.fcst.mlp #already TS object
 pred.keras <- predictions %>%
         ts(start = date.end + 1/12, freq = 12)
 
+# Make tibble
+results <- tibble(Time = index(pred.keras) %>% as.numeric(),
+                  Keras = pred.keras,
+                  nnetar = pred.nnetar$mean,
+                  Actual = sun.test)
+
+results$ID <- seq.int(nrow(results))
+
+# Plotly cumulative function
+# https://plot.ly/r/cumulative-animations/
+
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+
+results <- results %>% accumulate_by(~Time)
+results$Time <- as.yearmon(results$Time)
+results$Date <- results$frame
 
 # Plot
-autoplot(sun.test, series = "Training Data") +autolayer(pred.keras, series = "Keras") +autolayer(sun.test, series = "Testing Data") +autolayer(pred.nnetar$mean, series = "nnetar")
+g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
+        geom_line(aes(y = Keras, linetype = "Keras"), colour = "#2796FF", show.legend = T) +
+        geom_line(aes(y = nnetar, linetype = "nnetar"), colour = "firebrick", show.legend = T) +
+        geom_line(aes(y = Actual), size = 1.2, alpha = 0.3) +
+        # geom_text_repel(aes(y = Keras, label = "Keras"), data = results %>% filter(Time == max(Date))) +
+        # geom_text_repel(aes(x = Time +1, y = nnetar, label = "nnetar"), data = results %>% filter(Time == max(Date))) +
+        theme_minimal() +
+        ylab("Sunspots") +
+        ggtitle("Auto Neural Network Model vs. Manual Keras Model")
 
+
+
+ggplotly(g.plot) %>%
+        animation_opts(frame = 100,
+                       transition = 100,
+                       redraw = F) %>%
+        animation_slider(hide = T) %>%
+        config(displayModeBar = F) -> plty
+
+plty
 ```
 
 ## Conclusion
 
 Total number of lines of code to generate a forecast with `nnetar`:     2
+
+
 Total number of lines of code to generate a forecast with `Keras`:      `r 218-178+164-149+143-126+120-76`
+
+
 
 I'll let you decide which one is worth it. I'll likely run it through `nnetar` and depending on the results then decide if it's worth going down the manual route. If nothing else, `nnetar` provides a nice baseline forecast to compare with.
 
