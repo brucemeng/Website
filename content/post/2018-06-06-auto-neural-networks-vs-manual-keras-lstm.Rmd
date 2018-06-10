@@ -1,8 +1,8 @@
 ---
-title: Auto neural networks vs. Manual Keras LSTM
+title: Auto neural networks vs. Manual Keras neural model
 author: Bruce Meng
 date: '2018-06-06'
-slug: auto-neural-networks-vs-manual-keras-lstm
+slug: auto-neural-networks-vs-manual-keras
 categories: []
 tags:
   - R
@@ -19,7 +19,10 @@ library(plotly)
 library(ggrepel)
 set.seed(1)
 ```
-
+<center>
+![](../../img/auto.NN.vs.manual.keras.teaser.png)
+</center>
+<br>
 
 [Several posts back ](../post/neural-network-time-series-models/) I tested two packages for neural network time-series forecasting on the `AirPassengers` dataset.
 
@@ -256,9 +259,10 @@ results$Date <- results$frame
 
 # Plot
 g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
+        geom_line(aes(y = Actual, linetype = "Actual"), size = 1.1, alpha = 0.3) +
         geom_line(aes(y = Keras, linetype = "Keras"), colour = "#2796FF", show.legend = T) +
         geom_line(aes(y = nnetar, linetype = "nnetar"), colour = "firebrick", show.legend = T) +
-        geom_line(aes(y = Actual), size = 1.2, alpha = 0.3) +
+
         # geom_text_repel(aes(y = Keras, label = "Keras"), data = results %>% filter(Time == max(Date))) +
         # geom_text_repel(aes(x = Time +1, y = nnetar, label = "nnetar"), data = results %>% filter(Time == max(Date))) +
         theme_minimal() +
