@@ -24,20 +24,20 @@ tags:
 <h2>nnetar</h2>
 <p>We will use the following code to generate a forecast with <code>nnetar</code>:</p>
 <pre class="r"><code># Fitting nnetar model
-sun.fit.mlp &lt;- nnetar(sun.train, lambda = 1, P = 9)
+sun.fit.mlp &lt;- nnetar(sun.train, lambda = 1, P = 1)
 
 sun.fcst.mlp &lt;- forecast(sun.fit.mlp, h = 311)</code></pre>
 <p>(Note that it only takes 2 lines of code to generate this forecast!)</p>
 <p>Here are the model details:</p>
 <pre><code>## Series: sun.train 
-## Model:  NNAR(25,9,16)[12] 
-## Call:   nnetar(y = sun.train, P = 9, lambda = 1)
+## Model:  NNAR(25,1,13)[12] 
+## Call:   nnetar(y = sun.train, P = 1, lambda = 1)
 ## 
 ## Average of 20 networks, each of which is
-## a 32-16-1 network with 545 weights
+## a 25-13-1 network with 352 weights
 ## options were - linear output units 
 ## 
-## sigma^2 estimated as 123.6</code></pre>
+## sigma^2 estimated as 150.8</code></pre>
 </div>
 <div id="keras" class="section level2">
 <h2>Keras</h2>
@@ -63,6 +63,20 @@ model.keras %&gt;% compile(optimizer = &quot;rmsprop&quot;,
                   loss = &quot;mean_squared_error&quot;,
                   metrics = &quot;accuracy&quot;)</code></pre>
 <p>Step 3 - we can now attempt to train the model:</p>
+<pre class="r"><code># Model details
+model.keras</code></pre>
+<pre><code>## Model
+## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## dense_1 (Dense)                  (1, 64)                       9280        
+## ___________________________________________________________________________
+## dense_2 (Dense)                  (1, 1)                        65          
+## ===========================================================================
+## Total params: 9,345
+## Trainable params: 9,345
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
 <p>Step 4 - we can now make predictions from the model:</p>
 <pre class="r"><code>## Predict based on last observed passenger number
 n &lt;- 311
@@ -110,4 +124,9 @@ for(i in 1:n){
 <h2>Results!</h2>
 <p>And the moment we have been waiting for… which model does a better job at making predictions?</p>
 <p><img src="/post/2018-06-06-auto-neural-networks-vs-manual-keras-lstm_files/figure-html/results-1.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Total number of lines of code to generate a forecast with <code>nnetar</code>: 2 Total number of lines of code to generate a forecast with <code>Keras</code>: 116</p>
+<p>I’ll let you decide which one is worth it. I’ll likely run it through <code>nnetar</code> and depending on the results then decide if it’s worth going down the manual route. If nothing else, <code>nnetar</code> provides a nice baseline forecast to compare with.</p>
 </div>

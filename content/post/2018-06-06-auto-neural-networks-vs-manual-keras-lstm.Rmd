@@ -54,7 +54,7 @@ We will use the following code to generate a forecast with `nnetar`:
 
 ```{r nnetar.mlp.2}
 # Fitting nnetar model
-sun.fit.mlp <- nnetar(sun.train, lambda = 1, P = 9)
+sun.fit.mlp <- nnetar(sun.train, lambda = 1, P = 1)
 
 sun.fcst.mlp <- forecast(sun.fit.mlp, h = 311)
 ```
@@ -166,6 +166,12 @@ for (i in 1:5) {
 
 ```
 
+```{r keras.show.model, message=F}
+# Model details
+model.keras
+
+```
+
 Step 4 - we can now make predictions from the model:
 
 ```{r keras.model.predict, message = F, warning = F}
@@ -227,4 +233,11 @@ pred.keras <- predictions %>%
 autoplot(sun.test, series = "Training Data") +autolayer(pred.keras, series = "Keras") +autolayer(sun.test, series = "Testing Data") +autolayer(pred.nnetar$mean, series = "nnetar")
 
 ```
+
+## Conclusion
+
+Total number of lines of code to generate a forecast with `nnetar`:     2
+Total number of lines of code to generate a forecast with `Keras`:      `r 218-178+164-149+143-126+120-76`
+
+I'll let you decide which one is worth it. I'll likely run it through `nnetar` and depending on the results then decide if it's worth going down the manual route. If nothing else, `nnetar` provides a nice baseline forecast to compare with.
 
