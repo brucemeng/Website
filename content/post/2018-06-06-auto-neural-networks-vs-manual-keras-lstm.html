@@ -1,0 +1,113 @@
+---
+title: Auto neural networks vs. Manual Keras LSTM
+author: Bruce Meng
+date: '2018-06-06'
+slug: auto-neural-networks-vs-manual-keras-lstm
+categories: []
+tags:
+  - R
+  - modelling
+---
+
+
+
+<p><a href="../post/neural-network-time-series-models/">Several posts back</a> I tested two packages for neural network time-series forecasting on the <code>AirPassengers</code> dataset.</p>
+<p>I want to now test <code>nnetar</code> against a full neural network framework (Keras) and see how it fares.</p>
+<div id="dataset" class="section level2">
+<h2>Dataset</h2>
+<p>R contains a dataset called <code>sunspots</code> that is extremely long (starts from 1750s) and exhibits some nice seasonal patterns. This is the training data that we shall use for both models:</p>
+<p><img src="/post/2018-06-06-auto-neural-networks-vs-manual-keras-lstm_files/figure-html/data.train-1.png" width="672" /></p>
+<p>And this is the testing data which we will test our models against:</p>
+<p><img src="/post/2018-06-06-auto-neural-networks-vs-manual-keras-lstm_files/figure-html/data.test-1.png" width="672" /></p>
+</div>
+<div id="nnetar" class="section level2">
+<h2>nnetar</h2>
+<p>We will use the following code to generate a forecast with <code>nnetar</code>:</p>
+<pre class="r"><code># Fitting nnetar model
+sun.fit.mlp &lt;- nnetar(sun.train, lambda = 1, P = 9)
+
+sun.fcst.mlp &lt;- forecast(sun.fit.mlp, h = 311)</code></pre>
+<p>(Note that it only takes 2 lines of code to generate this forecast!)</p>
+<p>Here are the model details:</p>
+<pre><code>## Series: sun.train 
+## Model:  NNAR(25,9,16)[12] 
+## Call:   nnetar(y = sun.train, P = 9, lambda = 1)
+## 
+## Average of 20 networks, each of which is
+## a 32-16-1 network with 545 weights
+## options were - linear output units 
+## 
+## sigma^2 estimated as 123.6</code></pre>
+</div>
+<div id="keras" class="section level2">
+<h2>Keras</h2>
+<p>Setting up Keras to do a similar forecast is much more involved.</p>
+<p>Step 1 - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip that section as it’s likely boring and takes up quite a bit of room.</p>
+<p>Step 2 - we can now construct a Keras model:</p>
+<pre class="r"><code># Model params
+units &lt;- 64
+inputs &lt;- 1
+
+# Create model
+model.keras &lt;- keras_model_sequential()
+
+model.keras %&gt;%
+        layer_dense(units = units,
+                    input_shape = c(lookback),
+                    batch_size = inputs,
+                    activation = &quot;relu&quot;) %&gt;%
+        layer_dense(units = 1)
+
+# Compile model
+model.keras %&gt;% compile(optimizer = &quot;rmsprop&quot;,
+                  loss = &quot;mean_squared_error&quot;,
+                  metrics = &quot;accuracy&quot;)</code></pre>
+<p>Step 3 - we can now attempt to train the model:</p>
+<p>Step 4 - we can now make predictions from the model:</p>
+<pre class="r"><code>## Predict based on last observed passenger number
+n &lt;- 311
+
+predictions &lt;- numeric()
+
+# Generate predictions
+for(i in 1:n){
+    pred.y &lt;- x[(nrow(x) - inputs + 1):nrow(x), 1:lookback]
+    dim(pred.y) &lt;- c(inputs, lookback)
+    
+    # forecast
+    fcst.y &lt;- model.keras %&gt;% predict(pred.y, batch_size = inputs)
+    fcst.y &lt;- as_tibble(fcst.y)
+    names(fcst.y) &lt;- &quot;x&quot;
+    
+    # Add to previous dataset sun.tibble.rec
+    sun.tibble.rec &lt;- rbind(sun.tibble.rec, fcst.y)
+    
+    # Recalc lag matrix
+    # Setup a lagged matrix (using helper function from nnfor)
+    sun.tibble.rec.lag &lt;- nnfor::lagmatrix(sun.tibble.rec$x, 0:lookback)
+    colnames(sun.tibble.rec.lag) &lt;- paste0(&quot;x-&quot;, 0:lookback)
+    sun.tibble.rec.lag &lt;- as_tibble(sun.tibble.rec.lag) %&gt;%
+    filter(!is.na(.[, ncol(.)])) %&gt;%
+    as.matrix()
+    
+    # x is input (lag), y is output, multiple inputs
+    x &lt;- sun.tibble.rec.lag[, 2:(lookback + 1)]
+    dim(x) &lt;- c(nrow(x), ncol(x))
+    
+    y &lt;- sun.tibble.rec.lag[, 1]
+    dim(y) &lt;- length(y)
+    
+    # Invert recipes
+    fcst.y &lt;- (fcst.y + center.step + range.min.step) * scale.step * (range.max.step - range.min.step)
+    
+    # save prediction
+    predictions[i] &lt;- fcst.y %&gt;% 
+            InvBoxCox(l)
+    predictions &lt;- unlist(predictions)
+}</code></pre>
+</div>
+<div id="results" class="section level2">
+<h2>Results!</h2>
+<p>And the moment we have been waiting for… which model does a better job at making predictions?</p>
+<p><img src="/post/2018-06-06-auto-neural-networks-vs-manual-keras-lstm_files/figure-html/results-1.png" width="672" /></p>
+</div>

@@ -1,0 +1,230 @@
+---
+title: Auto neural networks vs. Manual Keras LSTM
+author: Bruce Meng
+date: '2018-06-06'
+slug: auto-neural-networks-vs-manual-keras-lstm
+categories: []
+tags:
+  - R
+  - modelling
+---
+```{r setup, include = F}
+library(tidyverse)
+library(forecast)
+library(nnfor)
+library(zoo)
+library(keras)
+library(recipes)
+set.seed(1)
+```
+
+
+[Several posts back ](../post/neural-network-time-series-models/) I tested two packages for neural network time-series forecasting on the `AirPassengers` dataset.
+
+I want to now test `nnetar` against a full neural network framework (Keras) and see how it fares.
+
+## Dataset
+
+R contains a dataset called `sunspots` that is extremely long (starts from 1750s) and exhibits some nice seasonal patterns. This is the training data that we shall use for both models:
+
+```{r data.train, echo = F}
+date.end <- 1959
+sun.train <- window(sunspots, end = date.end)
+
+autoplot(sun.train) +
+        ylab("Number of Sunspots") +
+        ggtitle("Training dataset") +
+        theme_minimal()
+```
+
+And this is the testing data which we will test our models against:
+
+```{r data.test, echo = F}
+sun.test <- window(sunspots, start = date.end + 1/12)
+
+autoplot(sun.test) +
+        ylab("Number of Sunspots") +
+        ggtitle("Testing dataset") +
+        theme_minimal()
+```
+
+## nnetar
+
+We will use the following code to generate a forecast with `nnetar`:
+
+```{r nnetar.mlp.2}
+# Fitting nnetar model
+sun.fit.mlp <- nnetar(sun.train, lambda = 1, P = 9)
+
+sun.fcst.mlp <- forecast(sun.fit.mlp, h = 311)
+```
+
+(Note that it only takes 2 lines of code to generate this forecast!)
+
+Here are the model details:
+```{r nnetar.model, echo = F}
+(sun.fit.mlp)
+```
+
+## Keras
+
+Setting up Keras to do a similar forecast is much more involved. 
+
+Step 1 - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip that section as it's likely boring and takes up quite a bit of room.
+
+```{r keras.data.prep, echo = F}
+## Normalize data for Keras
+# BoxCox transformation
+l <- forecast::BoxCox.lambda(sun.train)
+l <- 1
+sun.train.boxcox <- BoxCox(sun.train, l)
+
+# Using Recipes package to process, recipes requires tibbles
+sun.tibble <- as_tibble(sun.train.boxcox)
+
+# Center and scale
+sun.rec <- recipe(sun.tibble) %>%
+        step_scale(x) %>%
+        step_center(x) %>%
+        step_range(x) %>%
+        prep()
+
+sun.tibble.rec <- bake(sun.rec, sun.tibble)
+
+# Store center/scale values to invert
+center.step <- sun.rec$steps[[2]]$means
+scale.step <- sun.rec$steps[[1]]$sds
+range.min.step <- sun.rec$steps[[3]]$ranges[1]
+range.max.step <- sun.rec$steps[[3]]$ranges[2]
+
+# Setup a lagged matrix
+sun.tibble.rec.lag <- sun.tibble.rec %>%
+        mutate(lag = lag(x)) %>%
+        filter(!is.na(lag)) %>%
+        as.matrix()
+
+# Setup a lagged matrix (using helper function from nnfor)
+lookback <- 12 * 12
+
+sun.tibble.rec.lag <- nnfor::lagmatrix(sun.tibble.rec$x, 0:lookback) 
+colnames(sun.tibble.rec.lag) <- paste0("x-", 0:lookback)
+sun.tibble.rec.lag <- as_tibble(sun.tibble.rec.lag) %>%
+        filter(!is.na(.[,ncol(.)])) %>%
+        as.matrix()
+
+# x is input (lag), y is output, multiple inputs
+x <- sun.tibble.rec.lag[, 2:(lookback + 1)]
+dim(x) <- c(nrow(x), ncol(x))
+
+y <- sun.tibble.rec.lag[, 1]
+dim(y) <- length(y)
+```
+
+Step 2 - we can now construct a Keras model:
+
+```{r keras.model.prep}
+# Model params
+units <- 64
+inputs <- 1
+
+# Create model
+model.keras <- keras_model_sequential()
+
+model.keras %>%
+        layer_dense(units = units,
+                    input_shape = c(lookback),
+                    batch_size = inputs,
+                    activation = "relu") %>%
+        layer_dense(units = 1)
+
+# Compile model
+model.keras %>% compile(optimizer = "rmsprop",
+                  loss = "mean_squared_error",
+                  metrics = "accuracy")
+```
+
+Step 3 - we can now attempt to train the model:
+
+```{r keras.model.train, message=F, include=FALSE}
+# Train model
+for (i in 1:5) {
+        model.keras %>% fit(x, y,
+              batch_size = inputs,
+              epochs = 1,
+              shuffle = F,
+              validation_split = 0.1,
+              callbacks = callback_early_stopping(mode = "min",
+                                                  patience = 3,
+                                                  min_delta = 0.001),
+              verbose = 1)
+
+        model.keras %>% reset_states()
+
+        cat("Loop: ", i, "\n")
+}
+
+
+```
+
+Step 4 - we can now make predictions from the model:
+
+```{r keras.model.predict, message = F, warning = F}
+## Predict based on last observed passenger number
+n <- 311
+
+predictions <- numeric()
+
+# Generate predictions
+for(i in 1:n){
+    pred.y <- x[(nrow(x) - inputs + 1):nrow(x), 1:lookback]
+    dim(pred.y) <- c(inputs, lookback)
+    
+    # forecast
+    fcst.y <- model.keras %>% predict(pred.y, batch_size = inputs)
+    fcst.y <- as_tibble(fcst.y)
+    names(fcst.y) <- "x"
+    
+    # Add to previous dataset sun.tibble.rec
+    sun.tibble.rec <- rbind(sun.tibble.rec, fcst.y)
+    
+    # Recalc lag matrix
+    # Setup a lagged matrix (using helper function from nnfor)
+    sun.tibble.rec.lag <- nnfor::lagmatrix(sun.tibble.rec$x, 0:lookback)
+    colnames(sun.tibble.rec.lag) <- paste0("x-", 0:lookback)
+    sun.tibble.rec.lag <- as_tibble(sun.tibble.rec.lag) %>%
+    filter(!is.na(.[, ncol(.)])) %>%
+    as.matrix()
+    
+    # x is input (lag), y is output, multiple inputs
+    x <- sun.tibble.rec.lag[, 2:(lookback + 1)]
+    dim(x) <- c(nrow(x), ncol(x))
+    
+    y <- sun.tibble.rec.lag[, 1]
+    dim(y) <- length(y)
+    
+    # Invert recipes
+    fcst.y <- (fcst.y + center.step + range.min.step) * scale.step * (range.max.step - range.min.step)
+    
+    # save prediction
+    predictions[i] <- fcst.y %>% 
+            InvBoxCox(l)
+    predictions <- unlist(predictions)
+}
+```
+
+## Results!
+
+And the moment we have been waiting for... which model does a better job at making predictions?
+
+```{r results, message = F, echo = F}
+# Make TS objects out of predictions
+pred.nnetar <- sun.fcst.mlp #already TS object
+pred.keras <- predictions %>%
+        ts(start = date.end + 1/12, freq = 12)
+
+
+# Plot
+autoplot(sun.test, series = "Training Data") +autolayer(pred.keras, series = "Keras") +autolayer(sun.test, series = "Testing Data") +autolayer(pred.nnetar$mean, series = "nnetar")
+
+```
+
