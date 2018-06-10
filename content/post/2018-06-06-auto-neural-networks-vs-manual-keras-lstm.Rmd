@@ -75,7 +75,7 @@ Here are the model details:
 
 Setting up Keras to do a similar forecast is much more involved. 
 
-Step 1 - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip that section as it's likely boring and takes up quite a bit of room.
+**Step 1** - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip showing that section as I suspect you'll find it boring and it takes up quite a bit of room.
 
 ```{r keras.data.prep, echo = F}
 ## Normalize data for Keras
@@ -125,7 +125,7 @@ y <- sun.tibble.rec.lag[, 1]
 dim(y) <- length(y)
 ```
 
-Step 2 - we can now construct a Keras model:
+**Step 2** - we can now construct a Keras model:
 
 ```{r keras.model.prep}
 # Model params
@@ -148,7 +148,7 @@ model.keras %>% compile(optimizer = "rmsprop",
                   metrics = "accuracy")
 ```
 
-Step 3 - we can now attempt to train the model:
+**Step 3** - we can now attempt to train the model:
 
 ```{r keras.model.train, message=F, include=FALSE}
 # Train model
@@ -177,7 +177,7 @@ model.keras
 
 ```
 
-Step 4 - we can now make predictions from the model:
+**Step 4** - we can now make predictions from the model:
 
 ```{r keras.model.predict, message = F, warning = F}
 ## Predict based on last observed sunspot number
@@ -185,7 +185,8 @@ n <- 299 #number of predictions to make
 
 predictions <- numeric() #vector to hold predictions
 
-# Generate predictions
+# Generate predictions, starting with last observed sunspot number and feeding
+# new predictions back into itself
 for(i in 1:n){
     pred.y <- x[(nrow(x) - inputs + 1):nrow(x), 1:lookback]
     dim(pred.y) <- c(inputs, lookback)
@@ -214,7 +215,8 @@ for(i in 1:n){
     dim(y) <- length(y)
     
     # Invert recipes
-    fcst.y <- (fcst.y + center.step + range.min.step) * scale.step * (range.max.step - range.min.step)
+    fcst.y <- (fcst.y + center.step + range.min.step) 
+    fcst.y <- fcst.y * scale.step * (range.max.step - range.min.step)
     
     # save prediction
     predictions[i] <- fcst.y %>% 
@@ -288,7 +290,6 @@ Total number of lines of code to generate a forecast with `nnetar`:     2
 
 Total number of lines of code to generate a forecast with `Keras`:      `r 218-178+164-149+143-126+120-76`
 
-
-
+<br>
 I'll let you decide which one is worth it. I'll likely run it through `nnetar` and depending on the results then decide if it's worth going down the manual route. If nothing else, `nnetar` provides a nice baseline forecast to compare with.
 
