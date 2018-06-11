@@ -273,7 +273,8 @@ g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
         theme_minimal() +
         ylab("Number of Sunspots") +
         ggtitle("Auto Neural Network Model vs. Manual Keras Model") +
-        theme(legend.title = element_blank())
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom")
 
 
 
