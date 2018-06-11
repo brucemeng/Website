@@ -283,7 +283,8 @@ ggplotly(g.plot) %>%
                        transition = 100,
                        redraw = F) %>%
         animation_slider(hide = T) %>%
-        config(displayModeBar = F) -> plty
+        config(displayModeBar = F) %>%
+        layout(legend = list(orientation = "h")) -> plty
 
 plty
 ```
