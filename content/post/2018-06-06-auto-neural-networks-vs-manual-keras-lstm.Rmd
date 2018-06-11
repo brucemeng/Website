@@ -25,7 +25,7 @@ use_session_with_seed(1, disable_gpu = F, disable_parallel_cpu = F)
 </center>
 <br>
 
-[Several posts back ](../post/neural-network-time-series-models/) I tested two packages for neural network time-series forecasting on the `AirPassengers` dataset.
+[Several posts back ](../neural-network-time-series-models/) I tested two packages for neural network time-series forecasting on the `AirPassengers` dataset.
 
 I want to now test `nnetar` against a full neural network framework (Keras) and see how it fares.
 
