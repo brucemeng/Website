@@ -262,15 +262,18 @@ results$Date <- results$frame
 
 # Plot
 g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
-        geom_line(aes(y = Actual, linetype = "Actual"), size = 1.1, alpha = 0.3) +
+        geom_point(aes(y = Actual), size = 1.1, alpha = 0.5) +
+        geom_line(aes(y = Actual, linetype = "Actual"), alpha = 0.1) +
         geom_line(aes(y = Keras, linetype = "Keras"), colour = "#2796FF", show.legend = T) +
         geom_line(aes(y = nnetar, linetype = "nnetar"), colour = "firebrick", show.legend = T) +
+        scale_linetype_manual(values = c("solid", "twodash", "dotted")) +
 
         # geom_text_repel(aes(y = Keras, label = "Keras"), data = results %>% filter(Time == max(Date))) +
         # geom_text_repel(aes(x = Time +1, y = nnetar, label = "nnetar"), data = results %>% filter(Time == max(Date))) +
         theme_minimal() +
-        ylab("Sunspots") +
-        ggtitle("Auto Neural Network Model vs. Manual Keras Model")
+        ylab("Number of Sunspots") +
+        ggtitle("Auto Neural Network Model vs. Manual Keras Model") +
+        theme(legend.title = element_blank())
 
 
 
