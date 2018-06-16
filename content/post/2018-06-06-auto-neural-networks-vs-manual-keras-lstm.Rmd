@@ -60,7 +60,7 @@ We will use the following code to generate a forecast with `nnetar`:
 
 ```{r nnetar.mlp.2}
 # Fitting nnetar model
-sun.fit.mlp <- nnetar(sun.train)
+sun.fit.mlp <- nnetar(sun.train) 
 
 sun.fcst.mlp <- forecast(sun.fit.mlp, h = 299)
 ```
