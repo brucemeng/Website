@@ -60,7 +60,7 @@ We will use the following code to generate a forecast with `nnetar`:
 
 ```{r nnetar.mlp.2}
 # Fitting nnetar model
-sun.fit.mlp <- nnetar(sun.train, lambda = 1, P = 1)
+sun.fit.mlp <- nnetar(sun.train)
 
 sun.fcst.mlp <- forecast(sun.fit.mlp, h = 299)
 ```
@@ -82,7 +82,7 @@ Setting up Keras to do a similar forecast is much more involved.
 ## Normalize data for Keras
 # BoxCox transformation
 l <- forecast::BoxCox.lambda(sun.train)
-l <- 1
+#l <- 1
 sun.train.boxcox <- BoxCox(sun.train, l)
 
 # Using Recipes package to process, recipes requires tibbles
@@ -90,18 +90,18 @@ sun.tibble <- as_tibble(sun.train.boxcox)
 
 # Center and scale
 sun.rec <- recipe(sun.tibble) %>%
-        step_scale(x) %>%
-        step_center(x) %>%
+        # step_scale(x) %>%
+        # step_center(x) %>%
         step_range(x) %>%
         prep()
 
 sun.tibble.rec <- bake(sun.rec, sun.tibble)
 
 # Store center/scale values to invert
-center.step <- sun.rec$steps[[2]]$means
-scale.step <- sun.rec$steps[[1]]$sds
-range.min.step <- sun.rec$steps[[3]]$ranges[1]
-range.max.step <- sun.rec$steps[[3]]$ranges[2]
+# center.step <- sun.rec$steps[[2]]$means
+# scale.step <- sun.rec$steps[[1]]$sds
+range.min.step <- sun.rec$steps[[1]]$ranges[1]
+range.max.step <- sun.rec$steps[[1]]$ranges[2]
 
 # Setup a lagged matrix
 sun.tibble.rec.lag <- sun.tibble.rec %>%
@@ -130,7 +130,7 @@ dim(y) <- length(y)
 
 ```{r keras.model.prep}
 # Model params
-units <- 64
+units <- 256
 inputs <- 1
 
 # Create model
@@ -140,6 +140,10 @@ model.keras %>%
         layer_dense(units = units,
                     input_shape = c(lookback),
                     batch_size = inputs,
+                    activation = "relu") %>%
+                layer_dense(units = units/2,
+                    activation = "relu") %>%
+                layer_dense(units = units/8,
                     activation = "relu") %>%
         layer_dense(units = 1)
 
@@ -216,8 +220,7 @@ for(i in 1:n){
     dim(y) <- length(y)
     
     # Invert recipes
-    fcst.y <- (fcst.y + center.step + range.min.step) 
-    fcst.y <- fcst.y * scale.step * (range.max.step - range.min.step)
+    fcst.y <- fcst.y * (range.max.step - range.min.step)
     
     # save prediction
     predictions[i] <- fcst.y %>% 
