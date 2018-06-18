@@ -157,22 +157,20 @@ model.keras %>% compile(optimizer = "rmsprop",
 
 ```{r keras.model.train, message=F, include=FALSE}
 # Train model
-for (i in 1:5) {
-        model.keras %>% fit(x, y,
-              batch_size = inputs,
-              epochs = 1,
-              shuffle = F,
-              validation_split = 0.1,
-              callbacks = callback_early_stopping(mode = "min",
-                                                  patience = 3,
-                                                  min_delta = 0.001),
-              verbose = 1)
 
-        model.keras %>% reset_states()
-
-        cat("Loop: ", i, "\n")
-}
-
+model.keras %>% fit(
+        x, y,
+        batch_size = inputs,
+        epochs = 1,
+        shuffle = F,
+        validation_split = 0.1,
+        callbacks = callback_early_stopping(
+                mode = "min",
+                patience = 3,
+                min_delta = 0.001
+        ),
+        verbose = 1
+)
 
 ```
 
