@@ -52,9 +52,7 @@ autoplot(data.test) +
 
 ## Dense layers
 
-First up is the dense network.
-
-**Step 1** - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip showing that section as I suspect you'll find it boring and it takes up quite a bit of room.
+First up is the dense network. I'm going to skip showing the code for this here since I showed it in my last post.
 
 ```{r keras.data.prep, echo = F}
 ## Normalize data for Keras
@@ -108,9 +106,9 @@ y.comb <- y
 
 ```
 
-**Step 2** - we can now construct a dense model:
+Here are the model details:
 
-```{r keras.model.prep}
+```{r keras.model.prep, echo = F}
 # Model params
 units <- 256
 inputs <- 1
@@ -135,7 +133,6 @@ model.dense %>% compile(optimizer = "rmsprop",
                   metrics = "accuracy")
 ```
 
-**Step 3** - we can now attempt to train the model:
 
 ```{r keras.model.train, message=F, include=FALSE}
 # Train model
@@ -162,9 +159,7 @@ model.dense
 
 ```
 
-**Step 4** - we can now make predictions from the model:
-
-```{r keras.model.predict, message = F, warning = F}
+```{r keras.model.predict, message = F, warning = F, echo = F}
 ## Predict based on last observed sunspot number
 n <- 299 #number of predictions to make
 
