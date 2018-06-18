@@ -482,7 +482,7 @@ g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
 
 
 
-ggplotly(g.plot) %>%
+ggplotly(g.plot, height = 700) %>%
         animation_opts(frame = 100,
                        transition = 100,
                        redraw = F) %>%
