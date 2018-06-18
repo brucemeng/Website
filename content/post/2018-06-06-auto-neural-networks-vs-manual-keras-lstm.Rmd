@@ -161,7 +161,7 @@ model.keras %>% compile(optimizer = "rmsprop",
 model.keras %>% fit(
         x, y,
         batch_size = inputs,
-        epochs = 1,
+        epochs = 5,
         shuffle = F,
         validation_split = 0.1,
         callbacks = callback_early_stopping(
