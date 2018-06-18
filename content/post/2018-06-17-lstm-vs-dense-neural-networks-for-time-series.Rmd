@@ -1,0 +1,511 @@
+---
+title: LSTM vs. Dense neural networks for time-series
+author: Bruce Meng
+date: '2018-06-17'
+slug: lstm-vs-dense-neural-networks-for-time-series
+categories: []
+tags:
+  - R
+  - modelling
+---
+```{r setup, include = F}
+library(tidyverse)
+library(forecast)
+library(nnfor)
+library(zoo)
+library(keras)
+library(recipes)
+library(plotly)
+library(ggrepel)
+set.seed(1)
+use_session_with_seed(1, disable_gpu = F, disable_parallel_cpu = F)
+```
+
+This is a continuation from my last post comparing an [automatic neural network from the package `forecast` with a manual Keras model](../auto-neural-networks-vs-manual-keras/). 
+
+I used a fully connected deep neural network in that post to model sunspots. There's another type of model, called a long-short term memory network (LSTM), that has been widely considered to be excellent at time-series predictions. Let's run through a comparison between a deep feed-forward neural network model established in the prior post with a LSTM type of model.
+
+## Dataset
+
+We'll reuse the `sunspots` dataset since it's one of the better ones (it's long and exhibits nice seasonal patterns).
+
+```{r data.train, echo = F}
+date.end <- 1959
+data.train <- window(sunspots, end = date.end)
+
+autoplot(data.train) +
+        ylab("Number of Sunspots") +
+        ggtitle("Training dataset") +
+        theme_minimal()
+```
+
+And this is the testing data which we will test our models against:
+
+```{r data.test, echo = F}
+data.test <- window(sunspots, start = date.end + 1/12)
+
+autoplot(data.test) +
+        ylab("Number of Sunspots") +
+        ggtitle("Testing dataset") +
+        theme_minimal()
+```
+
+## Dense layers
+
+First up is the dense network.
+
+**Step 1** - we will need to manually prepare the dataset into a format that Keras can understand. The code is a bunch of scaling, centering and turning the data from a tibble/data.frame to a matrix. I will skip showing that section as I suspect you'll find it boring and it takes up quite a bit of room.
+
+```{r keras.data.prep, echo = F}
+## Normalize data for Keras
+# BoxCox transformation
+l <- forecast::BoxCox.lambda(data.train)
+#l <- 1
+data.train.boxcox <- BoxCox(data.train, l)
+
+# Using Recipes package to process, recipes requires tibbles
+data.tibble <- as_tibble(data.train.boxcox)
+
+# Center and scale
+data.rec <- recipe(data.tibble) %>%
+        # step_scale(x) %>%
+        # step_center(x) %>%
+        step_range(x) %>%
+        prep()
+
+data.tibble.rec <- bake(data.rec, data.tibble)
+data.tibble.rec.dense <- data.tibble.rec
+data.tibble.rec.lstm <- data.tibble.rec
+data.tibble.rec.comb <- data.tibble.rec
+
+# Store center/scale values to invert
+# center.step <- data.rec$steps[[2]]$means
+# scale.step <- data.rec$steps[[1]]$sds
+range.min.step <- data.rec$steps[[1]]$ranges[1]
+range.max.step <- data.rec$steps[[1]]$ranges[2]
+
+# Setup a lagged matrix (using helper function from nnfor)
+lookback <- 12 * 12
+
+data.tibble.rec.lag <- nnfor::lagmatrix(data.tibble.rec$x, 0:lookback) 
+colnames(data.tibble.rec.lag) <- paste0("x-", 0:lookback)
+data.tibble.rec.lag <- as_tibble(data.tibble.rec.lag) %>%
+        filter(!is.na(.[,ncol(.)])) %>%
+        as.matrix()
+
+# x is input (lag), y is output, multiple inputs
+x <- data.tibble.rec.lag[, 2:(lookback + 1)]
+dim(x) <- c(nrow(x), ncol(x))
+
+x.lstm <- data.tibble.rec.lag[, 2:(lookback + 1)]
+dim(x.lstm) <- c(nrow(x.lstm), ncol(x.lstm), 1)
+x.comb <- x.lstm
+
+y <- data.tibble.rec.lag[, 1]
+dim(y) <- length(y)
+y.lstm <- y
+y.comb <- y
+
+```
+
+**Step 2** - we can now construct a Keras model:
+
+```{r keras.model.prep}
+# Model params
+units <- 256
+inputs <- 1
+
+# Create model
+model.dense <- keras_model_sequential()
+
+model.dense %>%
+        layer_dense(units = units,
+                    input_shape = c(lookback),
+                    batch_size = inputs,
+                    activation = "relu") %>%
+                layer_dense(units = units/2,
+                    activation = "relu") %>%
+                layer_dense(units = units/8,
+                    activation = "relu") %>%
+        layer_dense(units = 1)
+
+# Compile model
+model.dense %>% compile(optimizer = "rmsprop",
+                  loss = "mean_squared_error",
+                  metrics = "accuracy")
+```
+
+**Step 3** - we can now attempt to train the model:
+
+```{r keras.model.train, message=F, include=FALSE}
+# Train model
+for (i in 1:5) {
+        model.dense %>% fit(x, y,
+              batch_size = inputs,
+              epochs = 1,
+              shuffle = F,
+              validation_split = 0.1,
+              callbacks = callback_early_stopping(mode = "min",
+                                                  patience = 3,
+                                                  min_delta = 0.001),
+              verbose = 1)
+
+        model.dense %>% reset_states()
+
+        cat("Loop: ", i, "\n")
+}
+
+
+```
+
+```{r keras.show.model, message=F, echo = F}
+# Model details
+model.dense
+
+```
+
+**Step 4** - we can now make predictions from the model:
+
+```{r keras.model.predict, message = F, warning = F}
+## Predict based on last observed sunspot number
+n <- 299 #number of predictions to make
+
+predictions <- numeric() #vector to hold predictions
+
+# Generate predictions, starting with last observed sunspot number and feeding
+# new predictions back into itself
+for(i in 1:n){
+    pred.y <- x[(nrow(x) - inputs + 1):nrow(x), 1:lookback]
+    dim(pred.y) <- c(inputs, lookback)
+    
+    # forecast
+    fcst.y <- model.dense %>% predict(pred.y, batch_size = inputs)
+    fcst.y <- as_tibble(fcst.y)
+    names(fcst.y) <- "x"
+    
+    # Add to previous dataset data.tibble.rec
+    data.tibble.rec.dense <- rbind(data.tibble.rec.dense, fcst.y)
+    
+    ## Recalc lag matrix
+    # Setup a lagged matrix (using helper function from nnfor)
+    data.tibble.rec.lag <- nnfor::lagmatrix(data.tibble.rec.dense$x, 0:lookback)
+    colnames(data.tibble.rec.lag) <- paste0("x-", 0:lookback)
+    data.tibble.rec.lag <- as_tibble(data.tibble.rec.lag) %>%
+    filter(!is.na(.[, ncol(.)])) %>%
+    as.matrix()
+    
+    # x is input (lag), y is output, multiple inputs
+    x <- data.tibble.rec.lag[, 2:(lookback + 1)]
+    dim(x) <- c(nrow(x), ncol(x))
+    
+    y <- data.tibble.rec.lag[, 1]
+    dim(y) <- length(y)
+    
+    # Invert recipes
+    fcst.y <- fcst.y * (range.max.step - range.min.step) + range.min.step
+    
+    # save prediction
+    predictions[i] <- fcst.y %>% 
+            InvBoxCox(l)
+    predictions <- unlist(predictions)
+}
+```
+
+## LSTM
+
+**Step 1** - we need to slightly tweak the data for LSTM models since LSTM expects a 3D tensor, instead of the 2D tensor used in the prior model.
+
+**Step 2** - we can now construct a Keras model:
+
+```{r keras.model.prep.lstm}
+# Model params
+units <- 1
+inputs <- 1
+
+# Create model
+model.lstm <- keras_model_sequential()
+
+model.lstm %>%
+        layer_cudnn_lstm(units = units,
+                         input_shape = c(lookback, 1),
+                         batch_size = inputs,
+                         stateful = T,
+                         return_sequences = F
+                         ) %>%
+        layer_dense(units = 1)
+
+# Compile model
+model.lstm %>% compile(optimizer = "rmsprop",
+                  loss = "mean_squared_error",
+                  metrics = "accuracy")
+```
+
+**Step 3** - we can now attempt to train the model:
+
+```{r keras.lstm.train, message=F, include=FALSE}
+# Train model
+for (i in 1:5) {
+        model.lstm %>% fit(x.lstm, y.lstm,
+              batch_size = inputs,
+              epochs = 1,
+              shuffle = F,
+              validation_split = 0.1,
+              callbacks = callback_early_stopping(mode = "min",
+                                                  patience = 3,
+                                                  min_delta = 0.001),
+              verbose = 1)
+
+        model.lstm %>% reset_states()
+
+        cat("Loop: ", i, "\n")
+}
+
+
+```
+
+```{r keras.show.lstm.model, message=F, echo = F}
+# Model details
+model.lstm
+
+```
+
+**Step 4** - we can now make predictions from the model:
+
+```{r keras.model.predict.lstm, message = F, warning = F}
+## Predict based on last observed sunspot number
+predictions.lstm <- numeric() #vector to hold predictions.lstm
+
+# Generate predictions.lstm, starting with last observed sunspot number and feeding
+# new predictions.lstm back into itself
+for(i in 1:n){
+    pred.y.lstm <- x.lstm[(nrow(x.lstm) - inputs + 1):nrow(x.lstm), 1:lookback, 1]
+    dim(pred.y.lstm) <- c(inputs, lookback, 1)
+    
+    # forecast
+    fcst.y.lstm <- model.lstm %>% predict(pred.y.lstm, batch_size = inputs)
+    fcst.y.lstm <- as_tibble(fcst.y.lstm)
+    names(fcst.y.lstm) <- "x"
+    
+    # Add to previous dataset data.tibble.rec
+    data.tibble.rec.lstm <- rbind(data.tibble.rec.lstm, fcst.y.lstm)
+    
+    ## Recalc lag matrix.lstm
+    # Setup a lagged matrix.lstm (using helper function from nnfor)
+    data.tibble.rec.lag <- nnfor::lagmatrix(data.tibble.rec.lstm$x, 0:lookback)
+    colnames(data.tibble.rec.lag) <- paste0("x-", 0:lookback)
+    data.tibble.rec.lag <- as_tibble(data.tibble.rec.lag) %>%
+    filter(!is.na(.[, ncol(.)])) %>%
+    as.matrix()
+    
+    # x.lstm is input (lag), y.lstm is output, multiple inputs
+    x.lstm <- data.tibble.rec.lag[, 2:(lookback + 1)]
+    dim(x.lstm) <- c(nrow(x.lstm), ncol(x.lstm), 1)
+    
+    y.lstm <- data.tibble.rec.lag[, 1]
+    dim(y.lstm) <- length(y.lstm)
+    
+    # Invert recipes
+    fcst.y.lstm <- fcst.y.lstm * (range.max.step - range.min.step) + range.min.step
+    
+    # save prediction
+    predictions.lstm[i] <- fcst.y.lstm %>% 
+            InvBoxCox(l)
+    predictions.lstm <- unlist(predictions.lstm)
+}
+```
+
+<!-- ## Combined -->
+
+<!-- And for fun, let's see how a combined model looks like. -->
+
+<!-- **Step 2** - we can now construct a Keras model: -->
+
+<!-- ```{r keras.model.prep} -->
+<!-- # Model params -->
+<!-- units.lstm <- 1 -->
+<!-- units.dense <- 8 -->
+<!-- inputs <- 1 -->
+
+<!-- # Create model -->
+<!-- model.comb <- keras_model_sequential() -->
+
+<!-- model.comb %>% -->
+<!--         layer_cudnn_lstm(units = units.lstm, -->
+<!--                          input_shape = c(lookback, 1), -->
+<!--                          batch_size = inputs, -->
+<!--                          stateful = T, -->
+<!--                          return_sequences = F -->
+<!--                          ) %>% -->
+<!--         layer_dense(units = units.dense, -->
+<!--                     activation = "relu") %>% -->
+<!--         # layer_dense(units = units.dense/2, -->
+<!--         #             activation = "relu") %>% -->
+<!--         # layer_dense(units = units.dense/8, -->
+<!--         #             activation = "relu") %>% -->
+<!--         layer_dense(units = 1) -->
+
+<!-- # Compile model -->
+<!-- model.comb %>% compile(optimizer = "rmsprop", -->
+<!--                   loss = "mean_squared_error", -->
+<!--                   metrics = "accuracy") -->
+<!-- ``` -->
+
+<!-- **Step 3** - we can now attempt to train the model: -->
+
+<!-- ```{r keras.lstm.train, message=F, include=FALSE} -->
+<!-- # Train model -->
+<!-- for (i in 1:5) { -->
+<!--         model.comb %>% fit(x.comb, y.comb, -->
+<!--               batch_size = inputs, -->
+<!--               epochs = 1, -->
+<!--               shuffle = F, -->
+<!--               validation_split = 0.1, -->
+<!--               callbacks = callback_early_stopping(mode = "min", -->
+<!--                                                   patience = 3, -->
+<!--                                                   min_delta = 0.001), -->
+<!--               verbose = 1) -->
+
+<!--         model.comb %>% reset_states() -->
+
+<!--         cat("Loop: ", i, "\n") -->
+<!-- } -->
+
+
+<!-- ``` -->
+
+<!-- ```{r keras.show.lstm.model, message=F, echo = F} -->
+<!-- # Model details -->
+<!-- model.comb -->
+
+<!-- ``` -->
+
+<!-- **Step 4** - we can now make predictions from the model: -->
+
+<!-- ```{r keras.model.predict, message = F, warning = F} -->
+<!-- ## Predict based on last observed sunspot number -->
+<!-- predictions.comb <- numeric() #vector to hold predictions.comb -->
+
+<!-- # Generate predictions.comb, starting with last observed sunspot number and feeding -->
+<!-- # new predictions.comb back into itself -->
+<!-- for(i in 1:n){ -->
+<!--     pred.y.comb <- x.comb[(nrow(x.comb) - inputs + 1):nrow(x.comb), 1:lookback, 1] -->
+<!--     dim(pred.y.comb) <- c(inputs, lookback, 1) -->
+
+<!--     # forecast -->
+<!--     fcst.y.comb <- model.comb %>% predict(pred.y.comb, batch_size = inputs) -->
+<!--     fcst.y.comb <- as_tibble(fcst.y.comb) -->
+<!--     names(fcst.y.comb) <- "x" -->
+
+<!--     # Add to previous dataset data.tibble.rec -->
+<!--     data.tibble.rec.comb <- rbind(data.tibble.rec.comb, fcst.y.comb) -->
+
+<!--     ## Recalc lag matrix.comb -->
+<!--     # Setup a lagged matrix.comb (using helper function from nnfor) -->
+<!--     data.tibble.rec.lag <- nnfor::lagmatrix(data.tibble.rec.comb$x, 0:lookback) -->
+<!--     colnames(data.tibble.rec.lag) <- paste0("x-", 0:lookback) -->
+<!--     data.tibble.rec.lag <- as_tibble(data.tibble.rec.lag) %>% -->
+<!--     filter(!is.na(.[, ncol(.)])) %>% -->
+<!--     as.matrix() -->
+
+<!--     # x.comb is input (lag), y.comb is output, multiple inputs -->
+<!--     x.comb <- data.tibble.rec.lag[, 2:(lookback + 1)] -->
+<!--     dim(x.comb) <- c(nrow(x.comb), ncol(x.comb), 1) -->
+
+<!--     y.comb <- data.tibble.rec.lag[, 1] -->
+<!--     dim(y.comb) <- length(y.comb) -->
+
+<!--     # Invert recipes -->
+<!--     fcst.y.comb <- fcst.y.comb * (range.max.step - range.min.step) + range.min.step -->
+
+<!--     # save prediction -->
+<!--     predictions.comb[i] <- fcst.y.comb %>%  -->
+<!--             InvBoxCox(l) -->
+<!--     predictions.comb <- unlist(predictions.comb) -->
+<!-- } -->
+<!-- ``` -->
+
+## Results!
+
+Ok let's see some results! (Since we have 2 models, I'm also going to sneak in an ensemble model which is simply an average of the dense and LSTM model predictions).
+
+```{r results, message = F, echo = F}
+# Make TS objects out of predictions
+pred.dense <- predictions %>%
+        ts(start = date.end + 1/12, freq = 12)
+
+pred.lstm <- predictions.lstm %>%
+        ts(start = date.end + 1/12, freq = 12)
+
+pred.ensemble <- (pred.dense + pred.lstm)/2
+
+# Make tibble
+results <- tibble(Time = index(pred.dense) %>% as.numeric(),
+                  Dense = pred.dense,
+                  LSTM = pred.lstm,
+                  Actual = data.test,
+                  Ensemble = pred.ensemble)
+
+results$ID <- seq.int(nrow(results))
+
+# Plotly cumulative function
+# https://plot.ly/r/cumulative-animations/
+
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+
+results <- results %>% accumulate_by(~Time)
+results$Time <- as.yearmon(results$Time)
+results$Date <- results$frame
+
+# Plot
+g.plot <- ggplot(results, aes(x = Time, frame = Date)) +
+        geom_point(aes(y = Actual), size = 1.1, alpha = 0.5) +
+        geom_line(aes(y = Actual, linetype = "Actual"), alpha = 0.1) +
+        geom_line(aes(y = Dense, linetype = "Dense"), colour = "#2796FF", show.legend = T) +
+        geom_line(aes(y = LSTM, linetype = "LSTM"), colour = "firebrick", show.legend = T) +
+        geom_line(aes(y = Ensemble, linetype = "Ensemble"), colour = "green") +
+        scale_linetype_manual(values = c("solid", "twodash", "dotted", "dashed")) +
+
+        # geom_text_repel(aes(y = Keras, label = "Keras"), data = results %>% filter(Time == max(Date))) +
+        # geom_text_repel(aes(x = Time +1, y = nnetar, label = "nnetar"), data = results %>% filter(Time == max(Date))) +
+        theme_minimal() +
+        ylab("Number of Sunspots") +
+        ggtitle("Dense vs. LSTM") +
+        theme(legend.title = element_blank()) +
+        theme(legend.position = "bottom")
+
+
+
+ggplotly(g.plot) %>%
+        animation_opts(frame = 100,
+                       transition = 100,
+                       redraw = F) %>%
+        animation_slider(hide = T) %>%
+        config(displayModeBar = F) %>%
+        layout(legend = list(orientation = "h")) -> plty
+
+plty
+```
+
+
+The results are fairly good for all three models. I'll also calculate a numerical RMSE score to settle this one more definitively:
+
+```{r rmse, echo = F}
+rmse.dense <- Metrics::rmse(data.test, pred.dense)
+rmse.lstm <- Metrics::rmse(data.test, pred.lstm)
+rmse.ensemble <- Metrics::rmse(data.test, pred.ensemble)
+
+rmse.results <- tibble(RMSE.Dense = rmse.dense, RMSE.LSTM = rmse.lstm, RMSE.Ensemble = rmse.ensemble)
+
+knitr::kable(rmse.results, "html") %>%
+        kableExtra::kable_styling()
+
+```
+
+The ensemble model takes it, with the really good dense layer model coming in second. The LSTM was just a tad worse, and maybe with some more tuning of the hyperparamters it may become better.

@@ -220,7 +220,7 @@ for(i in 1:n){
     dim(y) <- length(y)
     
     # Invert recipes
-    fcst.y <- fcst.y * (range.max.step - range.min.step)
+    fcst.y <- fcst.y * (range.max.step - range.min.step) + range.min.step
     
     # save prediction
     predictions[i] <- fcst.y %>% 
