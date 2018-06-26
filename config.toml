@@ -69,5 +69,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [outputFormats]
 [outputFormats.RSS]
-mediatype = "application/rss"
-baseName = "feed"
+    mediatype = "application/rss"
+    baseName = "feed"
