@@ -1,7 +1,7 @@
 ---
 title: RNN vs. Dense neural networks for time-series
 author: Bruce Meng
-date: '2018-06-19'
+date: '2018-06-27'
 slug: rnn-vs-dense-neural-networks-for-time-series
 categories: []
 tags:
@@ -130,7 +130,7 @@ model.dense %>%
 # Compile model
 model.dense %>% compile(optimizer = "rmsprop",
                   loss = "mean_squared_error",
-                  metrics = "accuracy")
+                  metrics = "mae")
 ```
 
 
@@ -237,7 +237,7 @@ model.GRU %>%
 # Compile model
 model.GRU %>% compile(optimizer = "rmsprop",
                   loss = "mean_squared_error",
-                  metrics = "accuracy")
+                  metrics = "mae")
 ```
 
 **Step 3** - we can now attempt to train the model:
