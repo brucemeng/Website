@@ -11,17 +11,6 @@ tags:
   - text
 ---
 
-## Demo of updates
-
-![](/img/autosmry.update.1/autosmry.update.1.gif)
-
-Articles tested in the video demo:
-
-1. [Ars Technica - NES turns 30](https://arstechnica.com/gaming/2013/07/time-to-feel-old-inside-the-nes-on-its-30th-birthday/)
-4. [WSJ - Students honors lose their luster](https://www.wsj.com/articles/you-graduated-cum-laude-so-did-everyone-else-1530523801)
-3. [NBA - LeBron James (French)](https://www.lemonde.fr/basket/article/2018/07/02/nba-la-superstar-lebron-james-quitte-cleveland-et-signe-aux-los-angeles-lakers_5324165_1616663.html)
-
-
 ## Updates
 
 1. You may now just enter a URL into the textbox and autoSmry will read that entire page instead of requiring you to copy & paste that page's contents into the textbox (URL must point to a html file).
@@ -43,6 +32,17 @@ Testing this however is extremely labourious for me since I only know English. I
 * Spanish
 
 If the results aren't terrible... I'll look into adding additional language support.
+
+## Demo of updates
+
+![](/img/autosmry.update.1/autosmry.update.1.gif)
+
+Articles tested in the video demo:
+
+1. [Ars Technica - NES turns 30](https://arstechnica.com/gaming/2013/07/time-to-feel-old-inside-the-nes-on-its-30th-birthday/)
+4. [WSJ - Students honors lose their luster](https://www.wsj.com/articles/you-graduated-cum-laude-so-did-everyone-else-1530523801)
+3. [NBA - LeBron James (French)](https://www.lemonde.fr/basket/article/2018/07/02/nba-la-superstar-lebron-james-quitte-cleveland-et-signe-aux-los-angeles-lakers_5324165_1616663.html)
+
 
 #### If you would like to make a donation...
 
