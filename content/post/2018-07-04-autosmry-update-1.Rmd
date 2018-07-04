@@ -1,0 +1,50 @@
+---
+title: autoSmry Update 1
+author: Bruce Meng
+date: '2018-07-04'
+slug: autosmry-update-1
+categories: []
+tags:
+  - autoSmry
+  - bot
+  - nlp
+  - text
+---
+
+## Demo of updates
+
+![](/img/autosmry.update.1/autosmry.update.1.gif)
+
+
+## Updates
+
+1. You may now just enter a URL into the textbox and autoSmry will read that entire page instead of requiring you to copy & paste that page's contents into the textbox (URL must point to a html file).
+
+To all the people who suggested adding the ability to parse the URL directly... this made a huge improvement on ease of use (for me at least). Thanks for the suggestion!
+
+The original limitations still apply however. If the webpage is too long, it will timeout.
+
+Also, while it tries to only read the main content, but it does sometimes screw it up. You can check for any odd shapes in "Sentence Relationships", as any odd shapes will likely indicate that it has unrelated text in there somewhere. The odd shapes may affect the quality of the summary. (Odd shapes to me are anything that resembles a scary insect...)
+
+2. I added additional support for other languages. 
+
+This one is still experimental in my mind. What I did was apply the same sort of preprocessing that I did for the English version (minus some English-specific ones) to a few more languages. This should theoretically result in much better sentence choices than before.
+
+Testing this however is extremely labourious for me since I only know English. I would appreciate any feedback on how it's working for the following languages:
+
+* French
+* German
+* Spanish
+
+If the results aren't terrible... I'll look into adding additional language support.
+
+#### If you would like to make a donation...
+
+My payment info is below:
+
+**[[Link to Patreon page](https://www.patreon.com/bruce_meng)]**
+
+
+**Paypal address: bruce.meng@alumni.utoronto.ca**
+
+I appreciate any donations if you would like to, but don't feel obligated! I'm already happy that you have used this tool :)
