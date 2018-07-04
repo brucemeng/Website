@@ -1,5 +1,5 @@
 ---
-title: autoSmry Update 1
+title: autoSmry Update 1 - New features!
 author: Bruce Meng
 date: '2018-07-04'
 slug: autosmry-update-1
@@ -14,6 +14,12 @@ tags:
 ## Demo of updates
 
 ![](/img/autosmry.update.1/autosmry.update.1.gif)
+
+Articles tested in the video demo:
+
+1. [Ars Technica - NES turns 30](https://arstechnica.com/gaming/2013/07/time-to-feel-old-inside-the-nes-on-its-30th-birthday/)
+4. [WSJ - Students honors lose their luster](https://www.wsj.com/articles/you-graduated-cum-laude-so-did-everyone-else-1530523801)
+3. [NBA - LeBron James (French)](https://www.lemonde.fr/basket/article/2018/07/02/nba-la-superstar-lebron-james-quitte-cleveland-et-signe-aux-los-angeles-lakers_5324165_1616663.html)
 
 
 ## Updates
