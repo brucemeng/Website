@@ -1,7 +1,7 @@
 ---
 title: autoSmry Update 1 - New features!
 author: Bruce Meng
-date: '2018-07-04'
+date: '2018-07-19'
 slug: autosmry-update-1
 categories: []
 tags:
@@ -13,15 +13,15 @@ tags:
 
 ## Updates
 
-**1. You may now just enter a URL into the textbox and autoSmry will read that entire page instead of requiring you to copy & paste that page's contents into the textbox (URL must point to a html file).**
+**1. You may now just enter a URL into the textbox and autoSmry will read that entire page instead of requiring you to copy & paste a webpage's contents into the textbox (URL must point to a html file).**
 
 To all the people who suggested adding the ability to parse the URL directly... this made a huge improvement on ease of use (for me at least). Thanks for the suggestion!
 
 The original limitations still apply however. If the webpage is too long, it will timeout.
 
-Also, while it tries to only read the main content, but it does sometimes screw it up. You can check for any odd shapes in "Sentence Relationships", as any odd shapes will likely indicate that it has unrelated text in there somewhere. The odd shapes may affect the quality of the summary. (Odd shapes to me are anything that resembles a scary insect...)
+Also, while it tries to only read the main content, it does sometimes screw it up. You can check for any odd shapes in "Sentence Relationships", as any odd shapes will likely indicate that it has unrelated text in there somewhere. The odd shapes may affect the quality of the summary. (Odd shapes to me are anything that resembles a scary insect...). The algorithm is robust enough to recognize and ignore completely unrelated sentences, but if there are a lot of them, it may start incorporating it.
 
-**2. I added additional support for other languages. **
+**2. I added additional support for other languages.** 
 
 This one is still experimental in my mind. What I did was apply the same sort of preprocessing that I did for the English version (minus some English-specific ones) to a few more languages. This should theoretically result in much better sentence choices than before.
 
@@ -31,26 +31,19 @@ Testing this however is extremely labourious for me since I only know English. I
 * German
 * Spanish
 
-If the results aren't terrible... I'll look into adding additional language support.
+If the results aren't terrible... I'll look into adding additional language support. 
+
+## Tl;dr
+
+1. Enter a URL directly; no more copy/pasting from a webpage
+2. Too long; didn't read = 
+trop long; n'a pas lu = zu lang; habe nicht gelesen = demasiado largo; no leí
 
 ## Demo of updates
 
-![](/img/autosmry.update.1/autosmry.update.1.gif)
+![](/img/autosmry.update.1/autosmry.update.1.canada.gif)
 <br>
 Articles tested in the video demo:
 
-1. [Ars Technica - NES turns 30](https://arstechnica.com/gaming/2013/07/time-to-feel-old-inside-the-nes-on-its-30th-birthday/)
-4. [WSJ - Students honors lose their luster](https://www.wsj.com/articles/you-graduated-cum-laude-so-did-everyone-else-1530523801)
-3. [NBA - LeBron James (French)](https://www.lemonde.fr/basket/article/2018/07/02/nba-la-superstar-lebron-james-quitte-cleveland-et-signe-aux-los-angeles-lakers_5324165_1616663.html)
-
-------
-#### If you would like to make a donation...
-
-My payment info is below:
-
-**[[Link to Patreon page](https://www.patreon.com/bruce_meng)]**
-
-
-**Paypal address: bruce.meng@alumni.utoronto.ca**
-
-I appreciate any donations if you would like to, but don't feel obligated! I'm already happy that you have used this tool :)
+1. [PCs dismiss Ontario's Chief Scientist](https://www.theglobeandmail.com/canada/article-doug-ford-fires-ontarios-chief-scientist/)
+3. [The heat wave continues to claim victims in Quebec (French)](https://www.lesoleil.com/actualite/sante/la-vague-de-chaleur-continue-de-faire-des-victimes-au-quebec-f4f5436aea107534cc1ff3f41a9f64a5)
