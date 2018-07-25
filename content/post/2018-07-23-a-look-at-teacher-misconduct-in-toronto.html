@@ -87,7 +87,7 @@ for (i in 1:length(url.data)) {
 
 # Separate by case, instead of by sentence/line
 url.data.clean &lt;- url.data.clean %&gt;%
-        map(paste, collapse = &quot; &quot;) %&gt;%
+        map(paste, collapse = &quot;\n&quot;) %&gt;%
         textclean::replace_white() %&gt;%
         map(strsplit, split = &quot;(?&lt;=.)(?=Member: )&quot;, perl = TRUE)
 
