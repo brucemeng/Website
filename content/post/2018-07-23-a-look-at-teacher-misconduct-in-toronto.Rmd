@@ -28,7 +28,7 @@ It turns out that he made the news because he was charged with "sexual exploitat
 
 While exploring the internet for the results of his hearing, I found that the Toronto District School Board has a website that lists all offenses from presumably all teachers, going as far back as 2012 or so. It piqued my interest to explore this dataset a bit more fully than to simply look up a past classmate's fate.
 
-# Observations
+## Observations
 
 ![](/img/teachers/gender.plot.png)
 
@@ -37,10 +37,10 @@ While exploring the internet for the results of his hearing, I found that the To
 
 [Put reddit front page worthy visualization here]
 
-# Appendix
-## 1. Obtaining and cleaning the data
+## Appendix
+### 1. Obtaining and cleaning the data
 
-### How to scrape the data
+#### How to scrape the data
 
 The data from the "Professionally Speaking" website is split by month across many years. 
 
@@ -101,7 +101,7 @@ head(url.data[[1]], 2)
 
 ```
 
-### How to clean the data
+#### How to clean the data
 
 Ok good. It worked. Let's clean it up some by removing that first paragraph, and segregating it by case rather than by line:
 
@@ -242,7 +242,7 @@ url.data.df$gender <- url.data.df$text %>%
 
 ```
 
-## 2. Full table
+### 2. Full table
 
 ```{r table, echo = F}
 # url.data.df %>%
@@ -333,19 +333,23 @@ url.data.df$decision <- url.data.df$decision %>%
         str_extract("\\w+") %>%
         str_replace("Counseling|Counselled", "Counselling") %>%
         str_replace("Revoked", "Revocation") %>%
+        str_replace("^((?!Revocation|Suspension|Reprimand).)*$", "Other") %>%
         as.factor()
 
 url.data.df$gender <- url.data.df$gender %>%
         unlist() %>%
         as.factor()
 
-# Decisions
-decision.plot <- ggplot(url.data.df) +
-        geom_bar(aes(x = decision)) +
-        facet_grid(. ~ gender) +
-        coord_flip()
+height.data <- url.data.df %>%
+        group_by(decision, gender) %>%
+        summarise(height = length(decision))
 
-#decision.plot
+# Decisions
+decision.plot <- ggplot(height.data) +
+        geom_ridgeline(aes(x = decision, y = gender, height = height, group = gender))
+
+
+decision.plot
 
 # Genders
 gender.plot <- ggplot(url.data.df) +
@@ -358,6 +362,8 @@ gender.plot <- ggplot(url.data.df) +
         theme(legend.position = "none") +
         labs(caption = "Source: Professionally Speaking 2012-2018") +
         ggtitle("Gender of teachers at misconduct hearings")
+
+ggsave("../../static/img/teachers/gender.plot.png", height = 4)
 
 ```
 
