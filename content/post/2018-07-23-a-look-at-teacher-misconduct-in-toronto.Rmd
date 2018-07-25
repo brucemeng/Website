@@ -1,0 +1,235 @@
+---
+title: A look at teacher misconduct in Toronto...
+author: Bruce Meng
+date: '2018-07-23'
+slug: a-look-at-teacher-misconduct-in-toronto
+categories: []
+tags:
+  - R
+  - data
+---
+
+```{r setup, include=F}
+library(tidyverse)
+library(rvest)
+library(quanteda)
+library(kableExtra)
+library(knitr)
+```
+
+A couple of years back there was a news article written about someone that I went to high school with. We were in the same grade and we shared many classes together, including some extra-curricular classes like band class. We were never that close, and we never stayed in contact after high school, but nonetheless I recognized the name and picture when I saw it.
+
+It turns out that he made the news because he was charged with "sexual exploitation" of a student of his while he was a teacher at a high school that was about 10 min away from where I now live. I recently just drove by that high school, and that prompted me to look into that case and whether he was found guilty or not (he was).
+
+While exploring the internet for the results of his hearing, I found that the Toronto District School Board has a website that lists all offenses from presumably all teachers, going as far back as 2012 or so. It piqued my interest to explore this dataset a bit more fully than to simply look up a past classmate's fate.
+
+## 1. Obtaining and cleaning the data
+
+### How to scrape the data
+
+The data from the "Professionally Speaking" website is split by month across many years. 
+
+![](pic as example)
+
+I decided to make the urls from a couple of small functions:
+
+```{r get.url, echo = T}
+# Function to loop through years
+ps_year <- function(start.year, end.year) {
+        yr <- list()
+        n <- 1
+        for (i in start.year:end.year) {
+                yr[n:(n + 3)] <- rep(i, 4)
+                n <- n + 4
+                
+        }
+        return(yr)
+}
+
+# Function to loop through months
+ps_month <- function() {
+        mon <- c("March", "June", "September", "December")
+        return(mon)
+
+}
+
+# Function to build professionally speaking URL
+ps_url <- function(start.year, end.year) {
+        url <- paste0("http://professionallyspeaking.oct.ca/hearings/hearings-",
+                      ps_year(start.year, end.year), "-",
+                      ps_month(), ".aspx")
+        return(url)
+        
+}
+
+```
+
+With our functions made, we can now scrape all of the available "Hearings" data:
+
+```{r get.data}
+start.date <- 2012
+end.date <- 2017
+
+url <- ps_url(start.date, end.date)
+
+url.data <- url %>%
+        map(read_html) %>%
+        map(html_nodes, "p") %>%
+        map(html_text)
+        
+# View results
+head(url.data[[1]], 2)
+
+```
+
+### How to clean the data
+
+Ok good. It worked. Let's clean it up some by removing that first paragraph, and segregating it by case rather than by line:
+
+```{r clean.data}
+url.data.clean <- list()
+
+# Remove preamble
+for (i in 1:length(url.data)) {
+        url.data.clean[i] <- list(i = url.data[[i]][-1])
+        
+}
+
+# Separate by case, instead of by sentence/line
+url.data.clean <- url.data.clean %>%
+        map(paste, collapse = " ") %>%
+        textclean::replace_white() %>%
+        map(strsplit, split = "(?<=.)(?=Member: )", perl = TRUE)
+
+# Label list by year-month
+names(url.data.clean) <- paste(ps_year(start.date, end.date), 
+                               ps_month(),"",
+                               sep = "_")
+
+
+
+```
+
+And now, let's put everything in a data frame instead of working with lists, because I'm not as familiar with lists...
+
+```{r data.frame}
+# Establish number of entries
+n <- url.data.clean %>%
+        unlist() %>%
+        length()
+
+# Skeleton data frame
+url.data.df <- tibble(date = rep(NA, n),
+                      name = NA,
+                      gender = NA,
+                      text = NA)
+
+# Label date
+url.data.df$date <- url.data.clean %>%
+        unlist() %>%
+        names()
+
+# Extract year
+url.data.df$year <- url.data.df$date %>%
+        str_extract("20[0-9]+")
+
+# Extract month
+url.data.df$month <- url.data.df$date %>%
+        str_extract("[A-Za-z]+")
+
+# Place full text into `text` column
+url.data.df$text <- url.data.clean %>%
+        map(1) %>%
+        unlist() %>%
+        textclean::replace_white()
+
+```
+
+Let's take a look to see what our data frame looks like righth now:
+
+```{r view.data, echo = F}
+kable(url.data.df %>% head(1), "html") %>%
+    kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+Perfect. That's exactly what we are looking for (namely a structured view of the unstructured entries in Professionally Speaking).
+
+Let's continue our processing steps to extract the name of the teacher:
+
+```{r name}
+## Extract name
+# First, we need to add spaces so all words are separated by a space
+url.data.df$text <- url.data.df$text %>%
+        map(str_replace_all, "([0-9a-zA-Z])([D|R])", "\\1 \\2")
+
+# Next, we add a [space] after ":"
+url.data.df$text <- url.data.df$text %>%
+        map(str_replace_all, "([:])(.)", "\\1 \\2")
+
+
+# Looking for all words after "Member: " and before "Registration|Decision"
+url.data.df$name <- url.data.df$text %>%
+        str_extract("(?s)(?<=Member: )(.*?)(?= (Reg|Dec))") %>%
+        textclean::replace_white()
+
+```
+
+```{r view.data2, echo = F}
+kable(url.data.df %>% head(1), "html") %>%
+    kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+Let's now extract the "Decision":
+
+```{r decision}
+## Extract Decision
+# Looking for all words after "Decision: " and before "Registration|Decision"
+url.data.df$decision <- url.data.df$text %>%
+        str_extract("(?s)(?<=Decision: )(.*?)(?= A )")
+
+```
+
+```{r view.data3, echo = F}
+kable(url.data.df %>% head(1), "html") %>%
+    kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+Let's find the gender of the teacher:
+
+```{r gender}
+# If "he" is mentioned than gender = male, otherwise gender = female
+is_male <- function(txt) {
+        tok <- tokenizers::tokenize_words(txt) %>%
+                unlist()
+        sum.he <- sum(tok == "he" | tok == "him")
+        sum.she <- sum(tok == "she" | tok == "her")
+        
+        if (sum.he > sum.she) {
+                return("male")
+        } else {
+                return("female")
+        }
+
+}
+
+url.data.df$gender <- url.data.df$text %>%
+        map(is_male)
+
+```
+
+## 2. Full table
+
+```{r table, echo = F}
+url.data.df %>%
+        select(name, gender, year, month, decision, text) %>%
+        kable("html") %>%
+        kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
