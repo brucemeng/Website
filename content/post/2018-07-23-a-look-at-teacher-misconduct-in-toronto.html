@@ -61,14 +61,18 @@ ps_url &lt;- function(start.year, end.year) {
 }</code></pre>
 <p>With our functions made, we can now scrape all of the available “Hearings” data:</p>
 <pre class="r"><code>start.date &lt;- 2012
-end.date &lt;- 2017
+end.date &lt;- 2018
 
 url &lt;- ps_url(start.date, end.date)
+# Use possibly to process urls not yet available
+read_url_possibly &lt;- possibly(read_html, otherwise = NULL)
+nodes_possibly &lt;- possibly(html_nodes, otherwise = NULL)
+text_possibly &lt;- possibly(html_text, otherwise = NULL)
 
 url.data &lt;- url %&gt;%
-        map(read_html) %&gt;%
-        map(html_nodes, &quot;p&quot;) %&gt;%
-        map(html_text)
+        map(read_url_possibly) %&gt;%
+        map(nodes_possibly, &quot;p&quot;) %&gt;%
+        map(text_possibly)
         
 # View results
 head(url.data[[1]], 2)</code></pre>
@@ -7076,6 +7080,366 @@ Revocation, Fine, Costs <br><br>
 </td>
 <td style="text-align:left;">
 Member: Kenneth Gavin Bernard Williamson Registration No: 150105 Decision: Revocation, Fine, Costs <br><br> A Discipline Committee panel revoked the certificate of College member Kenneth Gavin Bernard Williamson for engaging in repeated violent sexual abuse of a child. <br><br> Williamson sexually exploited a boy repeatedly over a long period of time. He gained access to him through a program meant to help vulnerable youth. Certified to teach in June 1980, Williamson did not attend the hearing on December 5, 2016, nor was he represented by legal counsel. <br><br> Williamson was convicted of buggery, indecent assault and gross indecency. He was sentenced to four years’ imprisonment. The criminal charges were ultimately stayed due to an unreasonable delay in the courts. The Court of Appeal did not overturn the factual findings made by the trial judge or the fact that a jury had found Williamson guilty. The Supreme Court of Canada only dealt with the issue of unreasonable delay and did not consider the factual findings made by the trial judge. <br><br> The Discipline Committee panel found Williamson guilty of professional misconduct and ordered that his Certificate of Qualification and Registration be revoked. <br><br> It also imposed a $5,000 fine and costs of $10,839. <br><br> The panel imposed the fine for a number of reasons. It found that the member’s conduct was one of the worst violations a person in a position of trust could commit upon a child. Williamson showed no remorse for his conduct during his criminal trial, did not acknowledge the tremendous damage his abuse had inflicted upon the victim, and did not participate in the College proceeding. <br><br> The panel found the costs were warranted given Williamson’s rationale for failing to participate in these proceedings — namely that he was financially secure and did not plan to teach again and, therefore, did not need to engage in the College’s processes. <br><br> By failing to communicate or engage in discussions with the College, Williamson required the College to incur the full costs of a contested hearing, which placed significant emotional burden upon the witness in this case. <br><br> In its decision, the panel stated, “The Member abused a vulnerable child who saw him as a father figure. The Member has preyed on a child for his own sexual gratification, and he should never again have the privilege of being certified as a teacher in Ontario.” <br><br> The panel added that the sustained sexual abuse had a significant detrimental effect on the victim’s mental health and his quality of life. The abuse damaged him psychologically and caused him lifelong pain.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Raymond Nicholas Allam
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Raymond Nicholas Allam Registration No: 475667 Decision: Suspension, reprimand, conditions <br><br> A Discipline Committee panel suspended the certificate of Raymond Nicholas Allam, a teacher formerly employed by the Rainy River District School Board, for inappropriate conduct. <br><br> Allam engaged in several incidents of inappropriate and non-consensual grabbing or attempted grabbing of his colleagues’ genitals. These occurred when he had consumed substantial amounts of alcohol. <br><br> This matter was heard by the panel on November 20, 2017. Allam, who was certified to teach in June 2004, attended the hearing remotely via video conference. He had legal representation. <br><br> The Discipline Committee panel found him guilty of professional misconduct and ordered that his teaching certificate be suspended for three months. <br><br> He was directed to appear before the panel to receive a reprimand. <br><br> It also ordered him to successfully complete, at his own expense, a course on professional interactions and boundary violations. He needs to do so prior to returning to teaching or any position for which a Certificate of Qualification and Registration is required. <br><br> In its written decision, the panel stated, “Even when they are not in an educational setting and are not interacting directly with students, members must maintain a sense of professionalism at all times.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Gaetano Aversano, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Gaetano Aversano, OCT Registration No: 257650 Decision: Reprimand, conditions <br><br> A Discipline Committee panel ordered Gaetano Aversano, a teacher at the Durham Catholic District School Board, to be reprimanded for a pattern of inappropriate conduct. <br><br> Aversano, who was certified to teach in June 1988, attended the October 4, 2017, hearing. He was represented by legal counsel. <br><br> Aversano repeatedly made students feel uncomfortable by sitting behind them on the same chair on three separate occasions, hugging a student, touching the head, face, hair and cheeks of female students, and touching or rubbing students’ shoulders as he leaned over their desks to check their work. <br><br> The Discipline Committee panel found him guilty of professional misconduct and ordered that he appear before it, immediately after the hearing, to receive a reprimand. <br><br> In addition, the panel ordered a series of conditions, including: <br><br> In its written decision, the panel expressed its concern that he “continued to engage in inappropriate behaviour in the classroom despite having been admonished in the past.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+David William Bradley
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Revocation, reprimand <br><br>
+</td>
+<td style="text-align:left;">
+Member: David William Bradley Registration No: 101185 Decision: Revocation, reprimand <br><br> A Discipline Committee panel revoked the Certificate of Qualification and Registration of David William Bradley, a former teacher employed by the Trillium Lakelands District School Board, who was convicted of crimes related to sexual abuse. <br><br> Licensed to teach in June 1983, Bradley did not attend the hearing on November 8, 2017, nor was he represented by legal counsel. <br><br> Bradley sexually abused three boys. <br><br> He was found guilty of two criminal offences: luring a person under 16 years old by means of telecommunication and making sexually explicit material available to a person under 16 years old. <br><br> He was sentenced to 90 days’ incarceration to be served intermittently and concurrently on each conviction. He was also placed on three years’ probation and made subject to a number of ancillary orders. <br><br> The Discipline Committee panel found him guilty of professional misconduct and directed the Registrar to revoke his Certificate of Qualification and Registration. <br><br> He was also directed to appear before the panel to receive a reprimand. <br><br> In its written decision, the panel stated, “The Member has abused his position of trust and authority in the gravest manner.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Paul Christopher Carter
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Paul Christopher Carter Registration No: 489421 Decision: Suspension, reprimand, conditions <br><br> A Discipline Committee panel suspended the certificate of Paul Christopher Carter, a teacher employed by the Halton District School Board, for engaging in inappropriate personal electronic communications and demonstrating favouritism to a student. <br><br> This matter was heard by the panel on October 26, 2017. Carter, who was certified to teach in June 2005, attended the hearing with his legal counsel. <br><br> His inappropriate and personal communications occurred over approximately six months. <br><br> The Discipline Committee panel found Carter guilty of professional misconduct and ordered that his teaching certificate be suspended for two months. He was directed to appear before it to receive a reprimand. <br><br> The panel also ordered him to successfully complete, at his own expense, a course on boundary violations. He needs to do so prior to starting a teaching position or any position for which a Certificate of Qualification and Registration is required. <br><br> In its written decision, the panel stated, “Members of the teaching profession hold a unique position of trust and authority, and the Member abused this position in a concerning manner.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Ryan Paul Gabourie, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Ryan Paul Gabourie, OCT Registration No: 446165 Decision: Reprimand, conditions <br><br> A Discipline Committee panel reprimanded Ryan Paul Gabourie, a teacher employed by the Hastings and Prince Edward District School Board, for inappropriate conduct. <br><br> This matter was heard by the panel on October 25, 2017. Gabourie, who was certified to teach in May 2001, attended the hearing with his legal counsel. <br><br> Gabourie involved himself in a serious matter concerning two students that he ought to have known should be handled by the appropriate authorities, and thus interfered with the school and the police investigations. <br><br> The Discipline Committee panel found Gabourie guilty of professional misconduct and directed him to appear before it to receive a reprimand. <br><br> It also ordered him to successfully complete, at his own expense, a course on ethical practice. He must do so within 90 days of the panel’s order. <br><br> In its written decision, the panel stated, “The Committee finds that the Member displayed poor professional judgment.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Julie Rose Gionest
+</td>
+<td style="text-align:left;width: 2%; ">
+female
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Julie Rose Gionest Registration No: 478848 Decision: Reprimand, conditions <br><br> A Discipline Committee panel ordered that Julie Gionest, a former teacher with the Peel District School Board, be reprimanded for inappropriate conduct. <br><br> Gionest repeatedly made discriminatory, sexually explicit and disrespectful comments over the course of one year. <br><br> This matter was heard by the panel on November 22, 2017. Gionest, who was certified to teach in June 2004, did not attend the hearing but had legal representation. <br><br> The Discipline Committee panel found Gionest guilty of professional misconduct and directed that she receive a reprimand. <br><br> It also ordered her to successfully complete, at her own expense, a course on boundary violations and sensitivity issues. She must do so prior to starting a teaching position or any position for which a Certificate of Qualification and Registration is required. <br><br> In its written decision, the panel stated, “Members of the profession are expected to behave respectfully and to foster collaborative, safe and supporting learning communities.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Lubomir Iason
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Revocation <br><br>
+</td>
+<td style="text-align:left;">
+Member: Lubomir Iason Registration No: 491279 Decision: Revocation <br><br> A Discipline Committee panel revoked the teaching certificate of Lubomir Iason, a former teacher with the Hamilton-Wentworth Catholic District School Board, for sexually abusing a student. <br><br> Certified to teach in March 2005, Iason did not attend the hearing on October 25, 2017, nor was he represented by legal counsel. Iason engaged in sexual and psychological or emotional abuse of a student. <br><br> He was found guilty of sexual interference in a criminal court. He was sentenced to 90 days’ intermittent jail, three years’ probation and a number of ancillary orders. <br><br> The panel found Iason guilty of professional misconduct and ordered that his Certificate of Qualification and Registration be revoked. <br><br> In its decision, the panel stated, “The Committee found that the Member’s conduct toward the young female was abhorrent and reprehensible. The Member’s act of sexual misconduct was also psychologically and emotionally abusive to the victim.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Roger Bradley Jaarsma, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Roger Bradley Jaarsma, OCT Registration No: 470895 Decision: Reprimand, conditions <br><br> A Discipline Committee panel reprimanded Roger Bradley Jaarsma, a teacher employed by the Greater Essex County District School Board, for a pattern of inappropriate conduct. <br><br> Jaarsma, who was certified to teach in August 2003, attended the October 2, 2017, hearing and had legal representation. <br><br> Jaarsma repeatedly made inappropriate comments during class, used sexual innuendo and profane language, and made references to drugs and drug paraphernalia. <br><br> The Discipline Committee panel found him guilty of professional misconduct and ordered that he appear before it after the hearing to receive a reprimand. <br><br> In addition, he was directed to complete a course of instruction, at his own expense, regarding appropriate boundaries with students and classroom management. He needs to do so prior to returning to a teaching position or a position requiring a Certificate of Qualification or Registration. <br><br> In its written decision, the panel stated, “The Member’s misguided attempts to use inappropriate humour to purportedly motivate his students indicate a lack of judgment and made several students feel uncomfortable in his class.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Michael Anthony Lewis
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Revocation <br><br>
+</td>
+<td style="text-align:left;">
+Member: Michael Anthony Lewis Registration No: 176432 Decision: Revocation <br><br> A Discipline Committee panel revoked the teaching certificate of Michael Anthony Lewis, a former teacher with the Toronto Catholic District School Board, for engaging in a repeated pattern of completely inappropriate, aggressive and unprofessional conduct toward students and fellow teachers. His pattern continued despite multiple warnings from the board and attempts at rehabilitation. <br><br> Certified to teach in June 1986, Lewis did not attend the hearing on November 14, 2017, nor was he represented by legal counsel. <br><br> Lewis’s unprofessional conduct included racist and homophobic remarks and creating a hostile learning environment. He also had an inappropriate relationship with a former, recently graduated student. Within a year after her graduation, they were living together. He repeatedly failed to display professional judgment and maintain appropriate boundaries with students and staff. <br><br> The panel found Lewis guilty of professional misconduct and ordered that his Certificate of Qualification and Registration be revoked. In its decision, the panel stated, “The College does not tolerate this type of conduct and the Member has accordingly forfeited the privilege of holding a teaching certificate and being a member of the teaching profession in Ontario.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Walter Lolli, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand <br><br>
+</td>
+<td style="text-align:left;">
+Member: Walter Lolli, OCT Registration No: 277491 Decision: Reprimand <br><br> A Discipline Committee panel ordered Walter Lolli, a teacher employed by the Peel District School Board, to be reprimanded for inappropriate conduct. <br><br> Lolli, who was certified to teach in August 1997, attended the hearing on November 22, 2017, and was represented by legal counsel. <br><br> The member pushed a student through a door, grabbed him by the collar and verbally intimidated and belittled him. <br><br> Lolli pleaded guilty to an assault charge in a criminal court and received an absolute discharge. <br><br> The Discipline Committee panel found Lolli guilty of professional misconduct and ordered that he appear before it to receive a reprimand. <br><br> In its written decision, the panel stated, “The Member’s conduct was disrespectful, he failed to provide a safe and supportive learning environment, he modelled inappropriate behaviour, and he demonstrated a significant lack of professional judgment.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Craig James Lusk
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Craig James Lusk Registration No: 440833 Decision: Suspension, reprimand, conditions <br><br> A Discipline Committee panel suspended the certificate of Craig James Lusk, a teacher employed by the Sudbury Catholic District School Board, for a repeated pattern of sexually abusive conduct. <br><br> This matter was heard by the panel on September 25 and 26, 2017. Lusk, who was certified to teach in May 2001, was self-represented but did not attend the hearing. <br><br> Lusk repeatedly rubbed a student’s upper thigh on the back of her leg above her knee. He did so over the course of one and a half academic years. <br><br> In addition, the panel heard that he favoured the student and singled her out from her peers. He also angrily lashed out at her. He did so on multiple occasions. <br><br> The Discipline Committee panel found Lusk guilty of professional misconduct and ordered that his teaching certificate be suspended for six months. <br><br> He was directed to appear before the panel to receive a reprimand. It also ordered him to successfully complete, at his own expense, a course on appropriate boundaries and boundary violation issues, and a course regarding professional ethics. <br><br> He needs to appear before the panel to receive the reprimand and complete the courses prior to starting or resuming a teaching position for which a Certificate of Qualification and Registration is required. <br><br> In its written decision, the panel said, “The Member’s conduct demonstrated a gross abuse of his position of trust and authority and it undermined the public’s confidence in the teaching profession.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Lesley Jane-Ann MacKellar
+</td>
+<td style="text-align:left;width: 2%; ">
+female
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand <br><br>
+</td>
+<td style="text-align:left;">
+Member: Lesley Jane-Ann MacKellar Registration No: 261773 Decision: Suspension, reprimand <br><br> A Discipline Committee panel suspended the certificate of Lesley Jane- Ann MacKellar, a former vice-principal at the Upper Canada District School Board, for dishonest conduct. <br><br> She altered five final course marks of a student. She did so without the knowledge or authorization of the school principal after report cards had been completed and signed by the principal. <br><br> MacKellar, who was certified to teach in June 1992, attended the October 30, 2017, hearing. She was represented by legal counsel. <br><br> The Discipline Committee panel found her guilty of professional misconduct and ordered that her teaching certificate be suspended for four months. She was also directed to appear before it, immediately after the hearing, to receive a reprimand. <br><br> In its written decision, the panel stated, “Vice-principals are expected to model ethical behaviour to the entire school community at all times, and the Member’s actions in this case demonstrate a significant lapse in judgment on her part.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+David Michael McClenaghan, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: David Michael McClenaghan, OCT Registration No: 656056 Decision: Reprimand, conditions <br><br> A Discipline Committee panel reprimanded David Michael McClenaghan, a teacher at the Toronto District School Board. He was convicted of assaulting an individual with whom he had a personal relationship. <br><br> McClenaghan, who was certified to teach in July 2014, attended the hearing on October 11, 2017, and had legal representation. <br><br> The Discipline Committee panel found McClenaghan guilty of professional misconduct and ordered that he appear before it after the hearing to receive a reprimand. <br><br> In addition, he was directed to complete a course of instruction, at his own expense, regarding professional boundaries. He needs to do so within 90 days of the order’s date. <br><br> In its written decision, the panel stated, “Members of the teaching profession are expected to uphold the standards of the profession and to model appropriate behaviour both in and out of the classroom at all times. The Member failed to meet these expectations and, through criminal conduct, eroded the public’s trust and confidence in teachers and harmed the reputation of the teaching profession.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Cynthia Ann Nicolson, OCT
+</td>
+<td style="text-align:left;width: 2%; ">
+female
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Cynthia Ann Nicolson, OCT Registration No: 172452 Decision: Reprimand, conditions <br><br> A Discipline Committee panel reprimanded Cynthia Ann Nicolson, a teacher employed by the Near North District School Board, for inappropriate behaviour involving multiple students over the course of at least two academic years. <br><br> Nicolson, who was certified to teach in June 1992, did not attend the public hearing on October 26, 2017, but was represented by legal counsel. <br><br> The panel found that she had a pattern of inappropriate, unprofessional and abusive behaviour toward students, despite the school administration’s interventions and the board’s disciplinary measures. <br><br> Nicolson was impatient with students and made them feel singled out in front of their peers, ridiculed, bullied, upset, scared and embarrassed. <br><br> The panel ordered that she appear before it to receive a reprimand. She was also directed to complete, at her own expense, an Additional Qualification course covering the development of foundations of professional practice and commitment to students’ well-being. <br><br> She needs to do so prior to undertaking any teaching position or any other position for which a Certificate of Qualification and Registration is required. <br><br> In its written decision, the panel stated, “Members of the teaching profession are expected to provide students with a safe learning environment in which they can learn and develop.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Jody Lynn Page
+</td>
+<td style="text-align:left;width: 2%; ">
+female
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Jody Lynn Page Registration No: 459322 Decision: Suspension, reprimand, conditions <br><br> A Discipline Committee panel suspended the certificate of Jody Lynn Page, a teacher employed by the Hamilton-Wentworth District School Board, for inappropriate physical contact with multiple students. <br><br> Page, who was certified to teach in July 2002, attended the hearing on October 25, 2017, and had legal representation. <br><br> The physical conduct included using her leg to strike a student in the shin. <br><br> She was charged with assault and assault with a weapon. Both charges were subsequently withdrawn upon the member entering into a peace bond with conditions. <br><br> The Discipline Committee panel found her guilty of professional misconduct. It ordered that her teaching certificate be suspended for two months and that she appear before the panel to receive a reprimand. <br><br> In addition, Page was directed to complete, at her own expense, a course(s) covering classroom management, anger management and appropriate discipline techniques. She was directed to do so within 90 days of the order’s date. <br><br> In its written decision, the panel stated, “Members are expected to treat students with respect at all times and conduct themselves in a composed and professional manner, and to do so without using unnecessary physical force, even under challenging circumstances.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Alexander Jeremy Patry
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Suspension, reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: Alexander Jeremy Patry Registration No: 524076 Decision: Suspension, reprimand, conditions <br><br> A Discipline Committee panel suspended the certificate of Alexander Jeremy Patry, a teacher formerly employed by the Hamilton-Wentworth District School Board, for a wide range of inappropriate conduct. <br><br> This matter was heard by the panel on November 6, 2017. Patry, who was certified to teach in October 2007, attended the hearing with his legal counsel. Patry repeatedly met with a student alone in his classroom and, on at least one occasion, discussed personal issues with that student behind closed doors. Over the course of a couple of months, he also exchanged inappropriate electronic communications with another female student, such as wanting to hug her. He also offered her a gift. <br><br> The Discipline Committee panel found Patry guilty of professional misconduct and ordered that his teaching certificate be suspended for six months. <br><br> He was directed to appear before the panel to receive a reprimand. The panel also ordered him to successfully complete, at his own expense, courses on appropriate boundaries and boundary violation issues and professional ethics. He needs to complete the courses within three months after the date of the panel’s order. <br><br> In its written decision, the panel said, “The Committee is concerned by the Member’s failure to maintain appropriate boundaries with these students.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+Véronique Josee Vallée
+</td>
+<td style="text-align:left;width: 2%; ">
+female
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Revocation <br><br>
+</td>
+<td style="text-align:left;">
+Member: Véronique Josee Vallée Registration No: 629289 Decision: Revocation <br><br> A Discipline Committee panel revoked the Certificate of Qualification and Registration of Véronique Josee Vallée, a former teacher employed by the Conseil scolaire catholique de district des Grandes Rivières, for sexually abusing a student. <br><br> Licensed to teach in June 2012, Vallée did not attend the hearing on October 3, 2017, but was represented by legal counsel. <br><br> Vallée engaged in an inappropriate personal and sexual relationship with a student. She also engaged in inappropriate electronic communications with the student. <br><br> The Discipline Committee panel found her guilty of professional misconduct and directed the Registrar to revoke her Certificate of Qualification and Registration. <br><br> In its written decision, the panel stated, “The Member abused the trust and authority associated with her role as a teacher and undermined public confidence in the teaching profession. As a result, the Member has lost the privilege of holding a Certificate of Qualification and Registration in Ontario.” <br><br>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 2%; font-weight: bold;">
+David William Vesey
+</td>
+<td style="text-align:left;width: 2%; ">
+male
+</td>
+<td style="text-align:left;width: 2%; ">
+2018
+</td>
+<td style="text-align:left;width: 2%; ">
+June
+</td>
+<td style="text-align:left;width: 2%; ">
+Reprimand, conditions <br><br>
+</td>
+<td style="text-align:left;">
+Member: David William Vesey Registration No: 145851 Decision: Reprimand, conditions <br><br> A Discipline Committee panel reprimanded David William Vesey, a teacher formerly employed by the Ottawa- Carleton District School Board. He repeatedly failed to ensure student safety. <br><br> This matter was heard by the panel on October 5, 2017. Vesey, who was certified to teach in September 1976, attended part of the hearing remotely via video conference. He had legal representation. <br><br> His inappropriate behaviour occurred while he conducted demonstrations in his class. One demonstration was called “oxygen deprivation,” which consists of placing a white plastic bag over a student’s head. The experiment scared the student <br><br> The Discipline Committee panel found him guilty of professional misconduct and directed him to appear before it to receive a reprimand. It also ordered him to successfully complete, at his own expense, a course on safety procedures and maintaining a safe environment in the classroom. He needs to do so if he wants to teach or work in any position for which a Certificate of Qualification and Registration is required. <br><br> The Discipline Committee panel found him guilty of professional misconduct and directed him to appear before it to receive a reprimand. It also ordered him to successfully complete, at his own expense, a course on safety procedures and maintaining a safe environment in the classroom. He needs to do so if he wants to teach or work in any position for which a Certificate of Qualification and Registration is required.
 </td>
 </tr>
 </tbody>

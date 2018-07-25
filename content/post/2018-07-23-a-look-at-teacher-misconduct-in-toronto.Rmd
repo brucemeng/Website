@@ -75,14 +75,18 @@ With our functions made, we can now scrape all of the available "Hearings" data:
 
 ```{r get.data}
 start.date <- 2012
-end.date <- 2017
+end.date <- 2018
 
 url <- ps_url(start.date, end.date)
+# Use possibly to process urls not yet available
+read_url_possibly <- possibly(read_html, otherwise = NULL)
+nodes_possibly <- possibly(html_nodes, otherwise = NULL)
+text_possibly <- possibly(html_text, otherwise = NULL)
 
 url.data <- url %>%
-        map(read_html) %>%
-        map(html_nodes, "p") %>%
-        map(html_text)
+        map(read_url_possibly) %>%
+        map(nodes_possibly, "p") %>%
+        map(text_possibly)
         
 # View results
 head(url.data[[1]], 2)
