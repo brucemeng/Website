@@ -126,22 +126,22 @@ n <- url.data.clean %>%
         length()
 
 # Skeleton data frame
-url.data.df <- tibble(date = rep(NA, n),
+url.data.df <- tibble(id = rep(NA, n),
                       name = NA,
                       gender = NA,
                       text = NA)
 
 # Label date
-url.data.df$date <- url.data.clean %>%
+url.data.df$id <- url.data.clean %>%
         unlist() %>%
         names()
 
 # Extract year
-url.data.df$year <- url.data.df$date %>%
+url.data.df$year <- url.data.df$id %>%
         str_extract("20[0-9]+")
 
 # Extract month
-url.data.df$month <- url.data.df$date %>%
+url.data.df$month <- url.data.df$id %>%
         str_extract("[A-Za-z]+")
 
 # Place full text into `text` column
@@ -214,8 +214,8 @@ Let's find the gender of the teacher:
 is_male <- function(txt) {
         tok <- tokenizers::tokenize_words(txt) %>%
                 unlist()
-        sum.he <- sum(tok == "he" | tok == "him")
-        sum.she <- sum(tok == "she" | tok == "her")
+        sum.he <- sum(tok == "he" | tok == "him" | tok == "himself")
+        sum.she <- sum(tok == "she" | tok == "her" | tok == "herself")
         
         if (sum.he > sum.she) {
                 return("male")
@@ -238,6 +238,6 @@ url.data.df %>%
         kable("html", escape = F) %>%
         kable_styling(c("striped", "hover"),
                       font_size = 10) %>%
-        column_spec(1, bold = T, width = "1em") %>%
-        column_spec(2:5, width = "1em")
+        column_spec(1, bold = T, width = "2%") %>%
+        column_spec(2:5, width = "2%")
 ```
