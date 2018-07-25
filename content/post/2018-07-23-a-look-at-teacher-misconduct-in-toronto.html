@@ -15,14 +15,16 @@ tags:
 <p>A couple of years back there was a news article written about someone that I went to high school with. We were in the same grade and we shared many classes together, including some extra-curricular classes like band class. We were never that close, and we never stayed in contact after high school, but nonetheless I recognized the name and picture when I saw it.</p>
 <p>It turns out that he made the news because he was charged with “sexual exploitation” of a student of his while he was a teacher at a high school that was about 10 min away from where I now live. I recently just drove by that high school, and that prompted me to look into that case and whether he was found guilty or not (he was).</p>
 <p>While exploring the internet for the results of his hearing, I found that the Toronto District School Board has a website that lists all offenses from presumably all teachers, going as far back as 2012 or so. It piqued my interest to explore this dataset a bit more fully than to simply look up a past classmate’s fate.</p>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
 <div id="obtaining-and-cleaning-the-data" class="section level2">
 <h2>1. Obtaining and cleaning the data</h2>
 <div id="how-to-scrape-the-data" class="section level3">
 <h3>How to scrape the data</h3>
 <p>The data from the “Professionally Speaking” website is split by month across many years.</p>
 <div class="figure">
-<img src="pic%20as%20example" />
-
+<img src="/img/teachers/ps.website.PNG" alt="Professionally Speaking Website" />
+<p class="caption">Professionally Speaking Website</p>
 </div>
 <p>I decided to make the urls from a couple of small functions:</p>
 <pre class="r"><code># Function to loop through years
@@ -119,7 +121,7 @@ url.data.df$text &lt;- url.data.clean %&gt;%
         map(1) %&gt;%
         unlist() %&gt;%
         textclean::replace_white()</code></pre>
-<p>Let’s take a look to see what our data frame looks like righth now:</p>
+<p>Let’s take a look to see what our data frame looks like right now:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -7073,4 +7075,5 @@ Member: Kenneth Gavin Bernard Williamson Registration No: 150105 Decision: Revoc
 </tr>
 </tbody>
 </table>
+</div>
 </div>
