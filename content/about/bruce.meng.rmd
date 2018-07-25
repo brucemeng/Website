@@ -13,8 +13,6 @@ Hi!
 
 My name is Bruce.
 
-I am currently employed with BMO Financial Group, one of the largest banks in Canada.
-
 I have concentrated my studies around economics, accounting, and finance while at the University of Toronto and have managed to also obtain an accounting designation. My current focus is on integrating various data science concepts into classical financial analysis and modelling. 
 
 I intend to use this website as a medium to collect, write, and share my adventures in data science.
@@ -27,3 +25,6 @@ If you enjoyed my site, check out David Robinson's excellent posts at **[Varianc
 
 Right now, I'm probably most famous for the creation of **[autoSmry](../../project/autosmry/)**. Thank you **[Reddit](https://www.reddit.com/r/dataisbeautiful/comments/8m9ha6/i_created_a_tool_to_automatically_extract_the/)** for your amazing support!
 
+**Disclaimer**
+
+Obligatory disclaimer as required by my employer: all views expressed on this site and on social media are my own and do not represent my employer in any way.

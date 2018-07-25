@@ -1,8 +1,8 @@
 ---
-title: A look at teacher misconduct in Toronto...
+title: A look at teacher misconduct in Canada...
 author: Bruce Meng
 date: '2018-07-23'
-slug: a-look-at-teacher-misconduct-in-toronto
+slug: a-look-at-teacher-misconduct-in-canada
 categories: []
 tags:
   - R
@@ -25,6 +25,8 @@ While exploring the internet for the results of his hearing, I found that the To
 
 # Observations
 [blah blah]
+
+
 [Put reddit front page worthy visualization here]
 
 # Appendix
@@ -102,7 +104,7 @@ for (i in 1:length(url.data)) {
 
 # Separate by case, instead of by sentence/line
 url.data.clean <- url.data.clean %>%
-        map(paste, collapse = "\n") %>%
+        map(paste, collapse = "//<br//>") %>%
         textclean::replace_white() %>%
         map(strsplit, split = "(?<=.)(?=Member: )", perl = TRUE)
 
@@ -153,7 +155,7 @@ url.data.df$text <- url.data.clean %>%
 Let's take a look to see what our data frame looks like right now:
 
 ```{r view.data, echo = F}
-kable(url.data.df %>% head(1), "html") %>%
+kable(url.data.df %>% head(1), "latex") %>%
     kable_styling(c("striped", "hover"),
                       font_size = 10)
 
@@ -192,7 +194,7 @@ Let's now extract the "Decision":
 
 ```{r decision}
 ## Extract Decision
-# Looking for all words after "Decision: " and before "Registration|Decision"
+# Looking for all words after "Decision: " and before "A panel/etc."
 url.data.df$decision <- url.data.df$text %>%
         str_extract("(?s)(?<=Decision: )(.*?)(?= A )")
 
