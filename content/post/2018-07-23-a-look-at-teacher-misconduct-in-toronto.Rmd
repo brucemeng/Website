@@ -252,7 +252,8 @@ url.data.df %>%
                 style = "bootstrap",
                 rownames = F,
                 options = list(
-                        columnDefs = list(list(width = "2%", targets = 0:4))
+                        columnDefs = list(list(width = "10px", targets = 0:4)),
+                        lengthMenu = c(5, 10, 20)
                 )
         ) %>%
         DT::formatStyle(columns = 1:6, "vertical-align" = "top") %>%
