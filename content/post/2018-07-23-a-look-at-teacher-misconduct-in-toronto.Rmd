@@ -254,7 +254,7 @@ url.data.df %>%
                 options = list(
                         columnDefs = list(list(width = "100em", targets = 5)),
                         lengthMenu = c(5, 10, 20),
-                        autoWidth = T
+                        autoWidth = F
                 )
         ) %>%
         DT::formatStyle(columns = 1:6, "vertical-align" = "top") %>%
