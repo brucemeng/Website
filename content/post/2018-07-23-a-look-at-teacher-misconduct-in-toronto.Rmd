@@ -104,7 +104,7 @@ for (i in 1:length(url.data)) {
 
 # Separate by case, instead of by sentence/line
 url.data.clean <- url.data.clean %>%
-        map(paste, collapse = "<br><br>") %>%
+        map(paste, collapse = " <br><br> ") %>%
         textclean::replace_white() %>%
         map(strsplit, split = "(?<=.)(?=Member: )", perl = TRUE)
 
@@ -155,7 +155,7 @@ url.data.df$text <- url.data.clean %>%
 Let's take a look to see what our data frame looks like right now:
 
 ```{r view.data, echo = F}
-kable(url.data.df %>% head(1), "latex") %>%
+kable(url.data.df %>% head(1), "html", escape = F) %>%
     kable_styling(c("striped", "hover"),
                       font_size = 10)
 
@@ -184,7 +184,7 @@ url.data.df$name <- url.data.df$text %>%
 ```
 
 ```{r view.data2, echo = F}
-kable(url.data.df %>% head(1), "html") %>%
+kable(url.data.df %>% head(1), "html", escape = F) %>%
     kable_styling(c("striped", "hover"),
                       font_size = 10)
 
@@ -201,7 +201,7 @@ url.data.df$decision <- url.data.df$text %>%
 ```
 
 ```{r view.data3, echo = F}
-kable(url.data.df %>% head(1), "html") %>%
+kable(url.data.df %>% head(1), "html", escape = F) %>%
     kable_styling(c("striped", "hover"),
                       font_size = 10)
 
@@ -235,8 +235,9 @@ url.data.df$gender <- url.data.df$text %>%
 ```{r table, echo = F}
 url.data.df %>%
         select(name, gender, year, month, decision, text) %>%
-        kable("html") %>%
+        kable("html", escape = F) %>%
         kable_styling(c("striped", "hover"),
-                      font_size = 10)
-
+                      font_size = 10) %>%
+        column_spec(1, bold = T, width = "1em") %>%
+        column_spec(2:5, width = "1em")
 ```
