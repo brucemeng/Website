@@ -237,11 +237,25 @@ url.data.df$gender <- url.data.df$text %>%
 ## 2. Full table
 
 ```{r table, echo = F}
+# url.data.df %>%
+#         select(name, gender, year, month, decision, text) %>%
+#         kable("html", escape = F) %>%
+#         kable_styling(c("striped", "hover"),
+#                       font_size = 10) %>%
+#         column_spec(1, bold = T, width = "2%") %>%
+#         column_spec(2:5, width = "2%")
+
+
+
 url.data.df %>%
         select(name, gender, year, month, decision, text) %>%
-        kable("html", escape = F) %>%
-        kable_styling(c("striped", "hover"),
-                      font_size = 10) %>%
-        column_spec(1, bold = T, width = "2%") %>%
-        column_spec(2:5, width = "2%")
+        DT::datatable(
+                escape = F,
+                style = "default",
+                rownames = F
+        ) %>%
+        DT::formatStyle(columns = 1:6, "vertical-align" = "top") %>%
+        DT::formatStyle(columns = 1:6, fontSize = "10px") %>%
+        DT::formatStyle(columns = 1, fontWeight = "bold")
+        
 ```
