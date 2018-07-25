@@ -249,7 +249,7 @@ url.data.df %>%
         select(name, gender, year, month, decision, text) %>%
         DT::datatable(
                 escape = F,
-                style = "default",
+                style = "bootstrap",
                 rownames = F,
                 options = list(
                         columnDefs = list(list(width = "2%", targets = 0:4))
