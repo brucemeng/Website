@@ -30,9 +30,9 @@ While exploring the internet for the results of his hearing, I found that the To
 
 # Observations
 
-## 1. Male teachers represent more than 2x the number of female teachers
-
 ![](/img/teachers/gender.plot.png)
+
+1. First thing that jumped out at me was male teachers represent more than 2x the number of female teachers. I don't have a gender split of the total number of teachers available, but going by my own anecdotal experience, female teachers likely outnumber male teachers. So the fact that male teachers dominate misconduct hearings is even more significant.
 
 
 [Put reddit front page worthy visualization here]
@@ -356,7 +356,8 @@ gender.plot <- ggplot(url.data.df) +
         xlab("") +
         ylab("Number of teachers") +
         theme(legend.position = "none") +
-        labs(caption = "Source: Professionally Speaking 2012-2018")
+        labs(caption = "Source: Professionally Speaking 2012-2018") +
+        ggtitle("Gender of teachers at misconduct hearings")
 
 ```
 
