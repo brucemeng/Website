@@ -245,14 +245,15 @@ url.data.df$gender <- url.data.df$text %>%
 #         column_spec(1, bold = T, width = "2%") %>%
 #         column_spec(2:5, width = "2%")
 
-
-
 url.data.df %>%
         select(name, gender, year, month, decision, text) %>%
         DT::datatable(
                 escape = F,
                 style = "default",
-                rownames = F
+                rownames = F,
+                options = list(
+                        columnDefs = list(list(width = "2%", targets = 0:4))
+                )
         ) %>%
         DT::formatStyle(columns = 1:6, "vertical-align" = "top") %>%
         DT::formatStyle(columns = 1:6, fontSize = "10px") %>%
