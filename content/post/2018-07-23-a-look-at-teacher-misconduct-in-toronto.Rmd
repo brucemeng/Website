@@ -261,7 +261,7 @@ url.data.df %>%
                 rownames = F,
                 options = list(
                         columnDefs = list(list(width = "100em", targets = 5)),
-                        lengthMenu = c(5, 10, 20),
+                        lengthMenu = c(1, 5, 10),
                         autoWidth = F
                 )
         ) %>%
