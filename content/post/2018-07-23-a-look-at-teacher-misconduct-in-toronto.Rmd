@@ -21,7 +21,7 @@ While exploring the internet for the results of his hearing, I found that the To
 
 ## Interactive Exploration
 
-```{r graph, include = F}
+```{r graph, echo = F, warning = F, message = F}
 source("../../data/teachers/scripts/w2v.umap.R")
 source("../../data/teachers/scripts/graph.R")
 
