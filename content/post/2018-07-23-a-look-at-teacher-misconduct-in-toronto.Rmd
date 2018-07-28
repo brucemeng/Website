@@ -21,12 +21,19 @@ While exploring the internet for the results of his hearing, I found that the To
 
 ## Interactive Exploration
 
+### Exploring the text summary of teacher misconduct hearings
+
 ```{r graph, echo = F, warning = F, message = F}
 source("../../data/teachers/scripts/w2v.umap.R")
 source("../../data/teachers/scripts/graph.R")
 
 vis.graph
 ```
+
+### Method
+
+I used a word embedding layer to reconstruct the linguistic context of the words. I then used relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy, they called it uniform manifold approximation and projection, to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.
+
 
 ## Observations
 
@@ -110,6 +117,7 @@ url.data.df %>%
         DT::formatStyle(columns = 1, fontWeight = "bold")
         
 ```
+
 ### 2. Obtaining and cleaning the data
 
 #### How to scrape the data
