@@ -80,21 +80,24 @@ ggsave("../../static/img/teachers/gender.plot.png", height = 2)
 1. First thing that jumped out at me was male teachers represent more than 2x the number of female teachers. I don't have a gender split of the total number of teachers available, but going by my own anecdotal experience, female teachers likely outnumber male teachers. So the fact that male teachers dominate misconduct hearings is even more significant.
 
 2. I was able to identify 6 clusters of words from the text:
-        + Frequency: there were many words that related to how frequent the teacher approached the student(s)
-        + Judgement: this was how the Committee judged the teacher misconduct
-        + Abuse: there were incidents of both physical and mental abuse by teachers
-        + Sexual: sexual behaviour with students
-        + Flirtatious: borderline sexual behaviour with students
-        + Punishment: this was how the teacher was punished for their misconduct
++ Frequency: there were many words that related to how frequent the teacher approached the student(s)
++ Judgement: this was how the Committee judged the teacher misconduct
++ Abuse: there were incidents of both physical and mental abuse by teachers
++ Sexual: sexual behaviour with students
++ Flirtatious: borderline sexual behaviour with students
++ Punishment: this was how the teacher was punished for their misconduct
 
 3. The word "consensual" only appears for female teachers. Male teachers were rude, profane/offensive/disrepectful and in general, more violent.
 
 4. Some odd clusters of text:
-        + hot/cold/wet conditions? - I clustered it under "Torture"
++ hot/cold/wet conditions? - I clustered it under "Torture"
 
 
 ## Appendix
 ### 1. Full dataset
+
+I made the full dataset available to you to explore.
+
 
 ```{r table, echo = F}
 # url.data.df %>%
