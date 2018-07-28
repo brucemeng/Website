@@ -32,7 +32,9 @@ vis.graph
 
 ### Method
 
-I used a word embedding layer to reconstruct the linguistic context of the words. I then used relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy, they called it uniform manifold approximation and projection, to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.
+I used **[autoSmry](../../project/autosmry/)** to help narrow down the words to the most important ones.
+
+I then used a word embedding layer to reconstruct the linguistic context of the words. I then used relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy, they called it uniform manifold approximation and projection, to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.
 
 
 ## Observations
