@@ -39,6 +39,7 @@ tags:
 <h3>Method</h3>
 <p>I used <strong><a href="../../project/autosmry/">autoSmry</a></strong> to help narrow down the words to the most important ones.</p>
 <p>I then used a word embedding layer to reconstruct the linguistic context of the words. After which I used a relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy (they called it uniform manifold approximation and projection) to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.</p>
+<p>The visualization is divided up into words that were exclusively male (in blue), exclusively female (in pink), and words that were in both genders.</p>
 </div>
 </div>
 <div id="observations" class="section level2">
@@ -49,16 +50,17 @@ tags:
 </div>
 <ol style="list-style-type: decimal">
 <li><p>First thing that jumped out at me was male teachers represent more than 2x the number of female teachers. I don’t have a gender split of the total number of teachers available, but going by my own anecdotal experience, female teachers likely outnumber male teachers. So the fact that male teachers dominate misconduct hearings is even more significant.</p></li>
-<li><p>The word “consensual” only appears for female teachers.</p></li>
-<li>I can see a few easy to interpret clusters of text from the hearings:</li>
+<li>I was able to identify 5 clusters of words from the text:</li>
 </ol>
 <ul>
-<li>sexual behaviour with students</li>
-<li>borderline sexual behaviour, but not full on sex (i.e. flirty behaviour)</li>
-<li>physical abuse</li>
-<li>mental abuse</li>
+<li>Frequency: there were many words that related to how frequent the teacher approached the student(s)</li>
+<li>Judgement: this was how the Committee judged the teacher misconduct</li>
+<li>Abuse: there were incidents of both physical and mental abuse by teachers</li>
+<li>Sexual: sexual behaviour with students</li>
+<li>Flirtatious: borderline sexual behaviour with students</li>
 </ul>
-<ol start="4" style="list-style-type: decimal">
+<ol start="2" style="list-style-type: decimal">
+<li><p>The word “consensual” only appears for female teachers.</p></li>
 <li>Some odd clusters of text:</li>
 </ol>
 <ul>
