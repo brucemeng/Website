@@ -36,7 +36,7 @@ I used **[autoSmry](../../project/autosmry/)** to help narrow down the words to 
 
 I then used a word embedding layer to reconstruct the linguistic context of the words. After which I used a relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy (they called it uniform manifold approximation and projection) to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.
 
-The visualization is divided up into words that were exclusively male (in blue), exclusively female (in pink), and words that were in both genders.
+The visualization is divided up into words that were exclusively male (in blue), exclusively female (in pink), and words that were in both genders. While the size of the circle represents how frequently that word came up.
 
 
 ## Observations
@@ -87,7 +87,7 @@ ggsave("../../static/img/teachers/gender.plot.png", height = 2)
         + Flirtatious: borderline sexual behaviour with students
         + Punishment: this was how the teacher was punished for their misconduct
 
-3. The word "consensual" only appears for female teachers.
+3. The word "consensual" only appears for female teachers. Male teachers were rude, profane/offensive/disrepectful and in general, more violent.
 
 4. Some odd clusters of text:
         + hot/cold/wet conditions? - I clustered it under "Torture"
