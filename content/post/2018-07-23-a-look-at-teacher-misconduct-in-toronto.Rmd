@@ -25,7 +25,7 @@ While exploring the internet for the results of his hearing, I found that the To
 source("../../data/teachers/scripts/w2v.umap.R")
 source("../../data/teachers/scripts/graph.R")
 
-
+vis.graph
 ```
 
 ## Observations
@@ -305,61 +305,6 @@ url.data.df %>%
         
 ```
 
-```{r analysis, include=FALSE}
-# #### EDA and final analysis, not shown ####
-# 
-# ## Process text via cleanNLP
-# library(cleanNLP)
-# 
-# # Init cleanNLP
-# cnlp_init_corenlp(language = "en", lib_location = "E:/CoreNLP/stanford-corenlp-full-2018-02-27", verbose = T, anno_level = 2)
-# 
-# # Annotate text
-# misconduct.annotate <- cnlp_annotate(url.data.df$text %>% unlist(), as_strings = T,
-#                                      doc_ids = url.data.df$id,
-#                                      meta = url.data.df)
-# 
-# # Get lemmas
-# misconduct.lemma <- misconduct.annotate$token %>%
-#         select(id, word, lemma, upos) %>%
-#         filter(upos %in% c("VERB", "ADV", "ADJ")) %>%
-#         filter(word != "<br>")
-# 
-# # Addition - filter out stop words
-# stop <- stopwords(language = "en", source = "smart")
-# stop2 <- stopwords(source = "snowball")
-# stop.manual <- c("it", "as", "then")
-# stop.comb <- c(stop, stop2, stop.manual)
-# 
-# misconduct.lemma <- misconduct.lemma %>%
-#         filter(!(lemma %in% stop.comb))
-# 
-# names(misconduct.lemma) <- c("id", "word", "text", "upos")
-# 
-# # Make DFM/DTM
-# misconduct.dfm <- corpus(misconduct.lemma) %>%
-#         dfm() %>%
-#         dfm_trim(termfreq_type = "quantile",
-#                          max_docfreq = 0.25, min_termfreq = 0.98,
-#                          docfreq_type = "prop") %>%
-#         convert(to = "topicmodels")
-# 
-# # Construct LDA Model
-# # @Params
-# params <- list(
-#     burnin = 2500,
-#     iter = 5000,
-#     seed = 1:8,
-#     nstart = 8,
-#     best = T
-# )
-# 
-# # Build model
-# misconduct.lda <- topicmodels::LDA(misconduct.dfm, k = 4,
-#                                  method = "Gibbs",
-#                                  control = params)
-
-```
 
 
 
