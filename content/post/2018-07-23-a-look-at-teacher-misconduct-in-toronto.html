@@ -38,16 +38,21 @@ tags:
 <div id="method" class="section level3">
 <h3>Method</h3>
 <p>I used a word embedding layer to reconstruct the linguistic context of the words. After which I used a relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy (they called it uniform manifold approximation and projection) to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.</p>
-<p>The visualization is then clustered by two levels. First level (the physical cluster of words) is by how close the words are to each other as given by the word embedding layer. Second level (the colour of the words) is by the edge connectedness.</p>
+<p>The visualization is then clustered by two levels. First level (the physical cluster of words) is by how close the words are to each other as given by the word embedding layer. Second level (the colour of the words) is by the edge betweeness centrality.</p>
 </div>
 </div>
 <div id="observations" class="section level2">
 <h2>Observations</h2>
+<p>There are some distinct clusters of topics within the hearing texts. Most notably, there’s a rather large cluster of sexual misconduct. There are a number of additional clusters representing various types of abuse and frequency of misconduct as well.</p>
+<div class="figure">
+<img src="/img/teachers/sex.cluster.PNG" />
+
+</div>
+<p>One additional observation I noticed was that males greatly outnumber females.</p>
 <div class="figure">
 <img src="/img/teachers/gender.plot.png" />
 
 </div>
-<p>There are some distinct clusters of topics within the hearing texts. Most notably, there’s a rather large cluster of sexual misconduct. I’ll leave it up to you to explore the words more fully. The full dataset is also available below.</p>
 </div>
 <div id="appendix" class="section level2">
 <h2>Appendix</h2>
@@ -111,6 +116,8 @@ url.data &lt;- url %&gt;%
         
 # View results
 head(url.data[[1]], 2)</code></pre>
+<pre><code>## [1] &quot;Three-member panels of the Discipline  Committee conduct public hearings  into cases of alleged incompetence or  professional misconduct. The panels  are a mix of elected and appointed  Council members. Members found  guilty of incompetence or professional  misconduct may have their certificate  revoked, suspended or limited. In  professional misconduct matters only,  the committee may also reprimand,  admonish or counsel the member,  impose a fine, order the member to  pay costs, or publish the order in  Professionally Speaking.&quot;
+## [2] &quot;Member: C. Robert Clements Registration No: 266425Decision: Revoked&quot;</code></pre>
 </div>
 <div id="how-to-clean-the-data" class="section level4">
 <h4>How to clean the data</h4>

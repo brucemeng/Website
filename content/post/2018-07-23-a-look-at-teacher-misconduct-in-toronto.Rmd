@@ -34,10 +34,16 @@ vis.graph
 
 I used a word embedding layer to reconstruct the linguistic context of the words. After which I used a relatively novel (published Feb. 13, 2018) technique for dimensionality reduction by McInnes and Healy (they called it uniform manifold approximation and projection) to reduce the 300 dimensional word embedding layer to 2 dimensions for easy visualization.
 
-The visualization is then clustered by two levels. First level (the physical cluster of words) is by how close the words are to each other as given by the word embedding layer. Second level (the colour of the words) is by the edge connectedness.
+The visualization is then clustered by two levels. First level (the physical cluster of words) is by how close the words are to each other as given by the word embedding layer. Second level (the colour of the words) is by the edge betweeness centrality.
 
 
 ## Observations
+
+There are some distinct clusters of topics within the hearing texts. Most notably, there's a rather large cluster of sexual misconduct. There are a number of additional clusters representing various types of abuse and frequency of misconduct as well.
+
+![](/img/teachers/sex.cluster.PNG)
+
+One additional observation I noticed was that males greatly outnumber females.
 
 ```{r graphs, include=F}
 # Make factors
@@ -57,25 +63,23 @@ height.data <- url.data.df %>%
         summarise(height = length(decision))
 
 # # Genders
-# gender.plot <- ggplot(url.data.df) +
-#         geom_bar(aes(x = gender, fill = gender)) +
-#         coord_flip() +
-#         theme_minimal() +
-#         scale_fill_manual(values = c("pink", "skyblue")) +
-#         xlab("") +
-#         ylab("Number of teachers") +
-#         theme(legend.position = "none") +
-#         labs(caption = "Source: Professionally Speaking 2012-2018") +
-#         ggtitle("Gender of teachers at misconduct hearings")
-# 
-# ggsave("../../static/img/teachers/gender.plot.png", height = 2)
+gender.plot <- ggplot(url.data.df) +
+        geom_bar(aes(x = gender, fill = gender)) +
+        coord_flip() +
+        theme_minimal() +
+        scale_fill_manual(values = c("pink", "skyblue")) +
+        xlab("") +
+        ylab("Number of teachers") +
+        theme(legend.position = "none") +
+        labs(caption = "Source: Professionally Speaking 2012-2018") +
+        ggtitle("Gender of teachers at misconduct hearings")
+
+ggsave("../../static/img/teachers/gender.plot.png", height = 2)
 
 ```
 
 
 ![](/img/teachers/gender.plot.png)
-
-There are some distinct clusters of topics within the hearing texts. Most notably, there's a rather large cluster of sexual misconduct. I'll leave it up to you to explore the words more fully. The full dataset is also available below.
 
 
 ## Appendix
@@ -154,7 +158,7 @@ ps_url <- function(start.year, end.year) {
 
 With our functions made, we can now scrape all of the available "Hearings" data:
 
-```{r get.data, eval = F}
+```{r get.data, eval = T}
 start.date <- 2012
 end.date <- 2018
 
