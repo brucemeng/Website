@@ -1,0 +1,20 @@
+---
+title: autoSmry Update 2 - Dynamic number of sentences & more languages
+author: Bruce Meng
+date: '2018-08-11'
+slug: autosmry-update-2
+categories: []
+tags:
+  - autoSmry
+  - bot
+  - nlp
+  - text
+---
+
+## Updates
+
+**1. Dynamic number of sentences - autoSmry now attempts to find a more appropriate number of sentences for longer texts (previously defaulted to max of 5)**
+
+This will hopefully work better for longer texts.
+
+**2. I added additional support for other languages: Russian & Chinese now added**
