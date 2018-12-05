@@ -18,22 +18,17 @@ tags:
 <p>I shall be testing the following methods:</p>
 <ol style="list-style-type: decimal">
 <li>Unsupervised learning - LDA topic modelling</li>
-<li>Supervised learning
-a. A 256x2 layer Dense network
-b. A 256 bi-LSTM + 256 layer Dense network</li>
-<li>Semi-supervised learning
-a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</li>
+<li><p>Supervised learning</p>
+<pre><code> a. A 256x2 layer Dense network
+ b. A 256 bi-LSTM + 256 layer Dense network</code></pre></li>
+<li><p>Semi-supervised learning</p>
+<pre><code> a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</code></pre></li>
 </ol>
 <p>Let’s get started shall we?</p>
 <div id="dataset" class="section level2">
 <h2>Dataset</h2>
 <p>I found this <strong><a href="https://www.kaggle.com/yufengdev/bbc-fulltext-and-category/version/2">dataset from Kaggle</a></strong>, which mimics the type of text classification I was playing around with. It comprises of 2,225 articles that’s been pre-classified into one of five categories.</p>
 <p>Here’s a sample of a couple of the rows:</p>
-<pre><code>## Parsed with column specification:
-## cols(
-##   category = col_character(),
-##   text = col_character()
-## )</code></pre>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -69,27 +64,6 @@ tigers wary of farrell gamble leicester say they will not be rushed into making 
 <h3>Pre-processing of text</h3>
 <p>I’m going to remove stop words and lemmatize all the text for all methods.</p>
 <p>Lemmatize all the words using Stanford’s CoreNLP library:</p>
-<pre><code>## Parsed with column specification:
-## cols(
-##   category = col_character(),
-##   text = col_character(),
-##   num.cat = col_integer(),
-##   clean.text = col_character()
-## )
-## Parsed with column specification:
-## cols(
-##   category = col_character(),
-##   text = col_character(),
-##   num.cat = col_integer(),
-##   clean.text = col_character()
-## )
-## Parsed with column specification:
-## cols(
-##   category = col_character(),
-##   text = col_character(),
-##   num.cat = col_integer(),
-##   clean.text = col_character()
-## )</code></pre>
 <pre><code># text processing
 
 library(tidyverse)
@@ -102,8 +76,7 @@ bbc.raw &lt;- read_csv(&quot;data/bbc-text.csv&quot;)
 
 # Lemmatize
 cnlp_init_udpipe(&quot;english&quot;)
-# bbc.anno &lt;- cnlp_quick(bbc.raw$text) # takes a long time
-# saveRDS(bbc.anno, &quot;output/bbc.anno.RDS&quot;)
+bbc.anno &lt;- cnlp_quick(bbc.raw$text)
 
 bbc.anno &lt;- read_rds(&quot;output/bbc.anno.RDS&quot;)
 

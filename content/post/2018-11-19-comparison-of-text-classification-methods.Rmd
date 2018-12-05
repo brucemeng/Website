@@ -25,9 +25,12 @@ I shall be testing the following methods:
 
 1. Unsupervised learning - LDA topic modelling
 2. Supervised learning
+
         a. A 256x2 layer Dense network
         b. A 256 bi-LSTM + 256 layer Dense network
+        
 3. Semi-supervised learning
+
         a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples
         
 Let's get started shall we?
@@ -38,7 +41,7 @@ I found this **[dataset from Kaggle](https://www.kaggle.com/yufengdev/bbc-fullte
 
 Here's a sample of a couple of the rows:
 
-```{r dataset, echo = F}
+```{r dataset, echo = F, message = F}
 data.bbc <- read_csv("../../data/text.classification/bbc-text.csv")
 
 kable(data.bbc[2:3,], "html", escape = F) %>%
@@ -54,7 +57,7 @@ I'm going to remove stop words and lemmatize all the text for all methods.
 
 Lemmatize all the words using Stanford's CoreNLP library:
 
-```{r text.processing, echo = F}
+```{r text.processing, echo = F, message = F}
 bbc.train <- read_csv("../../../text.class.2/output/bbc.train.csv")
 bbc.test <- read_csv("../../../text.class.2/output/bbc.test.csv")
 bbc.test.orig <- read_csv("../../../text.class.2/output/bbc.test.csv")
@@ -74,8 +77,7 @@ bbc.raw <- read_csv("data/bbc-text.csv")
 
 # Lemmatize
 cnlp_init_udpipe("english")
-# bbc.anno <- cnlp_quick(bbc.raw$text) # takes a long time
-# saveRDS(bbc.anno, "output/bbc.anno.RDS")
+bbc.anno <- cnlp_quick(bbc.raw$text)
 
 bbc.anno <- read_rds("output/bbc.anno.RDS")
 
