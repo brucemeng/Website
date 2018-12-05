@@ -1,0 +1,289 @@
+---
+title: Comparison of text classification methods
+author: Bruce Meng
+date: '2018-11-19'
+slug: comparison-of-text-classification-methods
+categories: []
+tags:
+  - nlp
+  - modelling
+  - R
+  - text
+---
+
+```{r setup, include=F}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(caret)
+
+```
+
+I've been playing around with various text classification methods and I thought I'd do a proper accounting of all the methods I have tried so that I can more systematically assess the accuracy of all these methods.
+
+I shall be testing the following methods:
+
+1. Unsupervised learning - LDA topic modelling
+2. Supervised learning
+        a. A 256x2 layer Dense network
+        b. A 256 bi-LSTM + 256 layer Dense network
+3. Semi-supervised learning
+        a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples
+        
+Let's get started shall we?
+
+## Dataset
+
+I found this **[dataset from Kaggle](https://www.kaggle.com/yufengdev/bbc-fulltext-and-category/version/2)**, which mimics the type of text classification I was playing around with. It comprises of 2,225 articles that's been pre-classified into one of five categories.
+
+Here's a sample of a couple of the rows:
+
+```{r dataset, echo = F}
+data.bbc <- read_csv("../../data/text.classification/bbc-text.csv")
+
+kable(data.bbc[2:3,], "html", escape = F) %>%
+    kable_styling(c("striped", "hover"),
+                      font_size = 10)
+```
+
+First though, I intend to artificially limit the training data to a maximum of 20% of the dataset. I find that in a lot of cases, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).
+
+### Pre-processing of text
+
+I'm going to remove stop words and lemmatize all the text for all methods.
+
+Lemmatize all the words using Stanford's CoreNLP library:
+
+```{r text.processing, echo = F}
+bbc.train <- read_csv("../../../text.class.2/output/bbc.train.csv")
+bbc.test <- read_csv("../../../text.class.2/output/bbc.test.csv")
+bbc.test.orig <- read_csv("../../../text.class.2/output/bbc.test.csv")
+
+```
+
+```
+# text processing
+
+library(tidyverse)
+library(caret)
+library(cleanNLP)
+
+#### Data import ####
+bbc.raw <- read_csv("data/bbc-text.csv")
+
+
+# Lemmatize
+cnlp_init_udpipe("english")
+# bbc.anno <- cnlp_quick(bbc.raw$text) # takes a long time
+# saveRDS(bbc.anno, "output/bbc.anno.RDS")
+
+bbc.anno <- read_rds("output/bbc.anno.RDS")
+
+bbc.tokens <- cnlp_get_token(bbc.anno) %>%
+    group_by(id) %>%
+    summarize(lemma = paste0(lemma, collapse = " ")) %>%
+    ungroup() %>%
+    mutate(num.id = str_extract(.$id, pattern = "[0-9]+") %>% as.integer()) %>%
+    arrange(num.id)
+
+
+```
+
+Strip out stop words:
+
+```
+# Strip out stopwords
+stopwords.vec <- stopwords::stopwords(source = "smart")
+bbc.stop.text <- bbc.tokens$lemma %>%
+    str_split(" ")
+
+
+bbc.stop.text <- bbc.stop.text %>%
+    map(function(no.stop) no.stop[!(no.stop %in% stopwords.vec)]) %>%
+    map(paste0, collapse = " ")
+
+# Combine back
+bbc.clean <- bbc.raw %>%
+    mutate(clean.text = bbc.stop.text)
+
+# Assign labels
+bbc.clean$category <- as.factor(bbc.clean$category)
+bbc.clean$num.cat <- bbc.clean$category %>% as.integer() - 1
+
+# Get 20% training data
+bbc.train.idx <- createDataPartition(bbc.clean$category, 
+                                 p = 0.05, list = F)
+
+bbc.train <- bbc.clean[bbc.train.idx,] %>% unnest()
+bbc.test <- bbc.clean[-bbc.train.idx,] %>% unnest()
+
+```
+
+```{r show.text, echo = F}
+
+bbc.train %>%
+        select(category, num.cat, everything()) %>%
+        head(3) %>%
+        kable() %>%
+        kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+Ok! Let's try our first method...
+
+## Unsupervised learning - LDA topic modelling
+
+The LDA method is great for when there is very little, or even no, labelled data at all. The downside is that we have to explicitly set the number of topics for the algorithm to find. Since we know that this dataset contains five categories, we can set the number of topics to `5`.
+
+I'm going to use `quanteda` to do some additional processing, and then use LDA to isolate the five categories/topics:
+
+```
+library(quanteda)
+
+# Load text as a dfm
+bbc.dfm <- corpus(data.bbc.combined$text.stopwords.lemma)
+bbc.dfm <- dfm(bbc.dfm, remove_punct = T,
+               remove_numbers = F, stem = F,
+               ngrams = 1)
+
+# Isolate/trim dfm to most freq words that are unique to each category
+bbc.dfm <- dfm_trim(bbc.dfm, termfreq_type = "quantile",
+                         max_docfreq = 0.20, min_termfreq = 0.98,
+                         docfreq_type = "prop")
+
+# Convert to DTM from DFM to use LDA
+bbc.dtm <- convert(bbc.dfm, to = "topicmodels")
+
+# Construct LDA Model
+# @Params
+params <- list(
+    burnin = 2500,
+    iter = 5000,
+    seed = 1:8,
+    nstart = 8,
+    best = T
+)
+
+# Build model
+bbc.lda <- topicmodels::LDA(bbc.dtm, k = 5, 
+                                 method = "Gibbs",
+                                 control = params)
+
+# Save model
+saveRDS(bbc.lda, "../../data/text.classification/bbc.lda.rds")
+```
+
+```{r lda, echo = F}
+library(quanteda)
+library(topicmodels)
+
+# # Load text as a dfm
+# bbc.dfm <- corpus(bbc.test.orig$clean.text)
+# bbc.dfm <- dfm(bbc.dfm, remove_punct = T,
+#                remove_numbers = F, stem = F,
+#                ngrams = 1)
+# 
+# # Isolate/trim dfm to most freq words that are unique to each category
+# bbc.dfm <- dfm_trim(bbc.dfm, termfreq_type = "quantile",
+#                          max_docfreq = 0.20, min_termfreq = 0.98,
+#                          docfreq_type = "prop")
+# 
+# # Convert to DTM from DFM to use LDA
+# bbc.dtm <- convert(bbc.dfm, to = "topicmodels")
+# 
+# # Construct LDA Model
+# # Parameters for model
+# params <- list(
+#     burnin = 2500,
+#     iter = 5000,
+#     seed = 1:8,
+#     nstart = 8,
+#     best = T
+# )
+# 
+# # Build model
+# bbc.lda <- topicmodels::LDA(bbc.dtm, k = 5,
+#                                  method = "Gibbs",
+#                                  control = params)
+# 
+# # Save model
+# saveRDS(bbc.lda, "../../data/text.classification/bbc.lda.rds")
+
+
+# Load model
+bbc.lda <- read_rds("../../data/text.classification/bbc.lda.rds")
+
+```
+
+Let's look at some of the words associated with each topic:
+
+```{r lda.words}
+terms(bbc.lda, 10) %>%
+        kable("html") %>%
+            kable_styling(c("striped", "hover"),
+                      font_size = 10)
+
+```
+
+This is where it takes some human intuition and interpretation now. It looks like Topic 5 is `business` and Topic 4 is `tech`. Topic 2 looks like `politics` to me. Topic 1 looks like `sport` and that leaves Topic 3 as `entertainment` although the words do not appear to be related much to entertainment in my opinion.
+
+### Predictions
+
+And the predictions from the LDA method are...:
+
+```{r lda.prediction}
+pred.lda <- topics(bbc.lda)
+
+# Assign text labels
+bbc.test.orig$pred.lda <- case_when(
+        pred.lda == 3 ~ "entertainment",
+        pred.lda == 5 ~ "business",
+        pred.lda == 4 ~ "tech",
+        pred.lda == 2 ~ "politics",
+        pred.lda == 1 ~ "sport"
+)
+
+# Coerce into factors for comparison
+bbc.test.orig$category <- as.factor(bbc.test.orig$category)
+bbc.test.orig$pred.lda <- as.factor(bbc.test.orig$pred.lda)
+
+# Confusion matrix
+caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)
+```
+
+Our unsupervised method yields an accuracy of ~67%. As expected, the `entertainment` category was the worst performing one with this method.
+
+## Supervised learning
+
+Using just 5% of our dataset for training, let's see how well supervised learning fares.
+
+### A 256x2 layer Dense network
+
+```{r super.model.1}
+library(keras)
+
+#### Global Model Params ####
+batch.size <- 4
+max.words <- 15000
+max.len <- 800
+
+#### Create model ####
+model.class <- keras_model_sequential()
+
+model.class %>%
+    layer_embedding(input_dim = 15000 + 1,
+                    input_length = max.len,
+                    output_dim = 300) %>%
+    layer_dropout(rate = 0.3) %>%
+    layer_flatten() %>%
+    layer_dense(units = 256, activation = "relu") %>%
+    layer_dense(units = 256, activation = "relu") %>%
+    layer_dense(units = 5, activation = "softmax")
+
+model.class
+
+
+```
+
+

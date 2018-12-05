@@ -1,0 +1,563 @@
+---
+title: Comparison of text classification methods
+author: Bruce Meng
+date: '2018-11-19'
+slug: comparison-of-text-classification-methods
+categories: []
+tags:
+  - nlp
+  - modelling
+  - R
+  - text
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>I’ve been playing around with various text classification methods and I thought I’d do a proper accounting of all the methods I have tried so that I can more systematically assess the accuracy of all these methods.</p>
+<p>I shall be testing the following methods:</p>
+<ol style="list-style-type: decimal">
+<li>Unsupervised learning - LDA topic modelling</li>
+<li>Supervised learning
+a. A 256x2 layer Dense network
+b. A 256 bi-LSTM + 256 layer Dense network</li>
+<li>Semi-supervised learning
+a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</li>
+</ol>
+<p>Let’s get started shall we?</p>
+<div id="dataset" class="section level2">
+<h2>Dataset</h2>
+<p>I found this <strong><a href="https://www.kaggle.com/yufengdev/bbc-fulltext-and-category/version/2">dataset from Kaggle</a></strong>, which mimics the type of text classification I was playing around with. It comprises of 2,225 articles that’s been pre-classified into one of five categories.</p>
+<p>Here’s a sample of a couple of the rows:</p>
+<pre><code>## Parsed with column specification:
+## cols(
+##   category = col_character(),
+##   text = col_character()
+## )</code></pre>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+category
+</th>
+<th style="text-align:left;">
+text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+business
+</td>
+<td style="text-align:left;">
+worldcom boss left books alone former worldcom boss bernie ebbers who is accused of overseeing an $11bn (£5.8bn) fraud never made accounting decisions a witness has told jurors. david myers made the comments under questioning by defence lawyers who have been arguing that mr ebbers was not responsible for worldcom s problems. the phone company collapsed in 2002 and prosecutors claim that losses were hidden to protect the firm s shares. mr myers has already pleaded guilty to fraud and is assisting prosecutors. on monday defence lawyer reid weingarten tried to distance his client from the allegations. during cross examination he asked mr myers if he ever knew mr ebbers make an accounting decision . not that i am aware of mr myers replied. did you ever know mr ebbers to make an accounting entry into worldcom books mr weingarten pressed. no replied the witness. mr myers has admitted that he ordered false accounting entries at the request of former worldcom chief financial officer scott sullivan. defence lawyers have been trying to paint mr sullivan who has admitted fraud and will testify later in the trial as the mastermind behind worldcom s accounting house of cards. mr ebbers team meanwhile are looking to portray him as an affable boss who by his own admission is more pe graduate than economist. whatever his abilities mr ebbers transformed worldcom from a relative unknown into a $160bn telecoms giant and investor darling of the late 1990s. worldcom s problems mounted however as competition increased and the telecoms boom petered out. when the firm finally collapsed shareholders lost about $180bn and 20 000 workers lost their jobs. mr ebbers trial is expected to last two months and if found guilty the former ceo faces a substantial jail sentence. he has firmly declared his innocence.
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sport
+</td>
+<td style="text-align:left;">
+tigers wary of farrell gamble leicester say they will not be rushed into making a bid for andy farrell should the great britain rugby league captain decide to switch codes. we and anybody else involved in the process are still some way away from going to the next stage tigers boss john wells told bbc radio leicester. at the moment there are still a lot of unknowns about andy farrell not least his medical situation. whoever does take him on is going to take a big big gamble. farrell who has had persistent knee problems had an operation on his knee five weeks ago and is expected to be out for another three months. leicester and saracens are believed to head the list of rugby union clubs interested in signing farrell if he decides to move to the 15-man game. if he does move across to union wells believes he would better off playing in the backs at least initially. i m sure he could make the step between league and union by being involved in the centre said wells. i think england would prefer him to progress to a position in the back row where they can make use of some of his rugby league skills within the forwards. the jury is out on whether he can cross that divide. at this club the balance will have to be struck between the cost of that gamble and the option of bringing in a ready-made replacement.
+</td>
+</tr>
+</tbody>
+</table>
+<p>First though, I intend to artificially limit the training data to a maximum of 20% of the dataset. I find that in a lot of cases, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).</p>
+<div id="pre-processing-of-text" class="section level3">
+<h3>Pre-processing of text</h3>
+<p>I’m going to remove stop words and lemmatize all the text for all methods.</p>
+<p>Lemmatize all the words using Stanford’s CoreNLP library:</p>
+<pre><code>## Parsed with column specification:
+## cols(
+##   category = col_character(),
+##   text = col_character(),
+##   num.cat = col_integer(),
+##   clean.text = col_character()
+## )
+## Parsed with column specification:
+## cols(
+##   category = col_character(),
+##   text = col_character(),
+##   num.cat = col_integer(),
+##   clean.text = col_character()
+## )
+## Parsed with column specification:
+## cols(
+##   category = col_character(),
+##   text = col_character(),
+##   num.cat = col_integer(),
+##   clean.text = col_character()
+## )</code></pre>
+<pre><code># text processing
+
+library(tidyverse)
+library(caret)
+library(cleanNLP)
+
+#### Data import ####
+bbc.raw &lt;- read_csv(&quot;data/bbc-text.csv&quot;)
+
+
+# Lemmatize
+cnlp_init_udpipe(&quot;english&quot;)
+# bbc.anno &lt;- cnlp_quick(bbc.raw$text) # takes a long time
+# saveRDS(bbc.anno, &quot;output/bbc.anno.RDS&quot;)
+
+bbc.anno &lt;- read_rds(&quot;output/bbc.anno.RDS&quot;)
+
+bbc.tokens &lt;- cnlp_get_token(bbc.anno) %&gt;%
+    group_by(id) %&gt;%
+    summarize(lemma = paste0(lemma, collapse = &quot; &quot;)) %&gt;%
+    ungroup() %&gt;%
+    mutate(num.id = str_extract(.$id, pattern = &quot;[0-9]+&quot;) %&gt;% as.integer()) %&gt;%
+    arrange(num.id)
+
+</code></pre>
+<p>Strip out stop words:</p>
+<pre><code># Strip out stopwords
+stopwords.vec &lt;- stopwords::stopwords(source = &quot;smart&quot;)
+bbc.stop.text &lt;- bbc.tokens$lemma %&gt;%
+    str_split(&quot; &quot;)
+
+
+bbc.stop.text &lt;- bbc.stop.text %&gt;%
+    map(function(no.stop) no.stop[!(no.stop %in% stopwords.vec)]) %&gt;%
+    map(paste0, collapse = &quot; &quot;)
+
+# Combine back
+bbc.clean &lt;- bbc.raw %&gt;%
+    mutate(clean.text = bbc.stop.text)
+
+# Assign labels
+bbc.clean$category &lt;- as.factor(bbc.clean$category)
+bbc.clean$num.cat &lt;- bbc.clean$category %&gt;% as.integer() - 1
+
+# Get 20% training data
+bbc.train.idx &lt;- createDataPartition(bbc.clean$category, 
+                                 p = 0.05, list = F)
+
+bbc.train &lt;- bbc.clean[bbc.train.idx,] %&gt;% unnest()
+bbc.test &lt;- bbc.clean[-bbc.train.idx,] %&gt;% unnest()
+</code></pre>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+category
+</th>
+<th style="text-align:right;">
+num.cat
+</th>
+<th style="text-align:left;">
+text
+</th>
+<th style="text-align:left;">
+clean.text
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+business
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:left;">
+virgin blue shares plummet 20% shares in australian budget airline virgin blue plunged 20% after it warned of a steep fall in full year profits. virgin blue said profits after tax for the year to march would be between 10% to 15% lower than the previous year. sluggish demand reported previously for november and now december 2004 continues said virgin blue chief executive brett godfrey. virgin blue which is 25% owned by richard branson has been struggling to fend off pressure from rival jetstar. it cut its full year passenger number forecast by approximately 2.5% . virgin blue reported a 22% fall in first quarter profits in august 2004 due to tough competition. in november first half profits were down due to slack demand and rising fuel costs. virgin blue was launched four years ago and now has roughly one third of australia s domestic airline market. but the national carrier qantas has fought back with its own budget airline jetstar which took to the skies in may 2004. sydney-listed virgin blue s shares recovered slightly to close 12% down on wednesday. shares in its major shareholder patrick corporation - which owns 46% of virgin blue - had dropped 31% by the close.
+</td>
+<td style="text-align:left;">
+virgin blue share plummet 20 % share australian budget airline virgin blue plunge 20 % warn steep fall full year profit . virgin blue profit tax year march 10 % 15 % lower previous year . sluggish demand report previously november december 2004 continue virgin blue chief executive brett godfrey . virgin blue 25 % richard branson struggle fend pressure rival jetstar . cut full year passenger number forecast approximately 2.5 % . virgin blue report 22 % fall quarter profit august 2004 due tough competition . november half profit due slack demand rise fuel cost . virgin blue launch year ago roughly australia domestic airline market . national carrier qanta fight back budget airline jetstar sky 2004 . sydney - list virgin blue share recover slightly close 12 % wednesday . share major shareholder patrick corporation - 46 % virgin blue - drop 31 % close .
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sport
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+scotland v italy (sat) murrayfield edinburgh saturday 26 february 1400 gmt bbc1 five live and this website victory for the azzurri in rome last year saw scotland end their campaign without a victory. and the pressure is on scotland coach matt williams as he seeks a first six nations victory at the eighth attempt. italy have lost both their opening games at home to ireland and wales but travel to edinburgh with high hopes. their coach john kirwan has warned his side they must eradicate the errors that blighted their loss to wales however or risk suffering a third successive defeat. if the defeat against wales has taught us anything it s that at this level we can t make any mistakes kirwan said. in the six nations every error you make will come at a high price. we have to be aggressive for 80 minutes keep calm in every situation and display great maturity on the pitch. it will be fundamental to keep cool in the difficult moments - in the key situations of the game. kirwan has recalled the experienced cristian stoica at centre and drafted in david dal maso at open-side after star flanker mauro bergamasco was ruled out for the rest of the tournament. scotland have also made two changes simon webster replacing simon danielli on the wing and simon taylor returning for his first test in a year for injured flanker jason white. taylor s recovery from a serious knee injury is a major boost to scottish hopes. he is one of the world-class players in the tournament and you want them in your team acknowledged williams. despite a record of only two victories from 14 tests williams insists he is revelling in the pressure. i actually really enjoy seeing how you cope with such pressure as a coach he said optimistic despite opening defeats to france and ireland. we were confident for those two first games and we are confident we can beat italy too he added. : c paterson; s webster a craig h southwell s lamont; d parks c cusiter; t smith g bulloch (capt) g kerr; s grimes s murray; s taylor j petrie a hogg. r russell b douglas n hines j dunbar m blair g ross b hinshelwood. r de marigny; mirco bergamasco c stoica a masi l nitoglia; l orquera a troncon; a lo cicero f ongaro m castrogiovanni; s dellape m bortolami (capt); a persico d dal maso s parisse. g intoppa s perugini ca del fava s orlando p griffen r pedrazzi kp robertson.
+</td>
+<td style="text-align:left;">
+scotland italy ( sit ) murrayfield edinburgh saturday 26 february 1400 gmt bbc1 live website victory azzurri rome year scotland end campaign victory . pressure scotland coach matt william seek nation victory eighth attempt . italy lose opening game home ireland wale travel edinburgh high hope . coach john kirwan warn side eradicate error blight loss wale risk suffer successive defeat . defeat wale teach level make mistake kirwan . nation error make high price . aggressive 80 minute calm situation display great maturity pitch . fundamental cool difficult moment - key situation game . kirwan recall experienced cristian stoica centre draft david dal maso open - side star flanker mauro bergamasco rule rest tournament . scotland make change simon webster replace simon danielli wing simon taylor return test year injured flanker jason white . taylor recovery knee injury major boost scottish hope . world - class player tournament team acknowledge william . record victory 14 test william insist revell pressure . enjoy cope pressure coach optimistic open defeat france ireland . confident game confident beat italy add . : paterson ; webster craig southwell lamo ; park cusiter ; smith bulloch ( capt ) kerr ; grim murray ; taylor petrie hogg . russell dougla hine dunbar blair ross hinshelwood . de marigny ; mirco bergamasco stoica masi nitoglia ; orquera troncon ; lo cicero ongaro castrogiovanni ; dellape bortolami ( capt ) ; persico dal maso parisse . intoppa perugini ca del fava orlando griffen pedrazzi kp robertson .
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+politics
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+wales must learn health lessons the new health minister for wales says there are lessons to learn from england in tackling waiting lists. dr brian gibbons on his first full day in the job after jane hutt was sacked admitted big challenges but insisted the essentials were in place. but both plaid cymru and the liberal democrats said dr gibbons needed to change policy. meanwhile ms hutt defended her record saying waiting times and lists were only 10% of the health agenda. dr gibbons who was a gp in blaengwynfi in the upper afan valley before becoming am for aberavon said nhs staff wanted a period of consolidation after tremendous change and reform . one of the biggest problems which had faced ms hutt during her five-and-a-half years as the assembly s first health minister was the length of waiting lists in wales. in november the british medical association said nhs staff were weeping with despair as figures showed 311 000 people were waiting for treatment in wales up by 2 400 on the previous month. in the same month lists in england were at their lowest for 17 years with 856 600 people waiting for treatment. dr gibbons told radio wales: there is no doubt that in managing waiting lists england has done a lot of very very useful work and we do need to learn from that. but he said the nhs in wales also needed to create a healthier population rather than respond only to ill health and a balanced view of priorities was important. we do need a consistent across-the-board approach recognising the patients experience of how they use the service is going to be at the end of the day the main test of how the service is working. he said nhs staff wanted a period of consolidation after tremendous change and reform . later dr gibbons praised the work of ms hutt saying he agreed with everything she s done to change the health service in wales. dr gibbons said he accepted there was a problem but his job now was to build on the foundations put in place by his predecessor. he also acknowledged that until the waiting list issue was sorted out the rest of the assembly government s health policy would be overshadowed. opposition members and some labour mps had long called for ms hutt s removal after sustained criticism over extended hospital waiting times. first minister rhodri morgan told bbc wales he had agreed with ms hutt in 2003 that she would not be health minister in the run-up to the 2007 elections. she s been doing the job for five years and eight months and apart from nye bevan himself (architect of the nhs) i don t think anybody has ever done the job for so long. mr morgan said he had only told ms hutt of the reshuffle on monday morning and said the nhs in wales was dr gibbons baby now. in response to dr gibbons comments ieuan wyn jones leader of the plaid cymru group in the assembly said: it is apparent that this reshuffle by the first minister was just changing the deckchairs on a sinking titanic. kisrty williams for the lib dems added: if the underlying policy is going to continue then changing the minister will serve no purpose other than to deflect flak from labour s mps she said. meanwhile ms hutt said she hoped that the people of wales would benefit from my investment of the past five years and eight months asked about waiting lists she said that waiting times and lists were only 10% of the health agenda and that the welsh assembly government had turned the corner on the issue.
+</td>
+<td style="text-align:left;">
+wale learn health lesson health minister wale lesson learn england tackling wait list . dr brian gibbon full day job jane hutt sack admit big challenge insist essential place . play cymru liberal democrat dr gibbon change policy . hutt defend record wait time list 10 % health agenda . dr gibbon gp blaengwynfi upper afan valley aberavon nh staff period consolidation tremendous change reform . biggest problem face hutt - - - half year assembly health minister length wait list wale . november british medical association nh staff weep despair figure show 311 000 people wait treatment wale 2 400 previous month . month list england lowest 17 year 856 600 people wait treatment . dr gibbon radio wale : doubt manage wait list england lot work learn . nh wale create healthier population respond ill health balanced view priorities important . consistent - - board approach recognise patient experience service end day main test service work . nh staff period consolidation tremendous change reform . dr gibbon praise work hutt agree change health service wale . dr gibbon accept problem job build foundation put place predecessor . acknowledge waiting list issue sort rest assembly government health policy overshadow . opposition member labour mp long call hutt removal sustain criticism extend hospital wait time . minister rhodri morgan bbc wale agree hutt 2003 health minister run - 2007 election . job year month nye bevan ( architect nh ) don job long . mr morgan hutt reshuffle monday morning nh wale dr gibbon baby . response dr gibbon comment ieuan wyn jones leader plaid cymru group assembly : apparent reshuffle minister change deckchair sinking titanic . kisrty william lib dem add : underlying policy continue change minister serve purpose deflect flak labour mp . hutt hope people wale benefit investment past year month wait list wait time list 10 % health agenda welsh assembly government turn corner issue .
+</td>
+</tr>
+</tbody>
+</table>
+<p>Ok! Let’s try our first method…</p>
+</div>
+</div>
+<div id="unsupervised-learning---lda-topic-modelling" class="section level2">
+<h2>Unsupervised learning - LDA topic modelling</h2>
+<p>The LDA method is great for when there is very little, or even no, labelled data at all. The downside is that we have to explicitly set the number of topics for the algorithm to find. Since we know that this dataset contains five categories, we can set the number of topics to <code>5</code>.</p>
+<p>I’m going to use <code>quanteda</code> to do some additional processing, and then use LDA to isolate the five categories/topics:</p>
+<pre><code>library(quanteda)
+
+# Load text as a dfm
+bbc.dfm &lt;- corpus(data.bbc.combined$text.stopwords.lemma)
+bbc.dfm &lt;- dfm(bbc.dfm, remove_punct = T,
+               remove_numbers = F, stem = F,
+               ngrams = 1)
+
+# Isolate/trim dfm to most freq words that are unique to each category
+bbc.dfm &lt;- dfm_trim(bbc.dfm, termfreq_type = &quot;quantile&quot;,
+                         max_docfreq = 0.20, min_termfreq = 0.98,
+                         docfreq_type = &quot;prop&quot;)
+
+# Convert to DTM from DFM to use LDA
+bbc.dtm &lt;- convert(bbc.dfm, to = &quot;topicmodels&quot;)
+
+# Construct LDA Model
+# @Params
+params &lt;- list(
+    burnin = 2500,
+    iter = 5000,
+    seed = 1:8,
+    nstart = 8,
+    best = T
+)
+
+# Build model
+bbc.lda &lt;- topicmodels::LDA(bbc.dtm, k = 5, 
+                                 method = &quot;Gibbs&quot;,
+                                 control = params)
+
+# Save model
+saveRDS(bbc.lda, &quot;../../data/text.classification/bbc.lda.rds&quot;)</code></pre>
+<pre><code>## Package version: 1.3.13</code></pre>
+<pre><code>## Parallel computing: 2 of 12 threads used.</code></pre>
+<pre><code>## See https://quanteda.io for tutorials and examples.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;quanteda&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:utils&#39;:
+## 
+##     View</code></pre>
+<p>Let’s look at some of the words associated with each topic:</p>
+<pre class="r"><code>terms(bbc.lda, 10) %&gt;%
+        kable(&quot;html&quot;) %&gt;%
+            kable_styling(c(&quot;striped&quot;, &quot;hover&quot;),
+                      font_size = 10)</code></pre>
+<table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Topic 1
+</th>
+<th style="text-align:left;">
+Topic 2
+</th>
+<th style="text-align:left;">
+Topic 3
+</th>
+<th style="text-align:left;">
+Topic 4
+</th>
+<th style="text-align:left;">
+Topic 5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+film
+</td>
+<td style="text-align:left;">
+party
+</td>
+<td style="text-align:left;">
+group
+</td>
+<td style="text-align:left;">
+service
+</td>
+<td style="text-align:left;">
+bn
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+top
+</td>
+<td style="text-align:left;">
+election
+</td>
+<td style="text-align:left;">
+run
+</td>
+<td style="text-align:left;">
+music
+</td>
+<td style="text-align:left;">
+sale
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+england
+</td>
+<td style="text-align:left;">
+labour
+</td>
+<td style="text-align:left;">
+deal
+</td>
+<td style="text-align:left;">
+phone
+</td>
+<td style="text-align:left;">
+market
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+award
+</td>
+<td style="text-align:left;">
+minister
+</td>
+<td style="text-align:left;">
+european
+</td>
+<td style="text-align:left;">
+technology
+</td>
+<td style="text-align:left;">
+2004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+player
+</td>
+<td style="text-align:left;">
+blair
+</td>
+<td style="text-align:left;">
+london
+</td>
+<td style="text-align:left;">
+mobile
+</td>
+<td style="text-align:left;">
+share
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+open
+</td>
+<td style="text-align:left;">
+public
+</td>
+<td style="text-align:left;">
+hope
+</td>
+<td style="text-align:left;">
+tv
+</td>
+<td style="text-align:left;">
+rise
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+issue
+</td>
+<td style="text-align:left;">
+follow
+</td>
+<td style="text-align:left;">
+net
+</td>
+<td style="text-align:left;">
+report
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+half
+</td>
+<td style="text-align:left;">
+tax
+</td>
+<td style="text-align:left;">
+long
+</td>
+<td style="text-align:left;">
+user
+</td>
+<td style="text-align:left;">
+bank
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+claim
+</td>
+<td style="text-align:left;">
+face
+</td>
+<td style="text-align:left;">
+system
+</td>
+<td style="text-align:left;">
+business
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+director
+</td>
+<td style="text-align:left;">
+tory
+</td>
+<td style="text-align:left;">
+club
+</td>
+<td style="text-align:left;">
+million
+</td>
+<td style="text-align:left;">
+growth
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is where it takes some human intuition and interpretation now. It looks like Topic 5 is <code>business</code> and Topic 4 is <code>tech</code>. Topic 2 looks like <code>politics</code> to me. Topic 1 looks like <code>sport</code> and that leaves Topic 3 as <code>entertainment</code> although the words do not appear to be related much to entertainment in my opinion.</p>
+<div id="predictions" class="section level3">
+<h3>Predictions</h3>
+<p>And the predictions from the LDA method are…:</p>
+<pre class="r"><code>pred.lda &lt;- topics(bbc.lda)
+
+# Assign text labels
+bbc.test.orig$pred.lda &lt;- case_when(
+        pred.lda == 3 ~ &quot;entertainment&quot;,
+        pred.lda == 5 ~ &quot;business&quot;,
+        pred.lda == 4 ~ &quot;tech&quot;,
+        pred.lda == 2 ~ &quot;politics&quot;,
+        pred.lda == 1 ~ &quot;sport&quot;
+)
+
+# Coerce into factors for comparison
+bbc.test.orig$category &lt;- as.factor(bbc.test.orig$category)
+bbc.test.orig$pred.lda &lt;- as.factor(bbc.test.orig$pred.lda)
+
+# Confusion matrix
+caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                Reference
+## Prediction      business entertainment politics sport tech
+##   business           396            45       27     2   14
+##   entertainment       20            29       18   272   27
+##   politics            14            20      358     3    1
+##   sport                0           185        2   298    0
+##   tech                13             9       14    16  328
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.6675          
+##                  95% CI : (0.6469, 0.6875)
+##     No Information Rate : 0.28            
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5818          
+##  Mcnemar&#39;s Test P-Value : 7.199e-11       
+## 
+## Statistics by Class:
+## 
+##                      Class: business Class: entertainment Class: politics
+## Sensitivity                   0.8939              0.10069          0.8544
+## Specificity                   0.9472              0.81514          0.9775
+## Pos Pred Value                0.8182              0.07923          0.9040
+## Neg Pred Value                0.9711              0.85158          0.9644
+## Prevalence                    0.2099              0.13643          0.1985
+## Detection Rate                0.1876              0.01374          0.1696
+## Detection Prevalence          0.2293              0.17338          0.1876
+## Balanced Accuracy             0.9206              0.45792          0.9160
+##                      Class: sport Class: tech
+## Sensitivity                0.5042      0.8865
+## Specificity                0.8770      0.9701
+## Pos Pred Value             0.6144      0.8632
+## Neg Pred Value             0.8198      0.9757
+## Prevalence                 0.2800      0.1753
+## Detection Rate             0.1412      0.1554
+## Detection Prevalence       0.2297      0.1800
+## Balanced Accuracy          0.6906      0.9283</code></pre>
+<p>Our unsupervised method yields an accuracy of ~67%. As expected, the <code>entertainment</code> category was the worst performing one with this method.</p>
+</div>
+</div>
+<div id="supervised-learning" class="section level2">
+<h2>Supervised learning</h2>
+<p>Using just 5% of our dataset for training, let’s see how well supervised learning fares.</p>
+<div id="a-256x2-layer-dense-network" class="section level3">
+<h3>A 256x2 layer Dense network</h3>
+<pre class="r"><code>library(keras)
+
+#### Global Model Params ####
+batch.size &lt;- 4
+max.words &lt;- 15000
+max.len &lt;- 800
+
+#### Create model ####
+model.class &lt;- keras_model_sequential()
+
+model.class %&gt;%
+    layer_embedding(input_dim = 15000 + 1,
+                    input_length = max.len,
+                    output_dim = 300) %&gt;%
+    layer_dropout(rate = 0.3) %&gt;%
+    layer_flatten() %&gt;%
+    layer_dense(units = 256, activation = &quot;relu&quot;) %&gt;%
+    layer_dense(units = 256, activation = &quot;relu&quot;) %&gt;%
+    layer_dense(units = 5, activation = &quot;softmax&quot;)
+
+model.class</code></pre>
+<pre><code>## Model
+## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## embedding_1 (Embedding)          (None, 800, 300)              4500300     
+## ___________________________________________________________________________
+## dropout_1 (Dropout)              (None, 800, 300)              0           
+## ___________________________________________________________________________
+## flatten_1 (Flatten)              (None, 240000)                0           
+## ___________________________________________________________________________
+## dense_1 (Dense)                  (None, 256)                   61440256    
+## ___________________________________________________________________________
+## dense_2 (Dense)                  (None, 256)                   65792       
+## ___________________________________________________________________________
+## dense_3 (Dense)                  (None, 5)                     1285        
+## ===========================================================================
+## Total params: 66,007,633
+## Trainable params: 66,007,633
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
+</div>
+</div>
