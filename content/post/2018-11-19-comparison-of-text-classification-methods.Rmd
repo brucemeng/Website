@@ -25,11 +25,11 @@ I shall be testing the following methods:
 
 1. Unsupervised learning - LDA topic modelling
 2. Supervised learning  
-        a. A 256x2 layer Dense network  
-        b. A 256 bi-LSTM + 256 layer Dense network
+        a. A 32x2 layer Dense network  
+        b. A 32 bi-LSTM + 32 layer Dense network
         
 3. Semi-supervised learning  
-        a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples
+        a. A 32 bi-LSTM + 32 layer Dense network, with self-added, high probability, training samples
         
 Let's get started shall we?
 
@@ -260,7 +260,7 @@ Our unsupervised method yields an accuracy of ~67%. As expected, the `entertainm
 
 Using just 5% of our dataset for training, let's see how well supervised learning fares.
 
-### A 256x2 layer Dense network
+### A 32x2 layer Dense network
 
 ```{r super.model.1, message = F, echo = F}
 library(keras)
@@ -279,8 +279,8 @@ model.class %>%
                     output_dim = 300) %>%
     layer_dropout(rate = 0.3) %>%
     layer_flatten() %>%
-    layer_dense(units = 256, activation = "relu") %>%
-    layer_dense(units = 256, activation = "relu") %>%
+    layer_dense(units = 32, activation = "relu") %>%
+    layer_dense(units = 32, activation = "relu") %>%
     layer_dense(units = 5, activation = "softmax")
 
 model.class
@@ -301,6 +301,8 @@ There's just not enough data for this network to get good results.
 
 ### A bi-LSTM + Dense network
 
+Let's replace the first dense layer with a bidirectional LSTM layer. This network has been popular with NLP tasks:
+
 ```{r super.model.2, message = F, echo = F}
 library(keras)
 
@@ -317,8 +319,8 @@ model.class %>%
                     input_length = max.len,
                     output_dim = 300) %>%
     layer_dropout(rate = 0.3) %>%
-    bidirectional(layer_cudnn_lstm(units = 256)) %>%
-    layer_dense(units = 256, activation = "relu") %>%
+    bidirectional(layer_cudnn_lstm(units = 32)) %>%
+    layer_dense(units = 32, activation = "relu") %>%
     layer_dense(units = 5, activation = "softmax")
 
 model.class

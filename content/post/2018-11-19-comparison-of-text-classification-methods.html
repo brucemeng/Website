@@ -19,10 +19,10 @@ tags:
 <ol style="list-style-type: decimal">
 <li>Unsupervised learning - LDA topic modelling</li>
 <li><p>Supervised learning<br />
-a. A 256x2 layer Dense network<br />
-b. A 256 bi-LSTM + 256 layer Dense network</p></li>
+a. A 32x2 layer Dense network<br />
+b. A 32 bi-LSTM + 32 layer Dense network</p></li>
 <li><p>Semi-supervised learning<br />
-a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</p></li>
+a. A 32 bi-LSTM + 32 layer Dense network, with self-added, high probability, training samples</p></li>
 </ol>
 <p>Let’s get started shall we?</p>
 <div id="dataset" class="section level2">
@@ -461,8 +461,8 @@ growth
 <div id="supervised-learning" class="section level2">
 <h2>Supervised learning</h2>
 <p>Using just 5% of our dataset for training, let’s see how well supervised learning fares.</p>
-<div id="a-256x2-layer-dense-network" class="section level3">
-<h3>A 256x2 layer Dense network</h3>
+<div id="a-32x2-layer-dense-network" class="section level3">
+<h3>A 32x2 layer Dense network</h3>
 <pre><code>## Model
 ## ___________________________________________________________________________
 ## Layer (type)                     Output Shape                  Param #     
@@ -473,14 +473,14 @@ growth
 ## ___________________________________________________________________________
 ## flatten_1 (Flatten)              (None, 240000)                0           
 ## ___________________________________________________________________________
-## dense_1 (Dense)                  (None, 256)                   61440256    
+## dense_1 (Dense)                  (None, 32)                    7680032     
 ## ___________________________________________________________________________
-## dense_2 (Dense)                  (None, 256)                   65792       
+## dense_2 (Dense)                  (None, 32)                    1056        
 ## ___________________________________________________________________________
-## dense_3 (Dense)                  (None, 5)                     1285        
+## dense_3 (Dense)                  (None, 5)                     165         
 ## ===========================================================================
-## Total params: 66,007,633
-## Trainable params: 66,007,633
+## Total params: 12,181,553
+## Trainable params: 12,181,553
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
 <p>Here are the results after training the above network for 50 epochs:</p>
@@ -519,6 +519,7 @@ growth
 </div>
 <div id="a-bi-lstm-dense-network" class="section level3">
 <h3>A bi-LSTM + Dense network</h3>
+<p>Let’s replace the first dense layer with a bidirectional LSTM layer. This network has been popular with NLP tasks:</p>
 <pre><code>## Model
 ## ___________________________________________________________________________
 ## Layer (type)                     Output Shape                  Param #     
@@ -527,14 +528,14 @@ growth
 ## ___________________________________________________________________________
 ## dropout_2 (Dropout)              (None, 800, 300)              0           
 ## ___________________________________________________________________________
-## bidirectional_1 (Bidirectional)  (None, 512)                   1142784     
+## bidirectional_1 (Bidirectional)  (None, 64)                    85504       
 ## ___________________________________________________________________________
-## dense_4 (Dense)                  (None, 256)                   131328      
+## dense_4 (Dense)                  (None, 32)                    2080        
 ## ___________________________________________________________________________
-## dense_5 (Dense)                  (None, 5)                     1285        
+## dense_5 (Dense)                  (None, 5)                     165         
 ## ===========================================================================
-## Total params: 5,775,697
-## Trainable params: 5,775,697
+## Total params: 4,588,049
+## Trainable params: 4,588,049
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
 <p>Here are the results after training the above network for 50 epochs:</p>
@@ -542,33 +543,33 @@ growth
 ## 
 ##           Reference
 ## Prediction   0   1   2   3   4
-##          0 356  29  66   9  21
-##          1  29 129  42  20  24
-##          2  43  87 210  16  46
-##          3  28  42  62 415  41
-##          4  28  79  16  25 248
+##          0 473  69 110 121  69
+##          1   3 161  45  65  12
+##          2   1   8  58   4   0
+##          3   1  80  47 280  26
+##          4   6  48 136  15 273
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.6433          
-##                  95% CI : (0.6224, 0.6638)
+##                Accuracy : 0.5898          
+##                  95% CI : (0.5684, 0.6109)
 ##     No Information Rate : 0.2297          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.5509          
+##                   Kappa : 0.4812          
 ##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4
-## Sensitivity            0.7355  0.35246  0.53030   0.8557   0.6526
-## Specificity            0.9232  0.93410  0.88805   0.8936   0.9145
-## Pos Pred Value         0.7401  0.52869  0.52239   0.7058   0.6263
-## Neg Pred Value         0.9215  0.87306  0.89116   0.9540   0.9230
+## Sensitivity            0.9773  0.43989  0.14646   0.5773   0.7184
+## Specificity            0.7732  0.92837  0.99242   0.9053   0.8816
+## Pos Pred Value         0.5618  0.56294  0.81690   0.6452   0.5711
+## Neg Pred Value         0.9913  0.88767  0.83431   0.8778   0.9345
 ## Prevalence             0.2293  0.17338  0.18759   0.2297   0.1800
-## Detection Rate         0.1686  0.06111  0.09948   0.1966   0.1175
-## Detection Prevalence   0.2279  0.11559  0.19043   0.2785   0.1876
-## Balanced Accuracy      0.8294  0.64328  0.70917   0.8746   0.7836</code></pre>
+## Detection Rate         0.2241  0.07627  0.02748   0.1326   0.1293
+## Detection Prevalence   0.3989  0.13548  0.03363   0.2056   0.2264
+## Balanced Accuracy      0.8752  0.68413  0.56944   0.7413   0.8000</code></pre>
 <p>The bidirectional LSTM layer was able to add considerable accuracy to the Dense network.</p>
 </div>
 </div>
