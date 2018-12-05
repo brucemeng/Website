@@ -291,7 +291,7 @@ model.class
 Here are the results after training the above network for 50 epochs:
 
 ```{r super.model.1.results, echo = F}
-model.dense.results <- read_rds("../../../text.class.2/output/accuracy.dense.adam.RDS")
+model.dense.results <- read_rds("../../../text.class.2/output/accuracy.dense.rms.RDS")
 
 model.dense.results
 
@@ -331,7 +331,7 @@ model.class
 Here are the results after training the above network for 50 epochs:
 
 ```{r super.model.2.results, echo = F}
-model.bilstm.results <- read_rds("../../../text.class.2/output/accuracy.biLSTM.adam.RDS")
+model.bilstm.results <- read_rds("../../../text.class.2/output/accuracy.biLSTM.rms.RDS")
 
 model.bilstm.results
 
