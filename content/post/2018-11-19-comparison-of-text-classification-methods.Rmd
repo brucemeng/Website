@@ -339,6 +339,21 @@ model.bilstm.results
 
 The bidirectional LSTM layer was able to add considerable accuracy to the Dense network.
 
+## Semi-supervised learning
+
+Using the same network as the bi-LSTM + Dense architecture from the previous model, I wanted to see if I can get improved performance from including highly confident predictions from the model as additional training samples.
+
+I include a set of predictions after the first 50 epochs, and train again for another 50 epochs and then I asked the model to make predictions on the test set. 
+
+Here are the results:
+
+```{r semi.model.1.results, echo = F}
+model.bilstm.semi.results <- read_rds("../../../text.class.2/output/accuracy.biLSTM-semi.rms.RDS")
+
+model.bilstm.semi.results
+
+```
+
 
 
 
