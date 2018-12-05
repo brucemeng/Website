@@ -121,7 +121,7 @@ bbc.test <- bbc.clean[-bbc.train.idx,] %>% unnest()
 
 ```
 
-```{r show.text, echo = F}
+```{r show.text, echo = F, message = F}
 
 bbc.train %>%
         select(category, num.cat, everything()) %>%
@@ -176,7 +176,7 @@ bbc.lda <- topicmodels::LDA(bbc.dtm, k = 5,
 saveRDS(bbc.lda, "../../data/text.classification/bbc.lda.rds")
 ```
 
-```{r lda, echo = F}
+```{r lda, echo = F, message = F}
 library(quanteda)
 library(topicmodels)
 
@@ -220,7 +220,7 @@ bbc.lda <- read_rds("../../data/text.classification/bbc.lda.rds")
 
 Let's look at some of the words associated with each topic:
 
-```{r lda.words}
+```{r lda.words, message = F, echo = F}
 terms(bbc.lda, 10) %>%
         kable("html") %>%
             kable_styling(c("striped", "hover"),
@@ -234,7 +234,7 @@ This is where it takes some human intuition and interpretation now. It looks lik
 
 And the predictions from the LDA method are...:
 
-```{r lda.prediction}
+```{r lda.prediction, message = F}
 pred.lda <- topics(bbc.lda)
 
 # Assign text labels
@@ -262,7 +262,7 @@ Using just 5% of our dataset for training, let's see how well supervised learnin
 
 ### A 256x2 layer Dense network
 
-```{r super.model.1}
+```{r super.model.1, message = F}
 library(keras)
 
 #### Global Model Params ####

@@ -216,19 +216,7 @@ bbc.lda &lt;- topicmodels::LDA(bbc.dtm, k = 5,
 
 # Save model
 saveRDS(bbc.lda, &quot;../../data/text.classification/bbc.lda.rds&quot;)</code></pre>
-<pre><code>## Package version: 1.3.13</code></pre>
-<pre><code>## Parallel computing: 2 of 12 threads used.</code></pre>
-<pre><code>## See https://quanteda.io for tutorials and examples.</code></pre>
-<pre><code>## 
-## Attaching package: &#39;quanteda&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:utils&#39;:
-## 
-##     View</code></pre>
 <p>Let’s look at some of the words associated with each topic:</p>
-<pre class="r"><code>terms(bbc.lda, 10) %&gt;%
-        kable(&quot;html&quot;) %&gt;%
-            kable_styling(c(&quot;striped&quot;, &quot;hover&quot;),
-                      font_size = 10)</code></pre>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
