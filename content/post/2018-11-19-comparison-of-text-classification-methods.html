@@ -18,11 +18,11 @@ tags:
 <p>I shall be testing the following methods:</p>
 <ol style="list-style-type: decimal">
 <li>Unsupervised learning - LDA topic modelling</li>
-<li><p>Supervised learning</p>
-<pre><code> a. A 256x2 layer Dense network
- b. A 256 bi-LSTM + 256 layer Dense network</code></pre></li>
-<li><p>Semi-supervised learning</p>
-<pre><code> a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</code></pre></li>
+<li><p>Supervised learning<br />
+a. A 256x2 layer Dense network
+b. A 256 bi-LSTM + 256 layer Dense network</p></li>
+<li><p>Semi-supervised learning<br />
+a. A 256 bi-LSTM + 256 layer Dense network, with self-added, high probability, training samples</p></li>
 </ol>
 <p>Let’s get started shall we?</p>
 <div id="dataset" class="section level2">
@@ -114,6 +114,7 @@ bbc.train.idx &lt;- createDataPartition(bbc.clean$category,
 bbc.train &lt;- bbc.clean[bbc.train.idx,] %&gt;% unnest()
 bbc.test &lt;- bbc.clean[-bbc.train.idx,] %&gt;% unnest()
 </code></pre>
+<p>And here’s a comparison of the raw text vs. the preprocessed text:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -479,27 +480,6 @@ caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)</code></p
 <p>Using just 5% of our dataset for training, let’s see how well supervised learning fares.</p>
 <div id="a-256x2-layer-dense-network" class="section level3">
 <h3>A 256x2 layer Dense network</h3>
-<pre class="r"><code>library(keras)
-
-#### Global Model Params ####
-batch.size &lt;- 4
-max.words &lt;- 15000
-max.len &lt;- 800
-
-#### Create model ####
-model.class &lt;- keras_model_sequential()
-
-model.class %&gt;%
-    layer_embedding(input_dim = 15000 + 1,
-                    input_length = max.len,
-                    output_dim = 300) %&gt;%
-    layer_dropout(rate = 0.3) %&gt;%
-    layer_flatten() %&gt;%
-    layer_dense(units = 256, activation = &quot;relu&quot;) %&gt;%
-    layer_dense(units = 256, activation = &quot;relu&quot;) %&gt;%
-    layer_dense(units = 5, activation = &quot;softmax&quot;)
-
-model.class</code></pre>
 <pre><code>## Model
 ## ___________________________________________________________________________
 ## Layer (type)                     Output Shape                  Param #     
@@ -520,5 +500,92 @@ model.class</code></pre>
 ## Trainable params: 66,007,633
 ## Non-trainable params: 0
 ## ___________________________________________________________________________</code></pre>
+<p>Here are the results after training the above network for 50 epochs:</p>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1   2   3   4
+##          0 187  40 200  12 164
+##          1   0   4   0   0   0
+##          2   0   1   7   0   1
+##          3 292 317 187 472 145
+##          4   5   4   2   1  70
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.3505          
+##                  95% CI : (0.3302, 0.3713)
+##     No Information Rate : 0.2297          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.1594          
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4
+## Sensitivity           0.38636 0.010929 0.017677   0.9732  0.18421
+## Specificity           0.74431 1.000000 0.998834   0.4213  0.99307
+## Pos Pred Value        0.31012 1.000000 0.777778   0.3340  0.85366
+## Neg Pred Value        0.80305 0.828192 0.814938   0.9814  0.84722
+## Prevalence            0.22928 0.173378 0.187589   0.2297  0.18001
+## Detection Rate        0.08858 0.001895 0.003316   0.2236  0.03316
+## Detection Prevalence  0.28565 0.001895 0.004263   0.6694  0.03884
+## Balanced Accuracy     0.56534 0.505464 0.508255   0.6972  0.58864</code></pre>
+<p>There’s just not enough data for this network to get good results.</p>
+</div>
+<div id="a-bi-lstm-dense-network" class="section level3">
+<h3>A bi-LSTM + Dense network</h3>
+<pre><code>## Model
+## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## embedding_2 (Embedding)          (None, 800, 300)              4500300     
+## ___________________________________________________________________________
+## dropout_2 (Dropout)              (None, 800, 300)              0           
+## ___________________________________________________________________________
+## bidirectional_1 (Bidirectional)  (None, 512)                   1142784     
+## ___________________________________________________________________________
+## dense_4 (Dense)                  (None, 256)                   131328      
+## ___________________________________________________________________________
+## dense_5 (Dense)                  (None, 5)                     1285        
+## ===========================================================================
+## Total params: 5,775,697
+## Trainable params: 5,775,697
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
+<p>Here are the results after training the above network for 50 epochs:</p>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1   2   3   4
+##          0 339  30  25  24 158
+##          1  15 184  18  54   8
+##          2  38 111 323  52  77
+##          3   2  33  10 349  13
+##          4  90   8  20   6 124
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.6248          
+##                  95% CI : (0.6038, 0.6455)
+##     No Information Rate : 0.2297          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.5285          
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+## 
+## Statistics by Class:
+## 
+##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4
+## Sensitivity            0.7004  0.50273   0.8157   0.7196  0.32632
+## Specificity            0.8543  0.94556   0.8379   0.9643  0.92837
+## Pos Pred Value         0.5885  0.65950   0.5374   0.8575  0.50000
+## Neg Pred Value         0.9055  0.90066   0.9517   0.9202  0.86259
+## Prevalence             0.2293  0.17338   0.1876   0.2297  0.18001
+## Detection Rate         0.1606  0.08716   0.1530   0.1653  0.05874
+## Detection Prevalence   0.2729  0.13216   0.2847   0.1928  0.11748
+## Balanced Accuracy      0.7774  0.72415   0.8268   0.8420  0.62734</code></pre>
+<p>The bidirectional LSTM layer was able to add considerable accuracy to the Dense network.</p>
 </div>
 </div>
