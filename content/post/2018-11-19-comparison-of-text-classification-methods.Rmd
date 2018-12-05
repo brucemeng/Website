@@ -25,7 +25,7 @@ I shall be testing the following methods:
 
 1. Unsupervised learning - LDA topic modelling
 2. Supervised learning  
-        a. A 256x2 layer Dense network
+        a. A 256x2 layer Dense network  
         b. A 256 bi-LSTM + 256 layer Dense network
         
 3. Semi-supervised learning  
