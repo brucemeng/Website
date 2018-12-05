@@ -59,10 +59,10 @@ tigers wary of farrell gamble leicester say they will not be rushed into making 
 </tr>
 </tbody>
 </table>
-<p>First though, I intend to artificially limit the training data to a maximum of 20% of the dataset. I find that in a lot of cases, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).</p>
+<p>First though, I intend to artificially limit the training data to just a small number of labelled samples. I find that, in most of the situations that I’m working in, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).</p>
 <div id="pre-processing-of-text" class="section level3">
 <h3>Pre-processing of text</h3>
-<p>I’m going to remove stop words and lemmatize all the text for all methods.</p>
+<p>It’s fairly standard now to remove stop words and lemmatize all the text for all methods and I shall do so as well.</p>
 <p>Lemmatize all the words using Stanford’s CoreNLP library:</p>
 <pre><code># text processing
 
@@ -114,7 +114,7 @@ bbc.train.idx &lt;- createDataPartition(bbc.clean$category,
 bbc.train &lt;- bbc.clean[bbc.train.idx,] %&gt;% unnest()
 bbc.test &lt;- bbc.clean[-bbc.train.idx,] %&gt;% unnest()
 </code></pre>
-<p>And here’s a comparison of the raw text vs. the preprocessed text:</p>
+<p>And here’s a comparison of the raw text vs. the clean text:</p>
 <table class="table table-striped table-hover" style="font-size: 10px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -415,23 +415,6 @@ growth
 <div id="predictions" class="section level3">
 <h3>Predictions</h3>
 <p>And the predictions from the LDA method are…:</p>
-<pre class="r"><code>pred.lda &lt;- topics(bbc.lda)
-
-# Assign text labels
-bbc.test.orig$pred.lda &lt;- case_when(
-        pred.lda == 3 ~ &quot;entertainment&quot;,
-        pred.lda == 5 ~ &quot;business&quot;,
-        pred.lda == 4 ~ &quot;tech&quot;,
-        pred.lda == 2 ~ &quot;politics&quot;,
-        pred.lda == 1 ~ &quot;sport&quot;
-)
-
-# Coerce into factors for comparison
-bbc.test.orig$category &lt;- as.factor(bbc.test.orig$category)
-bbc.test.orig$pred.lda &lt;- as.factor(bbc.test.orig$pred.lda)
-
-# Confusion matrix
-caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##                Reference
@@ -505,33 +488,33 @@ caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)</code></p
 ## 
 ##           Reference
 ## Prediction   0   1   2   3   4
-##          0 187  40 200  12 164
-##          1   0   4   0   0   0
-##          2   0   1   7   0   1
-##          3 292 317 187 472 145
-##          4   5   4   2   1  70
+##          0 181  61 162  49 139
+##          1   0   6   1   0   2
+##          2   0   0  13   1   1
+##          3 251 280 124 402  93
+##          4  52  19  96  33 145
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.3505          
-##                  95% CI : (0.3302, 0.3713)
+##                Accuracy : 0.3539          
+##                  95% CI : (0.3334, 0.3747)
 ##     No Information Rate : 0.2297          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.1594          
+##                   Kappa : 0.1706          
 ##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4
-## Sensitivity           0.38636 0.010929 0.017677   0.9732  0.18421
-## Specificity           0.74431 1.000000 0.998834   0.4213  0.99307
-## Pos Pred Value        0.31012 1.000000 0.777778   0.3340  0.85366
-## Neg Pred Value        0.80305 0.828192 0.814938   0.9814  0.84722
+## Sensitivity           0.37397 0.016393 0.032828   0.8289  0.38158
+## Specificity           0.74739 0.998281 0.998834   0.5400  0.88446
+## Pos Pred Value        0.30574 0.666667 0.866667   0.3496  0.42029
+## Neg Pred Value        0.80053 0.828735 0.817271   0.9136  0.86693
 ## Prevalence            0.22928 0.173378 0.187589   0.2297  0.18001
-## Detection Rate        0.08858 0.001895 0.003316   0.2236  0.03316
-## Detection Prevalence  0.28565 0.001895 0.004263   0.6694  0.03884
-## Balanced Accuracy     0.56534 0.505464 0.508255   0.6972  0.58864</code></pre>
+## Detection Rate        0.08574 0.002842 0.006158   0.1904  0.06869
+## Detection Prevalence  0.28044 0.004263 0.007106   0.5448  0.16343
+## Balanced Accuracy     0.56068 0.507337 0.515831   0.6844  0.63302</code></pre>
 <p>There’s just not enough data for this network to get good results.</p>
 </div>
 <div id="a-bi-lstm-dense-network" class="section level3">
@@ -559,33 +542,33 @@ caret::confusionMatrix(bbc.test.orig$category, bbc.test.orig$pred.lda)</code></p
 ## 
 ##           Reference
 ## Prediction   0   1   2   3   4
-##          0 339  30  25  24 158
-##          1  15 184  18  54   8
-##          2  38 111 323  52  77
-##          3   2  33  10 349  13
-##          4  90   8  20   6 124
+##          0 356  29  66   9  21
+##          1  29 129  42  20  24
+##          2  43  87 210  16  46
+##          3  28  42  62 415  41
+##          4  28  79  16  25 248
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.6248          
-##                  95% CI : (0.6038, 0.6455)
+##                Accuracy : 0.6433          
+##                  95% CI : (0.6224, 0.6638)
 ##     No Information Rate : 0.2297          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.5285          
+##                   Kappa : 0.5509          
 ##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: 0 Class: 1 Class: 2 Class: 3 Class: 4
-## Sensitivity            0.7004  0.50273   0.8157   0.7196  0.32632
-## Specificity            0.8543  0.94556   0.8379   0.9643  0.92837
-## Pos Pred Value         0.5885  0.65950   0.5374   0.8575  0.50000
-## Neg Pred Value         0.9055  0.90066   0.9517   0.9202  0.86259
-## Prevalence             0.2293  0.17338   0.1876   0.2297  0.18001
-## Detection Rate         0.1606  0.08716   0.1530   0.1653  0.05874
-## Detection Prevalence   0.2729  0.13216   0.2847   0.1928  0.11748
-## Balanced Accuracy      0.7774  0.72415   0.8268   0.8420  0.62734</code></pre>
+## Sensitivity            0.7355  0.35246  0.53030   0.8557   0.6526
+## Specificity            0.9232  0.93410  0.88805   0.8936   0.9145
+## Pos Pred Value         0.7401  0.52869  0.52239   0.7058   0.6263
+## Neg Pred Value         0.9215  0.87306  0.89116   0.9540   0.9230
+## Prevalence             0.2293  0.17338  0.18759   0.2297   0.1800
+## Detection Rate         0.1686  0.06111  0.09948   0.1966   0.1175
+## Detection Prevalence   0.2279  0.11559  0.19043   0.2785   0.1876
+## Balanced Accuracy      0.8294  0.64328  0.70917   0.8746   0.7836</code></pre>
 <p>The bidirectional LSTM layer was able to add considerable accuracy to the Dense network.</p>
 </div>
 </div>

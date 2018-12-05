@@ -47,11 +47,11 @@ kable(data.bbc[2:3,], "html", escape = F) %>%
                       font_size = 10)
 ```
 
-First though, I intend to artificially limit the training data to a maximum of 20% of the dataset. I find that in a lot of cases, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).
+First though, I intend to artificially limit the training data to just a small number of labelled samples. I find that, in most of the situations that I'm working in, labelled data is hard to obtain, or it would require a lot of time from fairly expensive domain specialists (lawyers and accountants are expensive!).
 
 ### Pre-processing of text
 
-I'm going to remove stop words and lemmatize all the text for all methods.
+It's fairly standard now to remove stop words and lemmatize all the text for all methods and I shall do so as well.
 
 Lemmatize all the words using Stanford's CoreNLP library:
 
@@ -119,7 +119,7 @@ bbc.test <- bbc.clean[-bbc.train.idx,] %>% unnest()
 
 ```
 
-And here's a comparison of the raw text vs. the preprocessed text:
+And here's a comparison of the raw text vs. the clean text:
 
 ```{r show.text, echo = F, message = F}
 
@@ -234,7 +234,7 @@ This is where it takes some human intuition and interpretation now. It looks lik
 
 And the predictions from the LDA method are...:
 
-```{r lda.prediction, message = F}
+```{r lda.prediction, message = F, echo = F}
 pred.lda <- topics(bbc.lda)
 
 # Assign text labels
