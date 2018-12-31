@@ -268,7 +268,7 @@ library(keras)
 #### Global Model Params ####
 batch.size <- 4
 max.words <- 15000
-max.len <- 800
+max.len <- 50
 
 #### Create model ####
 model.class <- keras_model_sequential()
@@ -277,7 +277,7 @@ model.class %>%
     layer_embedding(input_dim = 15000 + 1,
                     input_length = max.len,
                     output_dim = 300) %>%
-    layer_dropout(rate = 0.3) %>%
+    layer_dropout(rate = 0.5) %>%
     layer_flatten() %>%
     layer_dense(units = 32, activation = "relu") %>%
     layer_dense(units = 32, activation = "relu") %>%
@@ -309,7 +309,7 @@ library(keras)
 #### Global Model Params ####
 batch.size <- 4
 max.words <- 15000
-max.len <- 800
+max.len <- 50
 
 #### Create model ####
 model.class <- keras_model_sequential()
@@ -318,8 +318,8 @@ model.class %>%
     layer_embedding(input_dim = 15000 + 1,
                     input_length = max.len,
                     output_dim = 300) %>%
-    layer_dropout(rate = 0.3) %>%
-    bidirectional(layer_cudnn_lstm(units = 32)) %>%
+    layer_dropout(rate = 0.5) %>%
+    bidirectional(layer_cudnn_lstm(units = 16)) %>%
     layer_dense(units = 32, activation = "relu") %>%
     layer_dense(units = 5, activation = "softmax")
 
