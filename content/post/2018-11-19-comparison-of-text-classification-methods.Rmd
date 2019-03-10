@@ -1,9 +1,10 @@
 ---
 title: Comparison of text classification methods
 author: Bruce Meng
-date: '2018-11-19'
+date: '2019-05-19'
 slug: comparison-of-text-classification-methods
 categories: []
+draft: true
 tags:
   - nlp
   - modelling
