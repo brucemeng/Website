@@ -114,7 +114,8 @@ cooling_pics <- c("/img/computer_build/IMG_20191204_171426.jpg",
                   "/img/computer_build/IMG_20191208_100018.jpg",
                   "/img/computer_build/IMG_20191208_100122.jpg",
                   "/img/computer_build/IMG_20191208_100139.jpg",
-                  "/img/computer_build/IMG_20191209_173523.jpg")
+                  "/img/computer_build/IMG_20191209_173523.jpg",
+                  "/img/computer_build/heatkiller.gif")
 
 local_test <- "http://127.0.0.1:4321"
 local_path <- paste0(local_test, cooling_pics)
@@ -206,3 +207,46 @@ slickR(obj = local_path,
        width = "100%")
 
 ```
+
+## Power Supply
+
+For power supplies, there are two schools of thought. Purchase enough power supply to cover your power needs or purchase twice as much power supply to cover your power needs.
+
+The first step here is to calculate your power needs. Don't do what I did and just roughly estimate it in your head. There are some really great online tools to help calculate your power needs. I used this one: **[https://outervision.com/power-supply-calculator](https://outervision.com/power-supply-calculator)**.
+
+I went with getting a 1600w power supply from EVGA. My original choice was the 1000w Corsair power supply but my power needs at load was around 975w which was too close to the limit for my comfort.
+
+## The Complete Build
+
+Here's the complete build:
+
+```{r complete, echo = F, warning = F}
+cooling_pics <- c("/img/computer_build/IMG_20191227_164957.jpg",
+                  "/img/computer_build/IMG_20191209_173448.jpg")
+
+local_test <- "http://127.0.0.1:4321"
+local_path <- paste0(local_test, cooling_pics)
+
+
+opts <- list(initialSlide = 0, 
+     slidesToShow = 1, 
+     slidesToScroll = 1,
+     focusOnSelect = TRUE, 
+     dots = TRUE)
+
+slickR(obj = local_path,
+       slideId = 'complete',
+       slickOpts = opts,
+       height = 400, 
+       width = "100%")
+
+```
+
+## On a DS Task
+
+I developed a package for R to read and extract data from scanned email images (yes... I realize the absurdity of dealing with scanned in emails, but I'm in law enforcement and there are considerable lengths that some folks go to maliciously comply with some of our asks). The package itself utilizes multi-core processing and is capable of operating on each file independently.
+
+
+Here's the computer reading a whole bunch of my own personal test emails:
+
+![](/img/computer_build/3960x_read-email.gif)
