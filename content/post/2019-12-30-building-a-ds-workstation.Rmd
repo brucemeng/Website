@@ -137,7 +137,7 @@ slickR(obj = local_path,
 
 ## CPU
 
-At this point in time, there's no real debate as to which CPU to use... it's AMD Ryzen 3000 series. With AMD Ryzen 3000 there are two choices to make mainstream desktop or the high-end desktop. This is a budget/performance trade off. I chose the high-end desktop Threadripper CPU as I was coming from a HEDT Intel processor that I built in 2010.
+At this point in time, there's no real debate as to which CPU to use... it's AMD Ryzen 3000 series. With AMD Ryzen 3000 there is one choice to make: a mainstream desktop CPU or the high-end desktop CPU. This is a budget/performance trade off. I chose the high-end desktop Threadripper CPU as I was coming from a HEDT Intel processor that I built in 2010.
 
 AMD Threadripper 3960x - 24 cores/ 48 threads @ 4.2 GHz all-core / 4.5 GHz single-core:
 
@@ -166,9 +166,9 @@ slickR(obj = local_path,
 
 ## RAM
 
-When it comes to RAM there's two considerations: speed and amount. AMD recommends a 1600 MHz (PC3200) DDR4 speed as benchmarks show that speeds lower than 1600 MHz are significantly slower. The amount of RAM will depend on your data sizes. I would recommend a minimum of 64 GB but you may be able to get away with only 32 GB. 
+When it comes to RAM there are two considerations: speed and amount. AMD recommends a 1600 MHz (PC3200) DDR4 speed as benchmarks show that speeds lower than 1600 MHz are significantly slower. The amount of RAM will depend on your data sizes. I would recommend a minimum of 64 GB but you may be able to get away with only 32 GB. Another heuristic to consider is the amount of RAM per CPU core as a metric for multi-processing workloads. Aim for at least 2 GB per CPU core.
 
-I used the G.Skill Ripjaws V Series 64 GB (4 x 16 GB) DDR4-3200 Memory.
+I used the G.Skill Ripjaws V Series 64 GB (4 x 16 GB) DDR4-3200 Memory. Since my motherboard has 8 RAM slots, this allows me to add additional RAM in the future if necessary.
 
 ## Storage
 
@@ -210,9 +210,9 @@ slickR(obj = local_path,
 
 ## Power Supply
 
-For power supplies, there are two schools of thought. Purchase enough power supply to cover your power needs or purchase twice as much power supply to cover your power needs.
+For power supplies, there are two schools of thought. Purchase enough power supply to cover your power needs or purchase twice as much power supply to cover your power needs. The first one is most likely cheaper. The second is a little bit more efficient, and allows for future component additions.
 
-The first step here is to calculate your power needs. Don't do what I did and just roughly estimate it in your head. There are some really great online tools to help calculate your power needs. I used this one: **[https://outervision.com/power-supply-calculator](https://outervision.com/power-supply-calculator)**.
+The first step here is to calculate your power needs. Don't do what I did initially and just roughly estimate it in my head. There are some really great online tools to help calculate your power needs. I used this one: **[https://outervision.com/power-supply-calculator](https://outervision.com/power-supply-calculator)**.
 
 I went with getting a 1600w power supply from EVGA. My original choice was the 1000w Corsair power supply but my power needs at load was around 975w which was too close to the limit for my comfort.
 

@@ -86,22 +86,22 @@ tags:
 <p><img src="/img/computer_build/IMG_20191203_203858.jpg" /></p>
 <p>I ordered all my parts from <strong><a href="https://www.dazmode.com/">https://www.dazmode.com/</a></strong> and it came out to about $1,400 CAD. The one thing that I did forget is to add a water temperature sensor. Knowing water temperatures can help determine if the heat is being transferred to the cooling system optimally.</p>
 <p>Some more cooling pictures:</p>
-<style>#htmlwidget-2235a5a895acd21b2f8e  {margin-left:auto;margin-right:auto}</style>
+<style>#htmlwidget-c089110f5e57528d3c7a  {margin-left:auto;margin-right:auto}</style>
 <div id="htmlwidget-1" style="width:100%;height:400px;" class="slickR html-widget"></div>
 <script type="application/json" data-for="htmlwidget-1">{"x":[{"divName":"cooling","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20191204_171426.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211658.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_171401.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211707.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211737.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191205_220941.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_204139.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100010.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100018.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100122.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100139.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191209_173523.jpg","http://127.0.0.1:4321/img/computer_build/heatkiller.gif"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="cpu" class="section level2">
 <h2>CPU</h2>
-<p>At this point in time, there’s no real debate as to which CPU to use… it’s AMD Ryzen 3000 series. With AMD Ryzen 3000 there are two choices to make mainstream desktop or the high-end desktop. This is a budget/performance trade off. I chose the high-end desktop Threadripper CPU as I was coming from a HEDT Intel processor that I built in 2010.</p>
+<p>At this point in time, there’s no real debate as to which CPU to use… it’s AMD Ryzen 3000 series. With AMD Ryzen 3000 there is one choice to make: a mainstream desktop CPU or the high-end desktop CPU. This is a budget/performance trade off. I chose the high-end desktop Threadripper CPU as I was coming from a HEDT Intel processor that I built in 2010.</p>
 <p>AMD Threadripper 3960x - 24 cores/ 48 threads @ 4.2 GHz all-core / 4.5 GHz single-core:</p>
-<style>#htmlwidget-710ebfa0f43029e5dab7  {margin-left:auto;margin-right:auto}</style>
+<style>#htmlwidget-bbf9c9e24259013d5c52  {margin-left:auto;margin-right:auto}</style>
 <div id="htmlwidget-2" style="width:100%;height:400px;" class="slickR html-widget"></div>
 <script type="application/json" data-for="htmlwidget-2">{"x":[{"divName":"cpu","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20191206_192435.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_192502.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_202333.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="ram" class="section level2">
 <h2>RAM</h2>
-<p>When it comes to RAM there’s two considerations: speed and amount. AMD recommends a 1600 MHz (PC3200) DDR4 speed as benchmarks show that speeds lower than 1600 MHz are significantly slower. The amount of RAM will depend on your data sizes. I would recommend a minimum of 64 GB but you may be able to get away with only 32 GB.</p>
-<p>I used the G.Skill Ripjaws V Series 64 GB (4 x 16 GB) DDR4-3200 Memory.</p>
+<p>When it comes to RAM there are two considerations: speed and amount. AMD recommends a 1600 MHz (PC3200) DDR4 speed as benchmarks show that speeds lower than 1600 MHz are significantly slower. The amount of RAM will depend on your data sizes. I would recommend a minimum of 64 GB but you may be able to get away with only 32 GB. Another heuristic to consider is the amount of RAM per CPU core as a metric for multi-processing workloads. Aim for at least 2 GB per CPU core.</p>
+<p>I used the G.Skill Ripjaws V Series 64 GB (4 x 16 GB) DDR4-3200 Memory. Since my motherboard has 8 RAM slots, this allows me to add additional RAM in the future if necessary.</p>
 </div>
 <div id="storage" class="section level2">
 <h2>Storage</h2>
@@ -114,20 +114,20 @@ tags:
 <p>For data science, and specifically deep learning tasks, there’s only one company to choose from, and that’s Nvidia. All of the deep learning frameworks (e.g. TensorFlow, PyTorch) are compiled with CUDA for GPU acceleration and CUDA only works on Nvidia. Choose the card with the most amount of RAM as that will most likely be your limitation.</p>
 <p>Currently the card with the most amount of RAM but still is somewhat priced reasonably is the Nvidia Titan RTX 24 GB.</p>
 <p>I bought my card before the Titan RTX came out, and so am using a <strong><a href="../../post/titan-v-and-r-performance/">Nvidia Titan V</a></strong>:</p>
-<style>#htmlwidget-367a044a3959b340f905  {margin-left:auto;margin-right:auto}</style>
+<style>#htmlwidget-35981673defb83f8a770  {margin-left:auto;margin-right:auto}</style>
 <div id="htmlwidget-3" style="width:100%;height:400px;" class="slickR html-widget"></div>
 <script type="application/json" data-for="htmlwidget-3">{"x":[{"divName":"gpu","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20180220_141246.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20180220_141408.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="power-supply" class="section level2">
 <h2>Power Supply</h2>
-<p>For power supplies, there are two schools of thought. Purchase enough power supply to cover your power needs or purchase twice as much power supply to cover your power needs.</p>
-<p>The first step here is to calculate your power needs. Don’t do what I did and just roughly estimate it in your head. There are some really great online tools to help calculate your power needs. I used this one: <strong><a href="https://outervision.com/power-supply-calculator">https://outervision.com/power-supply-calculator</a></strong>.</p>
+<p>For power supplies, there are two schools of thought. Purchase enough power supply to cover your power needs or purchase twice as much power supply to cover your power needs. The first one is most likely cheaper. The second is a little bit more efficient, and allows for future component additions.</p>
+<p>The first step here is to calculate your power needs. Don’t do what I did initially and just roughly estimate it in my head. There are some really great online tools to help calculate your power needs. I used this one: <strong><a href="https://outervision.com/power-supply-calculator">https://outervision.com/power-supply-calculator</a></strong>.</p>
 <p>I went with getting a 1600w power supply from EVGA. My original choice was the 1000w Corsair power supply but my power needs at load was around 975w which was too close to the limit for my comfort.</p>
 </div>
 <div id="the-complete-build" class="section level2">
 <h2>The Complete Build</h2>
 <p>Here’s the complete build:</p>
-<style>#htmlwidget-94f4578b3d590b3cd25b  {margin-left:auto;margin-right:auto}</style>
+<style>#htmlwidget-06476d266e8240ecfd7e  {margin-left:auto;margin-right:auto}</style>
 <div id="htmlwidget-4" style="width:100%;height:400px;" class="slickR html-widget"></div>
 <script type="application/json" data-for="htmlwidget-4">{"x":[{"divName":"complete","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20191227_164957.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191209_173448.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
 </div>
