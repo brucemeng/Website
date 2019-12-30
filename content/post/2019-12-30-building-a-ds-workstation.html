@@ -1,0 +1,120 @@
+---
+title: Building a DS Workstation
+author: Bruce Meng
+date: '2019-12-30'
+slug: building-a-ds-workstation
+categories: []
+tags:
+  - computers
+---
+
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/jquery-migrate/jquery-migrate.min.js"></script>
+<link href="/rmarkdown-libs/slick/slick/slick.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/slick/slick/slick-theme.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/slick/slick/slick.min.js"></script>
+<link href="/rmarkdown-libs/slickR/slickR.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/slickR-binding/slickR.js"></script>
+
+
+<p>I’ve been collecting various computer parts for about a year now in anticipation of AMD’s 7nm release of their Threadripper CPU. I’ve finally completed the build and this is my <em>opinionated</em> guide to building a computer for data science and other computationally intensive tasks.</p>
+<p>Before I get into the build, I’d like to just lightly touch on the “rent-vs-buy” analysis when it comes to computers. For myself, computers are a hobby and therefore will always be a buy decision for me, but if you find yourself only using it for specific tasks and then not using it at all afterwards, I would recommend a rent approach, e.g. renting time on an Amazon AWS EC2 or an equivalent solution from Google or Microsoft.</p>
+<p>The next thing I should mention is how to organize your data. Keeping everything in your head is not ideal, especially when there are some very superb computer build tools out now! I personally used <strong><a href="https://pcpartpicker.com/">https://pcpartpicker.com/</a></strong> to keep track of all the parts and also all the prices (including the merchant with the lowest price!). I would recommend you use something similar vs. just keeping it in your head or even a spreadsheet.</p>
+<p>Let’s get started then!</p>
+<div id="case" class="section level2">
+<h2>Case</h2>
+<p>When it comes to computer cases, i.e. the thing that holds everything together, in my opinion there are only two important considerations. The first is cooling capacity, and the second is looks, in that order.</p>
+<p>With those considerations in mind, I went with a case that’s a few years old now: the ThermalTake Core x9.</p>
+<p><img src="/img/computer_build/3863456.jpg" /></p>
+<p>Cooling capacity:</p>
+<ul>
+<li>4x480mm radiators</li>
+<li>Multiple smaller sized radiators</li>
+</ul>
+<p>Looks:</p>
+<ul>
+<li>Cube</li>
+</ul>
+<p>This case has more cooling capacity than I need with my current build and I really like the cube case look as it fits in my room rather well.</p>
+<p><img src="/img/computer_build/IMG_20191227_164950.jpg" /></p>
+<p>I made one modification to the case which I think is essential… wheels! The case itself is 40 lbs without any parts. With parts it can easily double, and then with water cooling (which is what I will be using), it’ll be much too heavy for me to move.</p>
+<p>I picked up the wheels and the screws from my local hardware store, Rona.</p>
+<p>Wheel details:</p>
+<ul>
+<li>1“x1” mounting plate screws perfectly onto the holes in the case</li>
+</ul>
+<p>Mounting hardware details:</p>
+<ul>
+<li>6-32x1/2 (can use shorter screws) screws</li>
+<li>6-32 hex screw nuts</li>
+</ul>
+<p><img src="/img/computer_build/IMG_20191201_125241.jpg" /></p>
+<p>Now the case can be easily moved!</p>
+<p><img src="/img/computer_build/case_spin.gif" /></p>
+</div>
+<div id="cooling" class="section level2">
+<h2>Cooling</h2>
+<p>Cooling is in my opinion a critical part of building a computer and a decent budget should be allocated here. I chose to do a full custom watercooling loop capable of dissipating my estimated 800w of heat coming out of my components.</p>
+<p>In terms of watercooling components, here are the major ones that I went with:</p>
+<p>Radiators:</p>
+<ul>
+<li>2x 480mm long, 45mm deep Alphacool radiators</li>
+</ul>
+<p>Water blocks:</p>
+<ul>
+<li>Watercool Heatkiller IV Pro TR4 CPU water block</li>
+<li>EKWB EK-FC Titan V water block</li>
+</ul>
+<p>Reservoir:</p>
+<ul>
+<li>EKWB EK-DBay reservoir</li>
+</ul>
+<p>Water pump:</p>
+<ul>
+<li>D5 Vario 8-24V Pump with a tachometer (MCP655)</li>
+</ul>
+<p>Fans:</p>
+<ul>
+<li>12x Gentle Typhoon Performance Radiator Fans (550-1850 rpm) 58cfm</li>
+</ul>
+<p>Misc:</p>
+<ul>
+<li>PWM Fan splitters</li>
+<li>Thermal Grizzly Hydronaut thermal paste</li>
+</ul>
+<p><img src="/img/computer_build/IMG_20191203_203858.jpg" /></p>
+<p>I ordered all my parts from <strong><a href="https://www.dazmode.com/">https://www.dazmode.com/</a></strong> and it came out to about $1,400 CAD. The one thing that I did forget is to add a water temperature sensor. Knowing water temperatures can help determine if the heat is being transferred to the cooling system optimally.</p>
+<p>Some more cooling pictures:</p>
+<style>#htmlwidget-a652cc0dcb875bfb2a21  {margin-left:auto;margin-right:auto}</style>
+<div id="htmlwidget-1" style="width:100%;height:400px;" class="slickR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":[{"divName":"cooling","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20191204_171426.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211658.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_171401.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211707.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191204_211737.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191205_220941.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_204139.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100010.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100018.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100122.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191208_100139.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191209_173523.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="cpu" class="section level2">
+<h2>CPU</h2>
+<p>At this point in time, there’s no real debate as to which CPU to use… it’s AMD Ryzen 3000 series. With AMD Ryzen 3000 there are two choices to make mainstream desktop or the high-end desktop. This is a budget/performance trade off. I chose the high-end desktop Threadripper CPU as I was coming from a HEDT Intel processor that I built in 2010.</p>
+<p>AMD Threadripper 3960x - 24 cores/ 48 threads @ 4.2 GHz all-core / 4.5 GHz single-core:</p>
+<style>#htmlwidget-83612a3a8fd87f613041  {margin-left:auto;margin-right:auto}</style>
+<div id="htmlwidget-2" style="width:100%;height:400px;" class="slickR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":[{"divName":"cpu","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20191206_192435.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_192502.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20191206_202333.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="ram" class="section level2">
+<h2>RAM</h2>
+<p>When it comes to RAM there’s two considerations: speed and amount. AMD recommends a 1600 MHz (PC3200) DDR4 speed as benchmarks show that speeds lower than 1600 MHz are significantly slower. The amount of RAM will depend on your data sizes. I would recommend a minimum of 64 GB but you may be able to get away with only 32 GB.</p>
+<p>I used the G.Skill Ripjaws V Series 64 GB (4 x 16 GB) DDR4-3200 Memory.</p>
+</div>
+<div id="storage" class="section level2">
+<h2>Storage</h2>
+<p>There isn’t too much to consider here, choose the fastest and largest storage solution for your budget. That means at a minimum a NVME PCI Express 3.0 solution.</p>
+<p>I chose the ADATA XPG SX8200 Pro 1 TB M.2-2280 NVME Solid State Drive.</p>
+<p>For data that won’t be accessed frequently I would recommend an external solution using spinning disks as a more practical and budget friendly option. I run a QNAP 4 bay NAS housing 4x 3TB Western Digital Red drives in a RAID 5 configuration.</p>
+</div>
+<div id="gpu" class="section level2">
+<h2>GPU</h2>
+<p>For data science, and specifically deep learning tasks, there’s only one company to choose from, and that’s Nvidia. All of the deep learning frameworks (e.g. TensorFlow, PyTorch) are compiled with CUDA for GPU acceleration and CUDA only works on Nvidia. Choose the card with the most amount of RAM as that will most likely be your limitation.</p>
+<p>Currently the card with the most amount of RAM but still is somewhat priced reasonably is the Nvidia Titan RTX 24 GB.</p>
+<p>I bought my card before the Titan RTX came out, and so am using a <strong><a href="../../post/titan-v-and-r-performance/">Nvidia Titan V</a></strong>:</p>
+<style>#htmlwidget-54c4d61b3d7b7e4e03be  {margin-left:auto;margin-right:auto}</style>
+<div id="htmlwidget-3" style="width:100%;height:400px;" class="slickR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":[{"divName":"gpu","divType":"img","padding":"99%","obj":["http://127.0.0.1:4321/img/computer_build/IMG_20180220_141246.jpg","http://127.0.0.1:4321/img/computer_build/IMG_20180220_141408.jpg"],"slickOpts":{"initialSlide":0,"slidesToShow":1,"slidesToScroll":1,"focusOnSelect":true,"dots":true}}],"evals":[],"jsHooks":[]}</script>
+</div>
