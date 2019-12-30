@@ -117,7 +117,7 @@ cooling_pics <- c("/img/computer_build/IMG_20191204_171426.jpg",
                   "/img/computer_build/IMG_20191209_173523.jpg",
                   "/img/computer_build/heatkiller.gif")
 
-local_test <- "http://127.0.0.1:4321"
+local_test <- "https://www.brucemeng.ca"
 local_path <- paste0(local_test, cooling_pics)
 
 
@@ -146,7 +146,7 @@ cooling_pics <- c("/img/computer_build/IMG_20191206_192435.jpg",
                   "/img/computer_build/IMG_20191206_192502.jpg",
                   "/img/computer_build/IMG_20191206_202333.jpg")
 
-local_test <- "http://127.0.0.1:4321"
+local_test <- "https://www.brucemeng.ca"
 local_path <- paste0(local_test, cooling_pics)
 
 
@@ -190,7 +190,7 @@ I bought my card before the Titan RTX came out, and so am using a **[Nvidia Tita
 cooling_pics <- c("/img/computer_build/IMG_20180220_141246.jpg",
                   "/img/computer_build/IMG_20180220_141408.jpg")
 
-local_test <- "http://127.0.0.1:4321"
+local_test <- "https://www.brucemeng.ca"
 local_path <- paste0(local_test, cooling_pics)
 
 
@@ -224,7 +224,7 @@ Here's the complete build:
 cooling_pics <- c("/img/computer_build/IMG_20191227_164957.jpg",
                   "/img/computer_build/IMG_20191209_173448.jpg")
 
-local_test <- "http://127.0.0.1:4321"
+local_test <- "https://www.brucemeng.ca"
 local_path <- paste0(local_test, cooling_pics)
 
 
